@@ -8,9 +8,19 @@
     },
     {
         "brand": "BMW",
-        "model": [
+        "model": 
             "320i",
-            "520i"
-        ]
+            "520i": {
+                "id":"1",
+                "photos":"",
+                "Power":"160",
+                "Engine size":"1600cc",
+                "Gearbox":"Manual",
+                "Body type":"sedan",
+                "Fuel type": "Diesel"
+
+
+          }
+        
     }
 ]
