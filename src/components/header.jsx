@@ -1,6 +1,8 @@
 import React from 'react';
 import {IoLocationOutline} from "react-icons/io5";
 
+import {Link} from "react-router-dom";
+
 const Header = () => {
     return (
         <div id="header">
@@ -16,10 +18,10 @@ const Header = () => {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
-                                <a className="nav-link" href="index.html">Home</a>
+                                <Link to="/" className="nav-link">Home</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="about.html">About</a>
+                                <Link to="/about" className="nav-link">About</Link>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="services.html">Services</a>
