@@ -20,6 +20,8 @@ import Contact from './pages/contact/contact';
 
 import Footer from './components/footer';
 
+import CarDetail from "./pages/car-detail";
+
 function App() {
   return (
       <div>
@@ -32,6 +34,8 @@ function App() {
               <Route path="/services" element={<Services />} />
               <Route path="/vehicles" element={<Vehicles />} />
               <Route path="/contact" element={<Contact />} />
+
+              <Route path="/cars/:carBrand/:carModel" element={<CarDetail />} />
             </Routes>
           <Footer/>
           </Router>

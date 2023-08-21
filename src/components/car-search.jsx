@@ -1,15 +1,24 @@
-import   {useState} from 'react';
-import Form from 'react-bootstrap/Form';
+import {useState} from 'react';
+import data from '../DATA/data.json';
 
-import data from '../DATA/data.json'
+import Form from 'react-bootstrap/Form';
+import {Link} from "react-router-dom";
 
 
 const CarSearch = () => {
-    
-  const [models, setModels] = useState(null);
 
-    const handleBrandChange = (event) => {
-        setModels(event.target.value === "" ? null : data.find(x=>x.brand === event.target.value).model)
+    const [carBrand, setCarBrand] = useState(null);
+    const [carModel, setCarModel] = useState(null);
+    const [carModelProperties, setCarModelProperties] = useState(null);
+
+    const handleBrandChange = event => {
+        setCarBrand(event.target.value !== "" ? event.target.value : null);
+    }
+    const handleModelChange = event => {
+
+        setCarModel(event.target.value !== "" ? event.target.value : null);
+
+        setCarModelProperties(data.find(item => item.brand === carBrand).model[event.target.value])
     }
     
     
@@ -29,21 +38,15 @@ const CarSearch = () => {
                                 <Form.Select size="lg" onChange={handleBrandChange}>
                                 <option value="">Choose a Brand</option>
                                 {
-                                    data.map((car)=>{
-                                        console.log(car);
-                                        return <option>{car.brand}</option>
-                                    })
+                                    data.map(car => <option value={car.brand}>{car.brand}</option>)
                                 }
                                 </Form.Select>
                                 </div>
                                 <div className="col-md-3 select-outline">
-                                <Form.Select size="lg" onChange={null}>
+                                <Form.Select size="lg" onChange={handleModelChange}>
                                 <option>Choose a Model</option>
-                                
                                 {
-                                    models && models.map((model)=>{
-                                        return <option>{model}</option>
-                                    })
+                                    carBrand && Object.keys(data.find(item => item.brand === carBrand).model).map(model => <option value={model}>{model}</option>)
                                 }
                                 </Form.Select>
                                 </div>
@@ -53,7 +56,14 @@ const CarSearch = () => {
                                 </Form.Select>
                                 </div>
                                 <div className="col-md-3">
-                                    <div className="search_btn"><a href="#">Search Now</a></div>
+                                    <div className="search_btn">
+                                        {
+                                            (carModel && carModel)
+                                                ? <Link to={`/cars/${carBrand}/${carModel}`}>Search Now</Link>
+                                                : <a href={null} className="text-white" disabled>Search Now</a>
+                                        }
+
+                                    </div>
                                 </div>
                                 </div>
                             </div>

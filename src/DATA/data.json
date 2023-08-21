@@ -1,26 +1,46 @@
 [
     {
+        "id": 1,
         "brand": "Hyundai",
-        "model": [
-            "i10",
-            "i20"
-        ]
+        "model": {
+            "i10": {
+                "photos": "",
+                "power": "67 HP",
+                "engineSize": "998 cc",
+                "gearbox": "Automatic",
+                "bodyType": "Hatchback",
+                "fuelType": "Gas"
+            },
+            "i20": {
+                "photos": "",
+                "power": "100 HP",
+                "engineSize": "1368 cc",
+                "gearbox": "Automatic",
+                "bodyType": "Hatchback",
+                "fuelType": "Gas"
+            }
+        }
     },
     {
+        "id": 2,
         "brand": "BMW",
-        "model": 
-            "320i",
-            "520i": {
-                "id":"1",
+        "model": {
+            "320d": {
                 "photos":"",
-                "Power":"160",
-                "Engine size":"1600cc",
-                "Gearbox":"Manual",
-                "Body type":"sedan",
-                "Fuel type": "Diesel"
-
-
-          }
-        
+                "power":"187 HP",
+                "engineSize":"1995 cc",
+                "gearbox":"Automatic",
+                "bodyType":"Sedan",
+                "fuelType": "Diesel"
+            },
+            "520i": {
+                "photos":"",
+                "power":"170 HP",
+                "engineSize":"1597 cc",
+                "gearbox":"Automatic",
+                "bodyType":"Sedan",
+                "fuelType": "Gas"
+            }
+        }
     }
 ]
