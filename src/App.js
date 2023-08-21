@@ -13,6 +13,10 @@ import Header from "./components/header";
 
 import Home from './pages/home';
 import About from './pages/about/about';
+import Client from './pages/client/client';
+import Services from './pages/services/services';
+import Vehicles from './pages/vehicles/vehicles';
+import Contact from './pages/contact/contact';
 
 import Footer from './components/footer';
 
@@ -24,6 +28,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
+              <Route path="/client" element={<Client />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/vehicles" element={<Vehicles />} />
+              <Route path="/contact" element={<Contact />} />
             </Routes>
           <Footer/>
           </Router>

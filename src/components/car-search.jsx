@@ -1,7 +1,18 @@
-import React from 'react';
+import   {useState} from 'react';
+import Form from 'react-bootstrap/Form';
+
+import data from '../DATA/data.json'
 
 
 const CarSearch = () => {
+    
+  const [models, setModels] = useState(null);
+
+    const handleBrandChange = (event) => {
+        setModels(event.target.value === "" ? null : data.find(x=>x.brand === event.target.value).model)
+    }
+    
+    
     return (
             <div id='CarSearch'>
                 <div className="search_section">
@@ -15,28 +26,26 @@ const CarSearch = () => {
                             <div className="select_box_main">
                                 <div className="row">
                                 <div className="col-md-3 select-outline">
-                                    <select className="mdb-select md-form md-outline colorful-select dropdown-primary">
-                                    <option value disabled selected>Any Brand</option>
-                                    <option value={1}>Option 1</option>
-                                    <option value={2}>Option 2</option>
-                                    <option value={3}>Option 3</option>
-                                    </select>
+                                <Form.Select size="lg" onChange={handleBrandChange}>
+                                <option value="">Choose a Brand</option>
+                                {
+                                    data.map((car)=>{
+                                        console.log(car);
+                                        return <option>{car.brand}</option>
+                                    })
+                                }
+                                </Form.Select>
                                 </div>
                                 <div className="col-md-3 select-outline">
-                                    <select className="mdb-select md-form md-outline colorful-select dropdown-primary">
-                                    <option value disabled selected>Any type</option>
-                                    <option value={1}>Option 1</option>
-                                    <option value={2}>Option 2</option>
-                                    <option value={3}>Option 3</option>
-                                    </select>
-                                </div>
-                                <div className="col-md-3 select-outline">
-                                    <select className="mdb-select md-form md-outline colorful-select dropdown-primary">
-                                    <option value disabled selected>Price</option>
-                                    <option value={1}>Option 1</option>
-                                    <option value={2}>Option 2</option>
-                                    <option value={3}>Option 3</option>
-                                    </select>
+                                <Form.Select size="lg" onChange={null}>
+                                <option>Choose a Model</option>
+                                
+                                {
+                                    models && models.map((model)=>{
+                                        return <option>{model}</option>
+                                    })
+                                }
+                                </Form.Select>
                                 </div>
                                 <div className="col-md-3">
                                     <div className="search_btn"><a href="#">Search Now</a></div>
@@ -49,7 +58,6 @@ const CarSearch = () => {
                     </div>
                     </div>
                 </div>
-            
             </div>
     );
 };

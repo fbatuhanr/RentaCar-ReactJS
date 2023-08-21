@@ -1,0 +1,16 @@
+[
+    {
+        "brand": "Hyundai",
+        "model": [
+            "i10",
+            "i20"
+        ]
+    },
+    {
+        "brand": "BMW",
+        "model": [
+            "320i",
+            "520i"
+        ]
+    }
+]
