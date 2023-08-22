@@ -5,7 +5,7 @@
             "brand": "Hyundai",
             "model": {
                 "Bayon": {
-                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/bayon.png",
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/hyundai/bayon.png",
                     "power": "100 HP",
                     "engineSize": "1398 cc",
                     "gearbox": "Automatic",
@@ -13,7 +13,7 @@
                     "fuelType": "Gas"
                 },
                 "i20": {
-                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/i20.png",
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/hyundai/i20.png",
                     "power": "100 HP",
                     "engineSize": "1368 cc",
                     "gearbox": "Automatic",
@@ -27,7 +27,7 @@
             "brand": "BMW",
             "model": {
                 "320d": {
-                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/320.png",
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/bmw/320d.png",
                     "power": "187 HP",
                     "engineSize": "1995 cc",
                     "gearbox": "Automatic",
@@ -35,7 +35,7 @@
                     "fuelType": "Diesel"
                 },
                 "520i": {
-                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/520i.png",
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/bmw/520i.png",
                     "power": "170 HP",
                     "engineSize": "1597 cc",
                     "gearbox": "Automatic",
