@@ -18,7 +18,7 @@ const CarDetail = () => {
     },[]);
 
     return (
-        <div>
+        <div className='main'>,
             {
                 modelProperties ?
                     <div>
