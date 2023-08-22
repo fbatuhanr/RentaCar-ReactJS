@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 
 import {vehiclesData, locationsData} from "../DATA/data.jsx";
 
-import {Container, Row, Col, Form, InputGroup} from 'react-bootstrap';
+import {Container, Row, Col, Form, InputGroup, Button} from 'react-bootstrap';
 
 import {TbEngine, TbManualGearbox} from "react-icons/tb";
 import {BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill} from "react-icons/bs";
@@ -89,7 +89,6 @@ const CarDetail = () => {
                     <InputGroup size="lg" className="my-2">
                         <InputGroup.Text id="pick-up-locations">Pick-up Location</InputGroup.Text>
                         <Form.Select name="pick-up-locations" size="lg" onChange={null}>
-                            <option value="">Choose a Location</option>
                             {
                                 locationsData.map((location, i) => <option value={location} key={i}>{location}</option>)
                             }
@@ -121,7 +120,6 @@ const CarDetail = () => {
                     <InputGroup size="lg" className="my-2">
                         <InputGroup.Text id="drop-off-locations">Drop-off Location</InputGroup.Text>
                         <Form.Select name="drop-off-locations" size="lg" onChange={null}>
-                            <option value="">Choose a Location</option>
                             {
                                 locationsData.map((location, i) => <option value={location} key={i}>{location}</option>)
                             }
@@ -146,6 +144,13 @@ const CarDetail = () => {
                             }}
                         />
                     </InputGroup>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <Button variant="success" size="lg">
+                        Block level button
+                    </Button>
                 </Col>
             </Row>
         </Container>
