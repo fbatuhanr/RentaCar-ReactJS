@@ -1,46 +1,59 @@
-[
-    {
-        "id": 1,
-        "brand": "Hyundai",
-        "model": {
-            "Bayon": {
-                "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/bayon.png",
-                "power": "100 HP",
-                "engineSize": "1398 cc",
-                "gearbox": "Automatic",
-                "bodyType": "SUV",
-                "fuelType": "Gas"
-            },
-            "i20": {
-                "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/i20.png",
-                "power": "100 HP",
-                "engineSize": "1368 cc",
-                "gearbox": "Automatic",
-                "bodyType": "Hatchback",
-                "fuelType": "Gas"
+{
+    "vehicles": [
+        {
+            "id": 1,
+            "brand": "Hyundai",
+            "model": {
+                "Bayon": {
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/bayon.png",
+                    "power": "100 HP",
+                    "engineSize": "1398 cc",
+                    "gearbox": "Automatic",
+                    "bodyType": "SUV",
+                    "fuelType": "Gas"
+                },
+                "i20": {
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/i20.png",
+                    "power": "100 HP",
+                    "engineSize": "1368 cc",
+                    "gearbox": "Automatic",
+                    "bodyType": "Hatchback",
+                    "fuelType": "Gas"
+                }
+            }
+        },
+        {
+            "id": 2,
+            "brand": "BMW",
+            "model": {
+                "320d": {
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/320.png",
+                    "power": "187 HP",
+                    "engineSize": "1995 cc",
+                    "gearbox": "Automatic",
+                    "bodyType": "Sedan",
+                    "fuelType": "Diesel"
+                },
+                "520i": {
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/520i.png",
+                    "power": "170 HP",
+                    "engineSize": "1597 cc",
+                    "gearbox": "Automatic",
+                    "bodyType": "Sedan",
+                    "fuelType": "Gas"
+                }
             }
         }
-    },
-    {
-        "id": 2,
-        "brand": "BMW",
-        "model": {
-            "320d": {
-                "imageUrl":"https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/320.png",
-                "power":"187 HP",
-                "engineSize":"1995 cc",
-                "gearbox":"Automatic",
-                "bodyType":"Sedan",
-                "fuelType": "Diesel"
-            },
-            "520i": {
-                "imageUrl":"https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/520i.png",
-                "power":"170 HP",
-                "engineSize":"1597 cc",
-                "gearbox":"Automatic",
-                "bodyType":"Sedan",
-                "fuelType": "Gas"
-            }
-        }
-    }
-]
+    ],
+    "locations": [
+        "Amsterdam, Netherlands",
+        "Helsinki, Finland",
+        "Copenhagen, Denmark",
+        "Auckland, New Zealand",
+        "Sydney, Australia",
+        "Vancouver, Canada",
+        "Zurich, Switzerland",
+        "Tokyo, Japan",
+        "Zurich, Switzerland"
+    ]
+}

@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import data from '../DATA/data.json';
+import {vehiclesData} from "../DATA/data.jsx";
 
 import Form from 'react-bootstrap/Form';
 import {Link} from "react-router-dom";
@@ -18,7 +18,7 @@ const CarSearch = () => {
 
         setCarModel(event.target.value !== "" ? event.target.value : null);
 
-        setCarModelProperties(data.find(item => item.brand === carBrand).model[event.target.value])
+        setCarModelProperties(vehiclesData.find(item => item.brand === carBrand).model[event.target.value])
     }
     
     
@@ -38,7 +38,7 @@ const CarSearch = () => {
                                 <Form.Select size="lg" onChange={handleBrandChange}>
                                 <option value="">Choose a Brand</option>
                                 {
-                                    data.map(car => <option value={car.brand}>{car.brand}</option>)
+                                    vehiclesData.map(car => <option value={car.brand}>{car.brand}</option>)
                                 }
                                 </Form.Select>
                                 </div>
@@ -46,7 +46,7 @@ const CarSearch = () => {
                                 <Form.Select size="lg" onChange={handleModelChange}>
                                 <option>Choose a Model</option>
                                 {
-                                    carBrand && Object.keys(data.find(item => item.brand === carBrand).model).map(model => <option value={model}>{model}</option>)
+                                    carBrand && Object.keys(vehiclesData.find(item => item.brand === carBrand).model).map(model => <option value={model}>{model}</option>)
                                 }
                                 </Form.Select>
                                 </div>
