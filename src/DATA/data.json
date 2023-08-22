@@ -4,7 +4,7 @@
         "brand": "Hyundai",
         "model": {
             "i10": {
-                "photos": "",
+                "imageUrl": "",
                 "power": "67 HP",
                 "engineSize": "998 cc",
                 "gearbox": "Automatic",
@@ -12,7 +12,7 @@
                 "fuelType": "Gas"
             },
             "i20": {
-                "photos": "",
+                "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/i20.png",
                 "power": "100 HP",
                 "engineSize": "1368 cc",
                 "gearbox": "Automatic",
@@ -26,7 +26,7 @@
         "brand": "BMW",
         "model": {
             "320d": {
-                "photos":"",
+                "imageUrl":"",
                 "power":"187 HP",
                 "engineSize":"1995 cc",
                 "gearbox":"Automatic",
@@ -34,7 +34,7 @@
                 "fuelType": "Diesel"
             },
             "520i": {
-                "photos":"",
+                "imageUrl":"",
                 "power":"170 HP",
                 "engineSize":"1597 cc",
                 "gearbox":"Automatic",
