@@ -3,7 +3,7 @@ import React from 'react';
 
 const Footer = () => {
     return (
-    <div id='Footer'>   
+    <div id="footer">
     <div>
         <div className="footer_section layout_padding">
           <div className="container">

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {vehiclesData} from "../DATA/data.jsx";
 
 import Form from 'react-bootstrap/Form';
@@ -9,7 +9,6 @@ const CarSearch = () => {
 
     const [carBrand, setCarBrand] = useState(null);
     const [carModel, setCarModel] = useState(null);
-    const [carModelProperties, setCarModelProperties] = useState(null);
 
     const handleBrandChange = event => {
         setCarBrand(event.target.value !== "" ? event.target.value : null);
@@ -17,8 +16,6 @@ const CarSearch = () => {
     const handleModelChange = event => {
 
         setCarModel(event.target.value !== "" ? event.target.value : null);
-
-        setCarModelProperties(vehiclesData.find(item => item.brand === carBrand).model[event.target.value])
     }
     
     
@@ -38,21 +35,26 @@ const CarSearch = () => {
                                 <Form.Select size="lg" onChange={handleBrandChange}>
                                 <option value="">Choose a Brand</option>
                                 {
-                                    vehiclesData.map(car => <option value={car.brand}>{car.brand}</option>)
+                                    vehiclesData.map(car =>
+                                        <option value={car.brand}>{car.brand}</option>
+                                    )
                                 }
                                 </Form.Select>
                                 </div>
                                 <div className="col-md-3 select-outline">
                                 <Form.Select size="lg" onChange={handleModelChange}>
-                                <option>Choose a Model</option>
+                                <option>{carBrand ? "Choose a Model" : "---"}</option>
                                 {
-                                    carBrand && Object.keys(vehiclesData.find(item => item.brand === carBrand).model).map(model => <option value={model}>{model}</option>)
+                                    carBrand &&
+                                    Object.keys(vehiclesData.find(item => item.brand === carBrand).model).map(model =>
+                                            <option value={model}>{model}</option>
+                                        )
                                 }
                                 </Form.Select>
                                 </div>
                                 <div className="col-md-3 select-outline">
                                 <Form.Select size="lg" onChange={null}>
-                                <option>{new Date().getFullYear()}</option>
+                                    <option>{carModel ? new Date().getFullYear() : "---"}</option>
                                 </Form.Select>
                                 </div>
                                 <div className="col-md-3">

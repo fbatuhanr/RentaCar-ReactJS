@@ -1,3 +1,5 @@
+import React from 'react';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/style.css'
 import './App.css';
@@ -21,11 +23,13 @@ import Contact from './pages/contact/contact';
 import Footer from './components/footer';
 
 import CarDetail from "./pages/car-detail";
+import ScrollToTop from "./config/ScrollToTop";
 
 function App() {
   return (
-      <div>
-          <Router>
+      <Router>
+          <ScrollToTop />
+
           <Header/>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -38,8 +42,7 @@ function App() {
               <Route path="/cars/:carBrand/:carModel" element={<CarDetail />} />
             </Routes>
           <Footer/>
-          </Router>
-      </div>
+      </Router>
   );
 }
 
