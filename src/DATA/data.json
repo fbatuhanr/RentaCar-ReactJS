@@ -3,12 +3,12 @@
         "id": 1,
         "brand": "Hyundai",
         "model": {
-            "i10": {
+            "bayon": {
                 "imageUrl": "",
-                "power": "67 HP",
-                "engineSize": "998 cc",
+                "power": "100 HP",
+                "engineSize": "1398 cc",
                 "gearbox": "Automatic",
-                "bodyType": "Hatchback",
+                "bodyType": "SUV",
                 "fuelType": "Gas"
             },
             "i20": {
@@ -26,7 +26,7 @@
         "brand": "BMW",
         "model": {
             "320d": {
-                "imageUrl":"",
+                "imageUrl":"https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/320d.png",
                 "power":"187 HP",
                 "engineSize":"1995 cc",
                 "gearbox":"Automatic",
