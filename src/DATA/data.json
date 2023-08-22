@@ -26,7 +26,7 @@
         "brand": "BMW",
         "model": {
             "320d": {
-                "imageUrl":"https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/320d.png",
+                "imageUrl":"https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/320.png",
                 "power":"187 HP",
                 "engineSize":"1995 cc",
                 "gearbox":"Automatic",
