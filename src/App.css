@@ -1,3 +1,7 @@
 header#header > .header-line-2 {
     background-color: #fe5b29;
 }
+
+header#header > .header-line-2 .header-line-2-icon {
+    margin-top:-3px;
+}

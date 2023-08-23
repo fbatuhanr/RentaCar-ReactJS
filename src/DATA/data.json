@@ -43,6 +43,20 @@
                     "fuelType": "Gas"
                 }
             }
+        },
+        {
+            "id": 3,
+            "brand": "Opel",
+            "model": {
+                "Astra": {
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/opel/astra.png",
+                    "power": "130 HP",
+                    "engineSize": "1199 cc",
+                    "gearbox": "Automatic",
+                    "bodyType": "Hatchback",
+                    "fuelType": "Gas"
+                }
+            }
         }
     ],
     "locations": [

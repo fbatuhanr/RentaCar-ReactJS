@@ -11,7 +11,10 @@ import {
   Link
 } from "react-router-dom"
 
+import ScrollToTop from "./config/ScrollToTop";
+
 import Header from "./components/header";
+import Footer from './components/footer';
 
 import Home from './pages/home';
 import About from './pages/about/about';
@@ -20,10 +23,9 @@ import Services from './pages/services/services';
 import Vehicles from './pages/vehicles/vehicles';
 import Contact from './pages/contact/contact';
 
-import Footer from './components/footer';
-
 import CarDetail from "./pages/car-detail";
-import ScrollToTop from "./config/ScrollToTop";
+import MyRentals from "./pages/my-rentals/my-rentals";
+
 
 function App() {
   return (
@@ -40,6 +42,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
 
               <Route path="/cars/:carBrand/:carModel" element={<CarDetail />} />
+              <Route path="/my-rentals" element={<MyRentals />} />
             </Routes>
           <Footer/>
       </Router>
