@@ -9,6 +9,7 @@ import {Container, Row, Col, Form, ListGroup, InputGroup, Button} from 'react-bo
 import {TbEngine, TbManualGearbox} from "react-icons/tb";
 import {BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill} from "react-icons/bs";
 import {PiEngineFill} from "react-icons/pi";
+import { event } from 'jquery';
 
 const CarDetail = () => {
 
@@ -82,8 +83,8 @@ const CarDetail = () => {
     }, [reservationTimer]);
 
 
-    const handleReserveButtonClick = () => {
-
+    const handleReserveButtonClick = event => {
+        event.currentTarget.disabled = true;
         setIsReservationTimerEnable(false);
         Swal.fire(
             'Reservation Completed!',
