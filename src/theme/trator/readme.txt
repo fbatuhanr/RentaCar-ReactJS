@@ -17,3 +17,9 @@ services -> services.jsx
 vehicles -> vehicles.jsx
 client -> client.jsx 
 contact -> contact.jsx
+
+
+------------------------------------
+
+Kullanıcı Reserve Now, dediği zaman yapmış olduğu rezervasyonu detaylarıyla birlikte bir yapıda tutacak bunu redux ile yapalım.
+Reduxu kullanma amacımız ise bu veri her yere taşınarak My Rentals sayfasını açtığımızda veriyi ekrana yansıtacak.
