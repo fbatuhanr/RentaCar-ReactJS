@@ -1,7 +1,6 @@
 {
     "vehicles": [
         {
-            "id": 1,
             "brand": "Hyundai",
             "model": {
                 "Bayon": {
@@ -23,7 +22,6 @@
             }
         },
         {
-            "id": 2,
             "brand": "BMW",
             "model": {
                 "320d": {
@@ -45,7 +43,6 @@
             }
         },
         {
-            "id": 3,
             "brand": "Opel",
             "model": {
                 "Astra": {
@@ -54,6 +51,19 @@
                     "engineSize": "1199 cc",
                     "gearbox": "Automatic",
                     "bodyType": "Hatchback",
+                    "fuelType": "Gas"
+                }
+            }
+        },
+        {
+            "brand": "Toyota",
+            "model": {
+                "Corolla": {
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/opel/astra.png",
+                    "power": "123 HP",
+                    "engineSize": "1490 cc",
+                    "gearbox": "Automatic",
+                    "bodyType": "Sedan",
                     "fuelType": "Gas"
                 }
             }
