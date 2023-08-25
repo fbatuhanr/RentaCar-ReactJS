@@ -297,12 +297,12 @@ button {
 /* banner section start */
 
 .banner_section {
-    width: 100%;
-    float: left;
-    /*background-image: url(../images/banner-bg.png);*/
-    height: auto;
-    background-size: 100%;
-    padding: 200px 0px 160px 0px;
+    background-image: url("../assets/images/banner-bg.jpg");
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position-y: top;
+    background-size: contain;
+    min-height: 500px;
 }
 
 .banner_taital_main {
@@ -791,35 +791,6 @@ span.current {
     float: left;
     text-align: center;
     margin-top: 50px;
-}
-
-#custom_slider a.carousel-control-prev {
-    left: 80px;
-    top: 270px;
-}
-
-#custom_slider a.carousel-control-next {
-    right: 80px;
-    top: 270px;
-
-}
-
-#custom_slider .carousel-control-next,
-#custom_slider .carousel-control-prev {
-    width: 55px;
-    height: 55px;
-    opacity: 1;
-    font-size: 30px;
-    color: #fefefd;
-    background-color: #fa5a29;
-}
-
-#custom_slider .carousel-control-next:focus,
-#custom_slider .carousel-control-next:hover,
-#custom_slider .carousel-control-prev:focus,
-#custom_slider .carousel-control-prev:hover {
-    color: #fefefd;
-    background-color: #363636;
 }
 
 

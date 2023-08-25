@@ -59,7 +59,7 @@
             "brand": "Toyota",
             "model": {
                 "Corolla": {
-                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/opel/astra.png",
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/toyota/corolla.png",
                     "power": "123 HP",
                     "engineSize": "1490 cc",
                     "gearbox": "Automatic",

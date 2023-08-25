@@ -1,65 +1,55 @@
-import React from 'react';
+import React, {useRef} from 'react';
+
+import BannerBg from '../assets/images/banner-bg.jpg'
+import {Container, Row, Col, Carousel, Button} from "react-bootstrap";
+import {GrFormNext, GrNext, GrPrevious} from "react-icons/gr";
 
 
 const Slider = () => {
+
+  const sliderRef = useRef(null);
+
+  const onPrevClick = () => {
+    sliderRef.current.prev();
+  };
+  const onNextClick = () => {
+    sliderRef.current.next();
+  };
+
     return (
-        <div id='slider'>
-
-
-
-    <div className="banner_section layout_padding">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6">
-              <div id="banner_slider" className="carousel slide" data-ride="carousel">
-                <div className="carousel-inner">
-                  <div className="carousel-item active">
-                    <div className="banner_taital_main">
-                      <h1 className="banner_taital">Car Rent <br /><span style={{color: '#fe5b29'}}>For You</span></h1>
-                      <p className="banner_text">There are many variations of passages of Lorem Ipsum available, but the majority</p>
-                      <div className="btn_main">
-                        <div className="contact_bt"><a href="#">Read More</a></div>
-                        <div className="contact_bt active"><a href="#">Contact Us</a></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="carousel-item">
-                    <div className="banner_taital_main">
-                      <h1 className="banner_taital">Car Rent <br /><span style={{color: '#fe5b29'}}>For You</span></h1>
-                      <p className="banner_text">There are many variations of passages of Lorem Ipsum available, but the majority</p>
-                      <div className="btn_main">
-                        <div className="contact_bt"><a href="#">Read More</a></div>
-                        <div className="contact_bt active"><a href="#">Contact Us</a></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="carousel-item">
-                    <div className="banner_taital_main">
-                      <h1 className="banner_taital">Car Rent <br /><span style={{color: '#fe5b29'}}>For You</span></h1>
-                      <p className="banner_text">There are many variations of passages of Lorem Ipsum available, but the majority</p>
-                      <div className="btn_main">
-                        <div className="contact_bt"><a href="#">Read More</a></div>
-                        <div className="contact_bt active"><a href="#">Contact Us</a></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <a className="carousel-control-prev" href="#banner_slider" role="button" data-slide="prev">
-                  <i className="fa fa-angle-left" />
-                </a>
-                <a className="carousel-control-next" href="#banner_slider" role="button" data-slide="next">
-                  <i className="fa fa-angle-right" />
-                </a>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="banner_img"><img src="" /></div>
-            </div>
+        <div id="slider">
+          <div className="banner_section py-5">
+              <Container>
+                <Row className="justify-content-star">
+                  <Col xs={{span:4, offset:2}}>
+                    <Row className="mt-5">
+                      <Col xs={2}>
+                        <div className="slider-buttons d-grid mt-5">
+                          <Button variant="outline-dark" onClick={onNextClick} className="next-button secondary-bg-color" size="lg"><GrNext /></Button>
+                          <Button variant="outline-dark" onClick={onPrevClick} className="prev-button primary-bg-color " size="lg"><GrPrevious /></Button>
+                        </div>
+                      </Col>
+                      <Col xs={{span:8, offset:1}}>
+                        <Carousel ref={sliderRef}>
+                          <Carousel.Item interval={3000}>
+                            <Carousel.Caption className="carousel-caption text-dark text-start">
+                              <h2 className="fs-1 fw-bold mb-2"><span>Car Rent</span><br/><span className="primary-color">For You</span></h2>
+                              <p className="fs-3 m-0">There are many variations of passages of Lorem Ipsum available, but the majority</p>
+                            </Carousel.Caption>
+                          </Carousel.Item>
+                          <Carousel.Item interval={3000}>
+                            <Carousel.Caption className="carousel-caption text-dark text-start">
+                              <h2 className="fs-1 fw-bold mb-2"><span>Rent a Car</span><br/><span className="primary-color">Easy</span></h2>
+                              <p className="fs-3 m-0">There are many variations of passages of Lorem Ipsum available, but the majority</p>
+                            </Carousel.Caption>
+                          </Carousel.Item>
+                        </Carousel>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </Container>
           </div>
-        </div>
-    </div>
-
-   
         </div>
     );
 };
