@@ -9,9 +9,14 @@ import {Container, Row, Col, Form, ListGroup, InputGroup, Button} from 'react-bo
 import {TbEngine, TbManualGearbox} from "react-icons/tb";
 import {BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill} from "react-icons/bs";
 import {PiEngineFill} from "react-icons/pi";
-import { event } from 'jquery';
+
+import {useDispatch} from "react-redux";
+import {reserveNow} from "../redux/features/reserveSlice";
 
 const CarDetail = () => {
+
+
+    const dispatch = useDispatch();
 
     const {carBrand, carModel} = useParams();
     const navigate = useNavigate();
@@ -33,6 +38,10 @@ const CarDetail = () => {
         end: getDateByInputFormat(1)
     });
 
+    const [locations, setLocations] = useState({
+        pickup: null,
+        dropoff: null
+    })
 
     const [isReservationTimerEnable, setIsReservationTimerEnable] = useState(true);
     const [reservationTimer, setReservationTimer] = useState(59); //in seconds
@@ -84,6 +93,7 @@ const CarDetail = () => {
 
 
     const handleReserveButtonClick = event => {
+
         event.currentTarget.disabled = true;
         setIsReservationTimerEnable(false);
         Swal.fire(
@@ -91,6 +101,19 @@ const CarDetail = () => {
             'Car has been reserved for you!',
             'success'
         )
+
+        const reserveInfo = {
+
+            carModel: carModel,
+
+            startDate: rentDate.start,
+            endDate: rentDate.end,
+            pickupLocation: locations.pickup,
+            dropoffLocation: locations.dropoff
+        }
+
+
+        dispatch(reserveNow(reserveInfo));
     }
 
     return properties !== null ?
@@ -145,7 +168,14 @@ const CarDetail = () => {
                     <Col xs={12} md={6}>
                         <InputGroup size="lg" className="my-2">
                             <InputGroup.Text id="pick-up-locations">Pick-up Location</InputGroup.Text>
-                            <Form.Select name="pick-up-locations" size="lg" onChange={null}>
+                            <Form.Select name="pick-up-locations" size="lg"
+                                 onChange={e => {
+                                     setLocations(prevState => ({
+                                         ...prevState,
+                                         pickup: e.target.value
+                                     }));
+                                 }}
+                            >
                                 {
                                     locationsData.map((location, i) => <option value={location} key={i}>{location}</option>)
                                 }
@@ -176,7 +206,14 @@ const CarDetail = () => {
                     <Col xs={12} md={6}>
                         <InputGroup size="lg" className="my-2">
                             <InputGroup.Text id="drop-off-locations">Drop-off Location</InputGroup.Text>
-                            <Form.Select name="drop-off-locations" size="lg" onChange={null}>
+                            <Form.Select name="drop-off-locations" size="lg"
+                                 onChange={e => {
+                                     setLocations(prevState => ({
+                                         ...prevState,
+                                         dropoff: e.target.value
+                                     }));
+                                 }}
+                            >
                                 {
                                     locationsData.map((location, i) => <option value={location} key={i}>{location}</option>)
                                 }

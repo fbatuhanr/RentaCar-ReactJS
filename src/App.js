@@ -4,6 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/style.css'
 import './App.css';
 
+import {store} from './redux/app/store'
+import { Provider } from 'react-redux'
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -29,23 +32,24 @@ import MyRentals from "./pages/my-rentals/my-rentals";
 
 function App() {
   return (
-      <Router>
-          <ScrollToTop />
+      <Provider store={store}>
+          <Router>
+              <ScrollToTop />
+              <Header/>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/client" element={<Client />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/vehicles" element={<Vehicles />} />
+                  <Route path="/contact" element={<Contact />} />
 
-          <Header/>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/client" element={<Client />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/vehicles" element={<Vehicles />} />
-              <Route path="/contact" element={<Contact />} />
-
-              <Route path="/cars/:carBrand/:carModel" element={<CarDetail />} />
-              <Route path="/my-rentals" element={<MyRentals />} />
-            </Routes>
-          <Footer/>
-      </Router>
+                  <Route path="/cars/:carBrand/:carModel" element={<CarDetail />} />
+                  <Route path="/my-rentals" element={<MyRentals />} />
+                </Routes>
+              <Footer/>
+          </Router>
+      </Provider>
   );
 }
 
