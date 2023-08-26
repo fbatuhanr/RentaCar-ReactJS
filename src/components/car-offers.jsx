@@ -23,7 +23,7 @@ const CarOffers = () => {
                                         <h3 className="types_text">{vehicle.brand}</h3>
                                         <p className="looking_text">{model[0]}</p>
                                         <div className="read_bt">
-                                            <Link to={`/cars/${vehicle.brand}/${model[0]}`}>Book Now</Link>
+                                            <Link to={`/cars/${vehicle.brand}/${model[0]}`}>Rent now</Link>
                                         </div>
                                     </div>
                                 </Col>

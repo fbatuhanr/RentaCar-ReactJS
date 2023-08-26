@@ -105,8 +105,13 @@ const CarDetail = () => {
         const reserveInfo = {
 
             carModel: carModel,
-
+            carBrand: carBrand,
             startDate: rentDate.start,
+            power: properties.power,
+            engineSize: properties.engineSize,
+            gearbox: properties.gearbox,
+            bodyType: properties.bodyType,
+            fuelType: properties.fuelType,
             endDate: rentDate.end,
             pickupLocation: locations.pickup,
             dropoffLocation: locations.dropoff
