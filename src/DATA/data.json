@@ -92,5 +92,27 @@
         "Zurich, Switzerland",
         "Tokyo, Japan",
         "Zurich, Switzerland"
+    ],
+    "customer-reviews": [
+        {
+            "customerImageUrl": "",
+            "customerName": "James",
+            "customerReview": "Renting was much easier than I expected!"
+        },
+        {
+            "customerImageUrl": "",
+            "customerName": "Olivia",
+            "customerReview": "I am very satisfied, I will definitely use 'Rent a Car' in the next rental."
+        },
+        {
+            "customerImageUrl": "",
+            "customerName": "Michael",
+            "customerReview": "It was a nice experience"
+        },
+        {
+            "customerImageUrl": "",
+            "customerName": "Charlotte",
+            "customerReview": "Excellent, 5 stars!"
+        }
     ]
 }

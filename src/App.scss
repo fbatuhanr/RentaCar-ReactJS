@@ -1,22 +1,48 @@
 
+/* GENERAL SETTINGS START */
 $primaryColor: #fe5b29;
 $secondaryColor: #111111;
 $tertiaryColor: #2b3036;
 $quaternaryColor: #cf4419;
+$quinaryColor: #fcf8f8;
 
 .primary-color { color: $primaryColor; }
 .secondary-color { color: $secondaryColor; }
+.tertiary-color { color: $tertiaryColor; }
+.quaternary-color { color: $quaternaryColor; }
+.quinary-color { color: $quinaryColor; }
+
 .primary-bg-color { background-color: $primaryColor;  }
 .secondary-bg-color { background-color: $secondaryColor; }
+.tertiary-bg-color { color: $tertiaryColor; }
+.quaternary-bg-color { color: $quaternaryColor; }
+.quinary-bg-color { color: $quinaryColor; }
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.fw-600 {
+    font-weight: 600;
+}
+.fw-500 {
+    font-weight: 500;
+}
+/* GENERAL SETTINGS END */
 
 
+/* HEADER START */
 header#header > .header-line-2 {
     background-color: $primaryColor;
 }
 header#header > .header-line-2 .header-line-2-icon {
     margin-top:-3px;
 }
+/* HEADER END */
 
+/* SLIDER START */
 .carousel, .carousel-caption, .carousel-inner {
     position: static;
 }
@@ -25,12 +51,60 @@ header#header > .header-line-2 .header-line-2-icon {
 }
 
 .slider-buttons polyline {
-    stroke: #ffffff;
+    stroke: $quinaryColor;
 }
-
 #slider .next-button:hover {
     background-color: $tertiaryColor;
 }
 #slider .prev-button:hover {
     background-color: $quaternaryColor;
 }
+/* SLIDER END */
+
+/* ABOUT SECTION START */
+#about-section .readmore-btn {
+    background-color: $primaryColor;
+    border-radius: 3px;
+    color: $quinaryColor;
+    text-align: center;
+    text-transform: uppercase;
+}
+#about-section .readmore-btn:hover {
+    background-color: $tertiaryColor;
+}
+/* ABOUT SECTION END */
+
+
+/* CAR SEARCH START */
+#car-search {
+    background-color:$tertiaryColor;
+}
+#car-search .search-btn {
+    background-color: $primaryColor;
+    color: $quinaryColor;
+    text-transform: uppercase;
+    border:0;
+}
+#car-search a:not([disabled]) .search-btn:hover {
+    color: $tertiaryColor;
+    background-color: $quinaryColor;
+}
+/* CAR SEARCH END */
+
+
+/* CAR OFFERS START */
+#car-offers .gallery-box {
+    box-shadow: 0px 0px 6px 6px #f4f3f2;
+}
+#car-offers .rent-now-button:hover {
+    color: $tertiaryColor;
+    background-color: $quinaryColor;
+}
+/* CAR OFFERS END */
+
+
+/* FEATURES SECTION START */
+#features-section {
+    background-color:$tertiaryColor;
+}
+/* FEATURES SECTION END */

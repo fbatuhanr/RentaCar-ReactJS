@@ -34,13 +34,17 @@ const Slider = () => {
                           <Carousel.Item interval={3000}>
                             <Carousel.Caption className="carousel-caption text-dark text-start">
                               <h2 className="fs-1 fw-bold mb-2"><span>Car Rent</span><br/><span className="primary-color">For You</span></h2>
-                              <p className="fs-3 m-0">There are many variations of passages of Lorem Ipsum available, but the majority</p>
+                              <p className="fs-3 m-0">
+                                Maecenas lacinia ultrices dolor vitae.
+                              </p>
                             </Carousel.Caption>
                           </Carousel.Item>
                           <Carousel.Item interval={3000}>
                             <Carousel.Caption className="carousel-caption text-dark text-start">
                               <h2 className="fs-1 fw-bold mb-2"><span>Rent a Car</span><br/><span className="primary-color">Easy</span></h2>
-                              <p className="fs-3 m-0">There are many variations of passages of Lorem Ipsum available, but the majority</p>
+                              <p className="fs-3 m-0">
+                                Maecenas euismod accumsan nunc ut tempus.
+                              </p>
                             </Carousel.Caption>
                           </Carousel.Item>
                         </Carousel>

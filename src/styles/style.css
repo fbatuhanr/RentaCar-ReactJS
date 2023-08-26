@@ -401,62 +401,6 @@ button {
 
 /* about section start */
 
-.about_section_2 {
-    width: 100%;
-    float: left;
-}
-
-.about_taital {
-    width: 100%;
-    float: left;
-    font-size: 40px;
-    color: #3b3b3b;
-    text-transform: uppercase;
-    font-weight: bold;
-    padding-bottom: 0px;
-}
-
-.about_taital_box {
-    width: 100%;
-    float: left;
-    padding-top: 15px;
-}
-
-.about_img {
-    width: 100%;
-}
-
-.about_text {
-    width: 91%;
-    float: left;
-    font-size: 16px;
-    color: #2d2d2d;
-    margin: 30px 0px 0px 0px;
-}
-
-.readmore_btn {
-    width: 170px;
-    float: left;
-    margin-top: 40px;
-}
-
-.readmore_btn a {
-    width: 100%;
-    float: left;
-    font-size: 18px;
-    color: #fcf8f8;
-    background-color: #fe5b29;
-    border-radius: 3px;
-    padding: 10px;
-    text-align: center;
-}
-
-.readmore_btn a:hover {
-    color: #fcf8f8;
-    background-color: #363636;
-}
-
-
 /* about section end */
 
 /* search section start */

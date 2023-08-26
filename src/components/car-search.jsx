@@ -4,6 +4,8 @@ import {vehiclesData} from "../DATA/data.jsx";
 import Form from 'react-bootstrap/Form';
 import {Link} from "react-router-dom";
 
+import {Container, Row, Col, Button} from "react-bootstrap";
+
 
 const CarSearch = () => {
 
@@ -20,62 +22,57 @@ const CarSearch = () => {
     
     
     return (
-            <div id='CarSearch'>
-                <div className="search_section">
-                    <div className="container">
-                    <div className="row">
-                        <div className="col-md-12">
-                        <h1 className="search_taital">Search Your Best Cars</h1>
-                        <p className="search_text">Using 'Content here, content here', making it look like readable</p>
-                        <div className="container">
-                            <div className="select_box_section">
-                            <div className="select_box_main">
-                                <div className="row">
-                                <div className="col-md-3 select-outline">
-                                <Form.Select size="lg" onChange={handleBrandChange}>
-                                <option value="">Choose a Brand</option>
-                                {
-                                    vehiclesData.map(car =>
-                                        <option value={car.brand}>{car.brand}</option>
-                                    )
-                                }
-                                </Form.Select>
-                                </div>
-                                <div className="col-md-3 select-outline">
-                                <Form.Select size="lg" onChange={handleModelChange}>
-                                <option>{carBrand ? "Choose a Model" : "---"}</option>
-                                {
-                                    carBrand &&
-                                    Object.keys(vehiclesData.find(item => item.brand === carBrand).model).map(model =>
-                                            <option value={model}>{model}</option>
-                                        )
-                                }
-                                </Form.Select>
-                                </div>
-                                <div className="col-md-3 select-outline">
-                                <Form.Select size="lg" onChange={null}>
-                                    <option>{carModel ? new Date().getFullYear() : "---"}</option>
-                                </Form.Select>
-                                </div>
-                                <div className="col-md-3">
-                                    <div className="search_btn">
+        <div id="car-search" className="pb-1">
+                <Container className="py-5">
+                <Row>
+                    <Col>
+                        <h1 className="quinary-color fs-2 p-0 mb-2">
+                            Search Your Best Cars
+                        </h1>
+                        <p className="quinary-color fs-5 p-0 m-0 mb-5">
+                            Using 'Content here, content here', making it look like readable
+                        </p>
+                        <Container>
+                            <Row>
+                                <Col xs={3}>
+                                    <Form.Select size="lg" onChange={handleBrandChange}>
+                                        <option value="">Choose a Brand</option>
                                         {
-                                            (carModel && carModel)
-                                                ? <Link to={`/cars/${carBrand}/${carModel}`}>Search Now</Link>
-                                                : <a href={null} className="text-white" disabled>Search Now</a>
+                                            vehiclesData.map(car =>
+                                                <option value={car.brand}>{car.brand}</option>
+                                            )
                                         }
-
+                                    </Form.Select>
+                                </Col>
+                                <Col xs={3}>
+                                    <Form.Select size="lg" onChange={handleModelChange}>
+                                        <option>{carBrand ? "Choose a Model" : "---"}</option>
+                                        {
+                                            carBrand &&
+                                            Object.keys(vehiclesData.find(item => item.brand === carBrand).model).map(model =>
+                                                <option value={model}>{model}</option>
+                                            )
+                                        }
+                                    </Form.Select>
+                                </Col>
+                                <Col xs={3}>
+                                    <Form.Select size="lg" onChange={null}>
+                                        <option>{carModel ? new Date().getFullYear() : "---"}</option>
+                                    </Form.Select>
+                                </Col>
+                                <Col xs={3}>
+                                    <div className="d-grid">
+                                        <Link to={carModel ? `/cars/${carBrand}/${carModel}` : null} disabled={!carModel ? true : false}>
+                                            <Button variant="primary" size="lg" className="search-btn">Search Now</Button>
+                                        </Link>
                                     </div>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Col>
+                </Row>
+                </Container>
+        </div>
     );
 };
 export default CarSearch;
