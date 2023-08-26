@@ -1,8 +1,8 @@
 import React from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/style.css'
-import './App.css';
+import './styles/style.css';
+import './App.scss';
 
 import {store} from './redux/app/store'
 import { Provider } from 'react-redux'
@@ -43,9 +43,9 @@ function App() {
                   <Route path="/services" element={<Services />} />
                   <Route path="/vehicles" element={<Vehicles />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/my-rentals" element={<MyRentals />} />
 
                   <Route path="/cars/:carBrand/:carModel" element={<CarDetail />} />
-                  <Route path="/my-rentals" element={<MyRentals />} />
                 </Routes>
               <Footer/>
           </Router>

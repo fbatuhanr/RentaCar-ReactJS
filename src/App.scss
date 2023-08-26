@@ -1,0 +1,36 @@
+
+$primaryColor: #fe5b29;
+$secondaryColor: #111111;
+$tertiaryColor: #2b3036;
+$quaternaryColor: #cf4419;
+
+.primary-color { color: $primaryColor; }
+.secondary-color { color: $secondaryColor; }
+.primary-bg-color { background-color: $primaryColor;  }
+.secondary-bg-color { background-color: $secondaryColor; }
+
+
+header#header > .header-line-2 {
+    background-color: $primaryColor;
+}
+header#header > .header-line-2 .header-line-2-icon {
+    margin-top:-3px;
+}
+
+.carousel, .carousel-caption, .carousel-inner {
+    position: static;
+}
+.carousel-indicators, .carousel-control-prev, .carousel-control-next {
+    display: none;
+}
+
+.slider-buttons polyline {
+    stroke: #ffffff;
+}
+
+#slider .next-button:hover {
+    background-color: $tertiaryColor;
+}
+#slider .prev-button:hover {
+    background-color: $quaternaryColor;
+}

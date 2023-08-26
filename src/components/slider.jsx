@@ -25,8 +25,8 @@ const Slider = () => {
                     <Row className="mt-5">
                       <Col xs={2}>
                         <div className="slider-buttons d-grid mt-5">
-                          <Button variant="outline-dark" onClick={onNextClick} className="next-button secondary-bg-color" size="lg"><GrNext /></Button>
-                          <Button variant="outline-dark" onClick={onPrevClick} className="prev-button primary-bg-color " size="lg"><GrPrevious /></Button>
+                          <Button variant="outline-dark" onClick={onNextClick} className="next-button secondary-bg-color border-0 rounded-0" size="lg"><GrNext /></Button>
+                          <Button variant="outline-dark" onClick={onPrevClick} className="prev-button primary-bg-color border-0 rounded-0" size="lg"><GrPrevious /></Button>
                         </div>
                       </Col>
                       <Col xs={{span:8, offset:1}}>

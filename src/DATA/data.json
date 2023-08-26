@@ -67,6 +67,19 @@
                     "fuelType": "Gas"
                 }
             }
+        },
+        {
+            "brand": "Nissan",
+            "model": {
+                "Qashqai": {
+                    "imageUrl": "https://raw.githubusercontent.com/fbatuhanr/RentaCar-ReactJS/master/src/assets/images/nissan/qashqai.png",
+                    "power": "190 HP",
+                    "engineSize": "1497 cc",
+                    "gearbox": "Automatic",
+                    "bodyType": "SUV",
+                    "fuelType": "Hybrid"
+                }
+            }
         }
     ],
     "locations": [
