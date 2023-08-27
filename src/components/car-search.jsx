@@ -34,7 +34,7 @@ const CarSearch = () => {
                         </p>
                         <Container>
                             <Row>
-                                <Col xs={3}>
+                                <Col xs={12} md={3} className="my-2">
                                     <Form.Select size="lg" onChange={handleBrandChange}>
                                         <option value="">Choose a Brand</option>
                                         {
@@ -44,7 +44,7 @@ const CarSearch = () => {
                                         }
                                     </Form.Select>
                                 </Col>
-                                <Col xs={3}>
+                                <Col xs={12} md={3} className="my-2">
                                     <Form.Select size="lg" onChange={handleModelChange}>
                                         <option>{carBrand ? "Choose a Model" : "---"}</option>
                                         {
@@ -55,15 +55,15 @@ const CarSearch = () => {
                                         }
                                     </Form.Select>
                                 </Col>
-                                <Col xs={3}>
+                                <Col xs={12} md={3} className="my-2">
                                     <Form.Select size="lg" onChange={null}>
                                         <option>{carModel ? new Date().getFullYear() : "---"}</option>
                                     </Form.Select>
                                 </Col>
-                                <Col xs={3}>
+                                <Col xs={12} md={3} className="my-2">
                                     <div className="d-grid">
                                         <Link to={carModel ? `/cars/${carBrand}/${carModel}` : null} disabled={!carModel ? true : false}>
-                                            <Button variant="primary" size="lg" className="search-btn">Search Now</Button>
+                                            <Button variant="primary" size="lg" className="search-btn w-100">Search Now</Button>
                                         </Link>
                                     </div>
                                 </Col>

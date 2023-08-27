@@ -11,7 +11,7 @@ import {BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill} from "react-icons/bs
 import {PiEngineFill} from "react-icons/pi";
 
 import {useDispatch} from "react-redux";
-import {reserveNow} from "../redux/features/reserveSlice";
+import {makeReservation, reserveNow} from "../redux/features/reserveSlice";
 
 const CarDetail = () => {
 
@@ -102,7 +102,7 @@ const CarDetail = () => {
             'success'
         )
 
-        const reserveInfo = {
+        const reservationData = {
 
             carBrand: carBrand,
             carModel: carModel,
@@ -113,8 +113,7 @@ const CarDetail = () => {
             dropoffLocation: locations.dropoff
         }
 
-
-        dispatch(reserveNow(reserveInfo));
+        dispatch(makeReservation(reservationData));
     }
 
     return properties !== null ?
@@ -188,7 +187,7 @@ const CarDetail = () => {
                             <InputGroup.Text id="start-date">Start Date</InputGroup.Text>
                             <Form.Control
                                 type="date"
-                                min={rentDate.start}
+                                min={getDateByInputFormat()}
                                 name="start-date"
                                 placeholder="Start Date"
                                 value={rentDate.start}
@@ -226,7 +225,7 @@ const CarDetail = () => {
                             <InputGroup.Text id="end-date">End Date</InputGroup.Text>
                             <Form.Control
                                 type="date"
-                                min={rentDate.end}
+                                min={getDateByInputFormat(1, rentDate.start)}
                                 name="end-date"
                                 placeholder="End Date"
                                 value={rentDate.end}

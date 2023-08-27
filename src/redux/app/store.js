@@ -4,6 +4,6 @@ import reserveReducer from "../features/reserveSlice";
 
 export const store = configureStore({
     reducer: {
-        reserveInfo: reserveReducer
+        reservations: reserveReducer
     },
 })

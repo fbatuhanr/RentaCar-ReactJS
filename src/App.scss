@@ -35,6 +35,14 @@ svg polyline {
 }
 /* GENERAL SETTINGS END */
 
+/* MOBILE SETTINGS START */
+@media only screen and (min-width: 768px) {
+    #slider .banner-section {
+        min-height: 500px;
+    }
+}
+/* MOBILE SETTINGS END */
+
 
 /* HEADER START */
 header#header > .header-line-2 {
@@ -58,6 +66,14 @@ header#header > .header-line-2 .header-line-2-icon {
 }
 #slider .prev-button:hover {
     background-color: $quaternaryColor;
+}
+
+#slider .banner-section {
+    background-image: url("assets/images/banner-bg.jpg");
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position-y: top;
+    background-size: contain;
 }
 /* SLIDER END */
 
@@ -135,3 +151,9 @@ header#header > .header-line-2 .header-line-2-icon {
     margin-top:-3px;
 }
 /* FOOTER END */
+
+/* MY RENTALS START */
+#my-rentals {
+    clear:both;
+}
+/* MY RENTALS END */

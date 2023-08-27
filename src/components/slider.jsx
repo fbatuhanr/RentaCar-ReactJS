@@ -18,11 +18,11 @@ const Slider = () => {
 
     return (
         <div id="slider">
-          <div className="banner_section py-5">
+          <div className="banner-section py-5">
               <Container>
                 <Row className="justify-content-star">
-                  <Col xs={{span:4, offset:2}}>
-                    <Row className="mt-5">
+                  <Col md={{span:4, offset:2}}>
+                    <Row className="mt-md-5">
                       <Col xs={2}>
                         <div className="slider-buttons d-grid mt-5">
                           <Button variant="outline-dark" onClick={onNextClick} className="next-button secondary-bg-color border-0 rounded-0" size="lg"><GrNext /></Button>

@@ -8,12 +8,12 @@ const AboutSection = () => {
     <div id="about-section">
      <Container>
         <Row className="mt-1 mb-2">
-          <Col xs={6}>
+          <Col xs={{span:12, order:"last"}} md={{span:6, order:"first"}}>
             <div className="image_iman">
                 <img src={AboutImage} className="about_img" />
             </div>
           </Col>
-          <Col xs={6}>
+          <Col xs={{span:12, order:"first"}} md={{span:6, order:"last"}}>
             <div className="mt-2 mb-5">
               <h1 className="text-uppercase fs-1 fw-600">
                   About <span className="primary-color">Us</span>

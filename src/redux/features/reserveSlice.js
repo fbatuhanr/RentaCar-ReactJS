@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    carModel: null,
+    reservations: [],
 }
 
 export const reserveSlice = createSlice({
-    name: 'reserveInfo',
+    name: 'reservation',
     initialState,
     reducers:{
-        reserveNow: (state, action) => {
-            state.reserveData = action.payload
+        makeReservation: (state, action) => {
+            state.reservations.push(action.payload)
         }
-    },
+    }
 })
 
-export const {reserveNow} = reserveSlice.actions;
+export const {makeReservation} = reserveSlice.actions;
 export default reserveSlice.reducer;

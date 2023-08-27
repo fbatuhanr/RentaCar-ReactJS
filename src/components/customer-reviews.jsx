@@ -21,18 +21,18 @@ const CustomerReview = () => {
     const resultsRender = [];
     for (let i = 0; i < reviewsData.length; i += 2) {
         resultsRender.push(
-            <Carousel.Item interval={3000}>
+            <Carousel.Item interval={99999}>
                 <Carousel.Caption className="carousel-caption text-dark text-start">
                     <Row>
                     {
                         reviewsData.slice(i, i + 2)
                             .map(review => (
-                                <Col className="d-flex align-items-stretch">
+                                <Col xs={6} className="d-flex align-items-stretch">
                                     <Card>
                                         <Card.Img variant="top" src={review.customerImageUrl} className="image-fluid"/>
                                         <Card.Body>
                                             <Card.Title className="text-center">{review.customerName}</Card.Title>
-                                            <Card.Text>{review.customerReview}</Card.Text>
+                                            <Card.Text className="m-0">{review.customerReview}</Card.Text>
                                             <div className="review-star text-center">
                                                 {
                                                     Array.from({length: review.customerStar}).map(()=><AiFillStar/>)
@@ -59,14 +59,14 @@ const CustomerReview = () => {
             </Col>
           </Row>
           <Row className="mt-5 justify-content-center">
-              <Col xs={8}>
+              <Col xs={12} md={8}>
                   <Row>
                       <Col xs={2} className="position-relative">
                           <div className="position-absolute top-50">
                               <Button variant="outline-dark" onClick={onPrevClick} className="primary-bg-color border-0 rounded-0" size="lg"><GrPrevious color="white"/></Button>
                           </div>
                       </Col>
-                      <Col xs={8}>
+                      <Col xs={8} className="p-0">
                           <Carousel ref={sliderRef}>
                               {resultsRender}
                           </Carousel>

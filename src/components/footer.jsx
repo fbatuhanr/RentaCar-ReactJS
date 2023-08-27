@@ -38,9 +38,20 @@ const Footer = () => {
               <Col>
                 <h4 className="fs-4 text-white fw-700">Contact Us</h4>
                 <p className="fs-6 text-white m-0">
-                  <span><IoLocation className="header-line-2-icon"/> Location</span><br/>
-                  <span><BsTelephoneFill size="0.9em" className="header-line-2-icon"/> (+71) 8522369417</span><br/>
-                  <span><GrMail className="header-line-2-icon"/> demo@gmail.com</span>
+                  <span>
+                    <IoLocation className="header-line-2-icon"/>&nbsp;
+                    <a href="https://goo.gl/maps/2rkkAA9FP5pegCXF9" target="_blank" className="text-white">New York</a>
+                  </span>
+                  <br/>
+                  <span>
+                    <BsTelephoneFill size="0.9em" className="header-line-2-icon"/>&nbsp;
+                    <a href="tel:+12126583916" target="_blank" className="text-white">(212) 658-3916</a>
+                  </span>
+                  <br/>
+                  <span>
+                    <GrMail className="header-line-2-icon"/>&nbsp;
+                     <a href="mailto:info@rentacar" target="_blank" className="text-white">info@rentacar</a>
+                  </span>
                 </p>
                  <div className="social-icon">
                   <ul>

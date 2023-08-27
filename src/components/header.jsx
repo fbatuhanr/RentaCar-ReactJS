@@ -44,18 +44,27 @@ const Header = () => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Container fluid className="header-line-2 py-2 text-white fs-5">
+            <Container fluid className="header-line-2 py-md-2 text-white fs-5">
             <Row className="justify-content-md-center text-center">
-                <Col xs={8}>
+                <Col xs={12} md={8}>
                     <Row>
-                        <Col>
-                            <span><IoLocation className="header-line-2-icon"/> Location</span>
+                        <Col xs={12} md={4}>
+                            <span className="fs-6">
+                                <IoLocation className="header-line-2-icon"/>&nbsp;
+                                <a href="https://goo.gl/maps/2rkkAA9FP5pegCXF9" target="_blank" className="text-white">New York</a>
+                            </span>
                         </Col>
-                        <Col>
-                            <span><BsTelephoneFill size="0.9em" className="header-line-2-icon"/> (+71) 8522369417</span>
+                        <Col xs={12} md={4}>
+                          <span className="fs-6">
+                            <BsTelephoneFill size="0.9em" className="header-line-2-icon"/>&nbsp;
+                              <a href="tel:+12126583916" target="_blank" className="text-white">(212) 658-3916</a>
+                          </span>
                         </Col>
-                        <Col>
-                            <span><GrMail className="header-line-2-icon"/> demo@gmail.com</span>
+                        <Col xs={12} md={4}>
+                          <span className="fs-6">
+                            <GrMail className="header-line-2-icon"/>&nbsp;
+                              <a href="mailto:info@rentacar" target="_blank" className="text-white">info@rentacar</a>
+                          </span>
                         </Col>
                     </Row>
                 </Col>

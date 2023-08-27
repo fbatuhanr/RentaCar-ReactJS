@@ -17,7 +17,7 @@ const CarOffers = () => {
                     {
                         vehiclesData.map(vehicle =>
                             Object.entries(vehicle.model).map(model =>
-                                 <Col xs={4} className="py-2">
+                                 <Col xs={6} md={4} className="py-2">
                                     <div className="gallery-box p-2">
                                         <div className="gallery-img">
                                             <img src={model[1].imageUrl} className="img-fluid"/>
