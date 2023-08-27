@@ -24,11 +24,14 @@ $quinaryColor: #fcf8f8;
     font-family: 'Open Sans', sans-serif;
 }
 
-.fw-600 {
-    font-weight: 600;
-}
-.fw-500 {
-    font-weight: 500;
+.fw-400 { font-weight: 400; }
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+.fw-800 { font-weight: 800; }
+
+svg polyline {
+    stroke: $quinaryColor;
 }
 /* GENERAL SETTINGS END */
 
@@ -50,9 +53,6 @@ header#header > .header-line-2 .header-line-2-icon {
     display: none;
 }
 
-.slider-buttons polyline {
-    stroke: $quinaryColor;
-}
 #slider .next-button:hover {
     background-color: $tertiaryColor;
 }
@@ -108,3 +108,30 @@ header#header > .header-line-2 .header-line-2-icon {
     background-color:$tertiaryColor;
 }
 /* FEATURES SECTION END */
+
+
+/* CONTACT SECTION START */
+/* CONTACT SECTION END */
+
+
+/* FOOTER START */
+#footer .social-icon {
+
+}
+#footer .social-icon ul li {
+    float:left;
+    margin: 3px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #fff;
+    text-align: center;
+}
+
+#footer .social-icon ul li a {
+    font-size:20px;
+}
+#footer .social-icon ul li a svg {
+    margin-top:-3px;
+}
+/* FOOTER END */

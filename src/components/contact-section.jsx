@@ -1,34 +1,34 @@
 import React from 'react';
+import {Container, Row, Col, Form, Button} from "react-bootstrap";
 
 
 const ContactSection = () => {
     return (
-    <div id='ContactSection'>
-         <div className="contact_section layout_padding">
-        <div className="container">
-          <div className="row">
-            <div className="col-sm-12">
-              <h1 className="contact_taital">Get In Touch</h1>
-            </div>
-          </div>
-        </div>
-        <div className="container">
-          <div className="contact_section_2">
-            <div className="row">
-              <div className="col-md-12">
-                <div className="mail_section_1">
-                  <input type="text" className="mail_text" placeholder="Name" name="Name" />
-                  <input type="text" className="mail_text" placeholder="Email" name="Email" />
-                  <input type="text" className="mail_text" placeholder="Phone Number" name="Phone Number" />
-                  <textarea className="massage-bt" placeholder="Massage" rows={5} id="comment" name="Massage" defaultValue={""} />
-                  <div className="send_bt"><a href="#">Send</a></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div id="contact-section">
+        <Container className="pt-4">
+            <Row className="mb-5">
+                <Col>
+                    <h1 className="fs-1 text-center text-uppercase">Get In Touch</h1>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <div className="primary-bg-color py-5 rounded-top">
+                        <Row className="justify-content-center">
+                            <Col xs={8} className="text-center">
+                                <Form.Control type="text" placeholder="Name" className="mb-2"/>
+                                <Form.Control type="email" placeholder="Email" className="mb-2"/>
+                                <Form.Control type="tel" placeholder="Phone Number" className="mb-2"/>
+                                <Form.Control as="textarea" rows={3} placeholder="Message" className="mb-2"/>
+                                <div className="d-grid">
+                                <Button variant="secondary" className="border-0 py-2" type="button">SEND</Button>
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     </div>
     );
 };

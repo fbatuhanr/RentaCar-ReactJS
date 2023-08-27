@@ -10,7 +10,7 @@ import {BiSolidOffer} from "react-icons/bi";
 const FeaturesSection = () => {
     return (
     <div id="features-section">
-        <Container className="py-4">
+        <Container className="py-5">
             <Row>
                 <Col>
                   <h1 className="quinary-color fs-1 p-0 mb-4">WHY CHOOSE US</h1>

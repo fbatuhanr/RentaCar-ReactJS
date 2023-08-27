@@ -39,8 +39,8 @@ const CarDetail = () => {
     });
 
     const [locations, setLocations] = useState({
-        pickup: null,
-        dropoff: null
+        pickup: locationsData[0],
+        dropoff: locationsData[0]
     })
 
     const [isReservationTimerEnable, setIsReservationTimerEnable] = useState(true);
@@ -104,14 +104,10 @@ const CarDetail = () => {
 
         const reserveInfo = {
 
-            carModel: carModel,
             carBrand: carBrand,
+            carModel: carModel,
+
             startDate: rentDate.start,
-            power: properties.power,
-            engineSize: properties.engineSize,
-            gearbox: properties.gearbox,
-            bodyType: properties.bodyType,
-            fuelType: properties.fuelType,
             endDate: rentDate.end,
             pickupLocation: locations.pickup,
             dropoffLocation: locations.dropoff
