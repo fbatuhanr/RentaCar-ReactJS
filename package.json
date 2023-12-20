@@ -10,9 +10,11 @@
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.3.1",
     "bootstrap-daterangepicker": "^3.1.0",
+    "firebase": "^10.7.1",
     "jquery": "^3.7.0",
     "json-loader": "^0.5.7",
     "moment": "^2.29.4",
+    "node-sass": "npm:sass@^1.66.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
@@ -21,9 +23,9 @@
     "react-redux": "^8.1.2",
     "react-router-dom": "^6.15.0",
     "react-scripts": "^2.1.3",
+    "redux-persist": "^6.0.0",
     "sweetalert2": "^11.6.13",
-    "web-vitals": "^2.1.4",
-    "node-sass": "npm:sass@^1.66.1"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",

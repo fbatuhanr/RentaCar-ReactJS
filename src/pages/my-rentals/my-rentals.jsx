@@ -15,7 +15,7 @@ import {PiEngineFill} from "react-icons/pi";
 
 const MyRentals = () => {
 
-    const {reservations} = useSelector(state => state.reservations);
+    const {reservations} = useSelector(state => state.ReserveSlice);
 
     return (
         <div id="my-rentals">

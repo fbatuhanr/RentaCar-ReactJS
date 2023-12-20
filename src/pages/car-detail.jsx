@@ -11,7 +11,7 @@ import {BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill} from "react-icons/bs
 import {PiEngineFill} from "react-icons/pi";
 
 import {useDispatch} from "react-redux";
-import {makeReservation, reserveNow} from "../redux/features/reserveSlice";
+import {makeReservation, reserveNow} from "../redux/features/ReserveSlice";
 
 const CarDetail = () => {
 

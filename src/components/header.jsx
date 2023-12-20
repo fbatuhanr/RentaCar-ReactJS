@@ -1,7 +1,9 @@
 import React from 'react';
 
-import {Link} from "react-router-dom";
-import {Container, Row, Nav, Navbar, NavDropdown, Col} from "react-bootstrap";
+import useAuthentication from "../hooks/useAuthentication";
+
+import {useNavigate, Link} from "react-router-dom";
+import {Container, Row, Nav, Navbar, NavDropdown, Col, Button} from "react-bootstrap";
 
 import Swal from "sweetalert2";
 
@@ -9,8 +11,21 @@ import {IoLocation, IoLocationOutline} from "react-icons/io5";
 import {LiaCarSideSolid, LiaHandsHelpingSolid} from "react-icons/lia";
 import {BsTelephoneFill} from "react-icons/bs";
 import {GrMail} from "react-icons/gr";
+import {useSelector} from "react-redux";
+import {FaUser, FaUserPlus} from "react-icons/fa";
+import {RxSlash} from "react-icons/rx";
 
 const Header = () => {
+
+    const navigate = useNavigate();
+
+    const user = useSelector(({UserSlice}) => UserSlice.user);
+
+    const {signOutCall} = useAuthentication();
+
+    const handleLogout = async () => {
+        await signOutCall();
+    }
 
     const handleHelpButtonClick = e => {
         e.preventDefault()
@@ -38,8 +53,21 @@ const Header = () => {
                             <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
                         </Nav>
                         <Nav>
+                            {
+                                user.email
+                                    ?
+                                        <Nav.Link as={Link} to="/my-rentals">My Rentals <LiaCarSideSolid size="1.25em" className="align-text-top"/></Nav.Link>
+                                    :
+                                    <>
+                                        <Nav.Link as={Link} to="/login" className="d-inline px-0">Login <FaUser className="align-text-top"/></Nav.Link>
+                                        <RxSlash className="mt-2"/>
+                                        <Nav.Link as={Link} to="/sign-up" className="d-inline px-0">Sign Up <FaUserPlus size="1.1em" className="align-text-top"/></Nav.Link>
+                                    </>
+                            }
                             <Nav.Link as={Link} to="/" onClick={handleHelpButtonClick}>Help <LiaHandsHelpingSolid size="1.25em" className="align-text-bottom"/></Nav.Link>
-                            <Nav.Link as={Link} to="/my-rentals">My Rentals <LiaCarSideSolid size="1.25em" className="align-text-top"/></Nav.Link>
+                            {
+                                user.email && <Button variant="danger" className="py-0" onClick={handleLogout}>Log out</Button>
+                            }
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
