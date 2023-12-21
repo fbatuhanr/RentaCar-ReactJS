@@ -5,13 +5,14 @@ import {
     signInWithEmailAndPassword,
     signOut,
 } from "firebase/auth";
-import {clearUserData, setUser} from "../redux/features/UserSlice"
+import {clearUserData, setUser} from "../redux/features/UserSlice";
 import {auth} from "../firebase-config";
 
 const useAuthentication = () => {
 
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
+    const [message, setMessage] = useState(null);
 
     const signInCall = async ({email, password}) => {
 
@@ -22,8 +23,19 @@ const useAuthentication = () => {
                 password
             );
             dispatch(setUser(user));
+
+            setMessage({
+                content: "You are successfully logged in!",
+                isError: false
+            });
         } catch (err) {
             console.log(err);
+
+            setMessage({
+                content: "Incorrect mail or password, please try again!",
+                isError: true
+            });
+
         } finally {
             setIsLoading (false);
         }
@@ -39,12 +51,23 @@ const useAuthentication = () => {
                 password
             );
             dispatch(setUser(user));
-        } catch (err) {
-            console.log(err);
-        }
-        finally {}
 
-        setIsLoading(false);
+            setMessage({
+                content: "You are successfully signed up!",
+                isError: false
+            });
+
+        } catch (err) {
+
+            console.log(err);
+            setMessage({
+                content: err.message,
+                isError: true
+            });
+        }
+        finally {
+            setIsLoading(false);
+        }
     };
 
     const signOutCall = async () => {
@@ -54,16 +77,26 @@ const useAuthentication = () => {
         try {
             await signOut (auth);
             dispatch(clearUserData());
+
+            setMessage({
+                content: "You are successfully logged out!",
+                isError: false
+            });
         }
         catch (err) {
             console.log(err);
-        }
-        finally {}
 
-        setIsLoading (false);
+            setMessage({
+                content: err,
+                isError: true
+            });
+        }
+        finally {
+            setIsLoading (false);
+        }
     };
 
-    return {isLoading, signInCall, signUpCall, signOutCall};
+    return {isLoading, message, signInCall, signUpCall, signOutCall};
 }
 
 export default useAuthentication;

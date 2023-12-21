@@ -10,10 +10,10 @@ import { persistStore } from "redux-persist";
 import store from "./redux/app/store";
 
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Link, useLocation
 } from "react-router-dom"
 
 import ScrollToTop from "./config/ScrollToTop";
@@ -36,19 +36,22 @@ import CarDetail from "./pages/car-detail";
 import MyRentals from "./pages/my-rentals/my-rentals";
 import AuthGuard from "./guards/AuthGuard";
 import GuestGuard from "./guards/GuestGuard";
+import Admin from "./pages/admin/admin";
 
 function App() {
 
-  const persistor = persistStore(store);
+    const persistor = persistStore(store);
 
   return (
       <Provider store={store}>
           <PersistGate persistor={persistor}>
               <Router>
                   <ScrollToTop />
-                  <Header/>
+                  { window.location.pathname !== "/admin" && <Header /> }
                     <Routes>
-                        <Route path="/" element={<Home />}/>
+                      <Route path="/admin" element={<Admin />} />
+
+                      <Route path="/" element={<Home />}/>
 
                       <Route path="/login" element={<GuestGuard><Login /></GuestGuard>} />
                       <Route path="/sign-up" element={<GuestGuard><Signup /></GuestGuard>} />
@@ -62,7 +65,7 @@ function App() {
 
                       <Route path="/cars/:carBrand/:carModel" element={<CarDetail />} />
                     </Routes>
-                  <Footer/>
+                  { window.location.pathname !== "/admin" && <Footer /> }
               </Router>
           </PersistGate>
       </Provider>
