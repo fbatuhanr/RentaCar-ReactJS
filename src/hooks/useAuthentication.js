@@ -1,12 +1,11 @@
-import {useState} from "react";
-import {useDispatch} from "react-redux";
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-} from "firebase/auth";
-import {clearUserData, setUser} from "../redux/features/UserSlice";
-import {auth} from "../firebase-config";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { db, auth } from "../config/firebase";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { clearUserData, setUser } from "../redux/features/UserSlice";
+
+
 
 const useAuthentication = () => {
 
@@ -18,11 +17,18 @@ const useAuthentication = () => {
 
         setIsLoading (true);
         try {
-            const {user} = await signInWithEmailAndPassword( auth,
+            const {user} = await signInWithEmailAndPassword(auth,
                 email,
                 password
             );
-            dispatch(setUser(user));
+
+            const docRef = doc(db, "users", email);
+            const docSnap = await getDoc(docRef);
+            const docData = docSnap.data();
+
+            const userData = {...user, ...docData};
+
+            dispatch(setUser(userData));
 
             setMessage({
                 content: "You are successfully logged in!",
@@ -46,11 +52,18 @@ const useAuthentication = () => {
         setIsLoading (true);
 
         try {
-            const {user} = await createUserWithEmailAndPassword( auth,
+            const {user} = await createUserWithEmailAndPassword(auth,
                 email,
                 password
             );
-            dispatch(setUser(user));
+
+            const docData = {role: "user"};
+            const docRef = doc(db, "users", email);
+            await setDoc(docRef, docData);
+
+            const userData = {...user, ...docData};
+
+            dispatch(setUser(userData));
 
             setMessage({
                 content: "You are successfully signed up!",

@@ -18,7 +18,12 @@ const Signup = () => {
     const handleSignup = async (e) => {
         e.preventDefault();
 
-        await signUpCall({email, password})
+        try{
+            const signUp = await signUpCall({email, password})
+        }
+        catch (e) {
+
+        }
     }
 
     return (
