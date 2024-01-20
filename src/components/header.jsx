@@ -39,11 +39,14 @@ const Header = () => {
 
     return (
         <header id="header">
-            <NavLink to="/admin" target="_blank">
-                <Button variant="primary" className="w-100 rounded-0 fw-bold">
-                    Click here for Admin Panel!
-                </Button>
-            </NavLink>
+            {
+                user.role === "admin" &&
+                <NavLink to="/admin" target="_blank">
+                    <Button variant="primary" className="w-100 rounded-0 fw-bold">
+                        Click here for Admin Panel!
+                    </Button>
+                </NavLink>
+            }
             <Navbar bg="dark" data-bs-theme="dark" collapseOnSelect expand="lg" className="bg-body-tertiary header-line-1">
                 <Container>
                     <Navbar.Brand as={Link} to="/">Rent a Car</Navbar.Brand>

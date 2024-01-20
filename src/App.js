@@ -37,6 +37,7 @@ import MyRentals from "./pages/my-rentals/my-rentals";
 import AuthGuard from "./guards/AuthGuard";
 import GuestGuard from "./guards/GuestGuard";
 import Admin from "./pages/admin/admin";
+import AdminGuard from "./guards/AdminGuard";
 
 function App() {
 
@@ -49,7 +50,7 @@ function App() {
                   <ScrollToTop />
                   { window.location.pathname !== "/admin" && <Header /> }
                     <Routes>
-                      <Route path="/admin" element={<Admin />} />
+                        <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>} />
 
                       <Route path="/" element={<Home />}/>
 
