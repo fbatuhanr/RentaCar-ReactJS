@@ -38,6 +38,8 @@ import AuthGuard from "./guards/AuthGuard";
 import GuestGuard from "./guards/GuestGuard";
 import Admin from "./pages/admin/admin";
 import AdminGuard from "./guards/AdminGuard";
+import VehicleBrands from "./pages/admin/vehicles-manager/vehicle-brands";
+import VehicleModels from "./pages/admin/vehicles-manager/vehicle-models";
 
 function App() {
 
@@ -48,9 +50,13 @@ function App() {
           <PersistGate persistor={persistor}>
               <Router>
                   <ScrollToTop />
-                  { window.location.pathname !== "/admin" && <Header /> }
+                  { !window.location.pathname.includes("admin") && <Header /> }
                     <Routes>
-                        <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>} />
+
+                        <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>}>
+                            <Route path="brands" element={<AdminGuard><VehicleBrands /></AdminGuard>} />
+                            <Route path="models" element={<AdminGuard><VehicleModels /></AdminGuard>} />
+                        </Route>
 
                       <Route path="/" element={<Home />}/>
 
@@ -66,7 +72,7 @@ function App() {
 
                       <Route path="/cars/:carBrand/:carModel" element={<CarDetail />} />
                     </Routes>
-                  { window.location.pathname !== "/admin" && <Footer /> }
+                  { !window.location.pathname.includes("admin") && <Footer /> }
               </Router>
           </PersistGate>
       </Provider>
