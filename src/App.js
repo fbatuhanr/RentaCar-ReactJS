@@ -40,6 +40,7 @@ import Admin from "./pages/admin/admin";
 import AdminGuard from "./guards/AdminGuard";
 import VehicleBrands from "./pages/admin/vehicles-manager/vehicle-brands";
 import VehicleModels from "./pages/admin/vehicles-manager/vehicle-models";
+import VehicleAdd from "./pages/admin/vehicles-manager/vehicle-add";
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
                         <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>}>
                             <Route path="brands" element={<AdminGuard><VehicleBrands /></AdminGuard>} />
                             <Route path="models" element={<AdminGuard><VehicleModels /></AdminGuard>} />
+                            <Route path="add" element={<AdminGuard><VehicleAdd /></AdminGuard>} />
                         </Route>
 
                       <Route path="/" element={<Home />}/>

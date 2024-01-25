@@ -1,12 +1,12 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import {db} from "../../../config/firebase";
-import {Button, Form, InputGroup} from "react-bootstrap";
+import {Button, Form, InputGroup, Spinner} from "react-bootstrap";
 
 const VehicleModels = () => {
 
-    const [brands, setBrands] = useState({});
-    const [models, setModels] = useState({});
+    const [brands, setBrands] = useState(null);
+    const [models, setModels] = useState(null);
 
     const [newModelBrandId, setNewModelBrandId] = useState("");
     const [newModel, setNewModel] = useState("");
@@ -141,75 +141,84 @@ const VehicleModels = () => {
             <Form onSubmit={handleSubmit}>
                 <div className="d-grid gap-2 p-3 border border-1 rounded">
                     {
-                        models && brands && Object.entries(models).map(([parentKey, value]) =>
-                        <div className="my-2">
-                            <h2 className="mb-1">{brands[value.brandId]}</h2>
+                        models && brands
+                        ?
+                            <>
                             {
-                                Object.entries(value.models).map(([key, value]) =>
-                                <InputGroup className="my-1">
+                            Object.entries(models).map(([parentKey, value]) =>
+                                <div className="my-2">
+                                    <h2 className="mb-1">{brands[value.brandId]}</h2>
+                                    {
+                                        Object.entries(value.models).map(([key, value]) =>
+                                            <InputGroup className="my-1">
+                                                <Form.Control
+                                                    type="text"
+                                                    name={key}
+                                                    value={value}
+                                                    onChange={event => handleInputChange(event, parentKey)}
+                                                    placeholder="Model..."
+                                                />
+                                                <Button variant="danger" type="button" onClick={() => handleRemoveButton(parentKey, key)}>
+                                                    Remove
+                                                </Button>
+                                            </InputGroup>
+                                        )
+                                    }
+                                    <InputGroup>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Add Model..."
+                                            defaultValue={null}
+                                            ref={(e) => refs.current[parentKey] = e}
+                                        />
+                                        <Button variant="primary" type="button" onClick={() => handleAddNewButton(parentKey)}>
+                                            Add New
+                                        </Button>
+                                    </InputGroup>
+                                </div>
+                            )
+                            }
+
+                            <div className="my-2">
+                                <h2>Create New</h2>
+                                <InputGroup>
+                                    <Form.Select
+                                        defaultValue=""
+                                        value={newModelBrandId}
+                                        onChange={e => setNewModelBrandId(e.target.value)}
+                                    >
+                                        <option value="">Select a brand...</option>
+                                        {
+                                            brands && Object.entries(brands).map(([key, value])=>
+                                                <option value={key}>{value}</option>
+                                            )
+                                        }
+                                    </Form.Select>
                                     <Form.Control
                                         type="text"
-                                        name={key}
-                                        value={value}
-                                        onChange={event => handleInputChange(event, parentKey)}
-                                        placeholder="Model..."
+                                        value={newModel}
+                                        onChange={e => setNewModel(e.target.value)}
+                                        placeholder="New Model Name..."
                                     />
-                                    <Button variant="danger" type="button" onClick={() => handleRemoveButton(parentKey, key)}>
-                                        Remove
+
+                                    <Button variant="primary" type="button" onClick={handleCreateNewButton}>
+                                        Create New
                                     </Button>
+
                                 </InputGroup>
-                                )
-                            }
-                            <InputGroup>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Add Model..."
-                                    defaultValue={null}
-                                    ref={(e) => refs.current[parentKey] = e}
-                                />
-                                <Button variant="primary" type="button" onClick={() => handleAddNewButton(parentKey)}>
-                                    Add New
-                                </Button>
-                            </InputGroup>
-                        </div>
-                        )
-                    }
+                            </div>
 
-
-
-
-                    <div className="my-2">
-                        <h2>Create New</h2>
-                        <InputGroup>
-                            <Form.Select
-                                defaultValue=""
-                                value={newModelBrandId}
-                                onChange={e => setNewModelBrandId(e.target.value)}
-                            >
-                                <option value="">Select a brand...</option>
-                                {
-                                    brands && Object.entries(brands).map(([key, value])=>
-                                        <option value={key}>{value}</option>
-                                    )
-                                }
-                            </Form.Select>
-                            <Form.Control
-                                type="text"
-                                value={newModel}
-                                onChange={e => setNewModel(e.target.value)}
-                                placeholder="New Model Name..."
-                            />
-
-                            <Button variant="primary" type="button" onClick={handleCreateNewButton}>
-                                Create New
+                            <Button variant="success" type="submit">
+                                Save All Changes
                             </Button>
-
-                        </InputGroup>
-                    </div>
-
-                    <Button variant="success" type="submit">
-                        Save All Changes
-                    </Button>
+                            </>
+                            :
+                            <div className="text-center p-4">
+                                <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner>
+                            </div>
+                    }
                 </div>
             </Form>
         </div>

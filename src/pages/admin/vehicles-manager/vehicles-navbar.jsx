@@ -17,7 +17,7 @@ const VehiclesNavbar = () => {
                             <Nav.Link as={Link} to="/admin/models">Models</Nav.Link>
                         </Nav>
                         <Nav>
-                            <Nav.Link href="#link">Add Car</Nav.Link>
+                            <Nav.Link as={Link} to="/admin/add">Add</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

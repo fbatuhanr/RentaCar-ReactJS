@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, InputGroup} from "react-bootstrap";
+import {Button, Form, InputGroup, Spinner} from "react-bootstrap";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import {db} from "../../../config/firebase";
 
 const VehicleBrands = () => {
 
-    const [brands, setBrands] = useState({});
+    const [brands, setBrands] = useState(null);
     const [newBrand, setNewBrand] = useState("");
 
 
@@ -44,12 +44,12 @@ const VehicleBrands = () => {
 
         setNewBrand("");
     }
-    const handleRemoveButton = (ind) => {
+    const handleRemoveButton = (key) => {
 
         setBrands(current => {
 
             const copy = {...current};
-            delete copy[`${ind}`];
+            delete copy[key];
 
             return copy;
         });
@@ -57,13 +57,13 @@ const VehicleBrands = () => {
         setBrands(current => {
 
             let copy = {...current};
-            console.log(copy);
+
             Object.keys(copy).map((id, index) => {
 
-                copy[`${index}`] = copy[`${id}`];
-                if(index != id) delete copy[`${id}`];
+                copy[index] = copy[id];
+                if(index != id) delete copy[id];
             })
-            console.log(copy);
+
             return copy;
         });
     }
@@ -80,42 +80,52 @@ const VehicleBrands = () => {
             <Form onSubmit={handleSubmit}>
                 <div className="d-grid gap-2 p-2 border border-1 rounded">
                     {
-                        brands && Object.entries(brands).map(([key, value]) =>
+                        brands
+                        ?
+                            <>
+                                {
+                                    Object.entries(brands).map(([key, value]) =>
+                                        <InputGroup>
+                                            <Form.Control
+                                                type="text"
+                                                name={key}
+                                                value={value}
+                                                onChange={handleInputChange}
+                                                placeholder="Brand..."
+                                            />
+                                            <InputGroup.Text className="p-0">
+                                                <Button variant="danger" type="button" onClick={() => handleRemoveButton(key)}>
+                                                    Remove
+                                                </Button>
+                                            </InputGroup.Text>
+                                        </InputGroup>
+                                    )
+                                }
+                                <InputGroup>
+                                    <Form.Control
+                                        type="text"
+                                        value={newBrand}
+                                        onChange={e => setNewBrand(e.target.value)}
+                                        placeholder="New Brand Name..."
+                                    />
+                                    <InputGroup.Text className="p-0">
+                                        <Button variant="primary" type="button" onClick={handleAddNewButton}>
+                                            Add New
+                                        </Button>
+                                    </InputGroup.Text>
+                                </InputGroup>
 
-                            <InputGroup>
-                                <Form.Control
-                                    type="text"
-                                    name={key}
-                                    value={value}
-                                    onChange={handleInputChange}
-                                    placeholder="Brand..."
-                                />
-                                <InputGroup.Text className="p-0">
-                                    <Button variant="danger" type="button" onClick={() => handleRemoveButton(key)}>
-                                        Remove
-                                    </Button>
-                                </InputGroup.Text>
-                            </InputGroup>
-                        )
+                                <Button variant="success" type="submit">
+                                    Save Changes
+                                </Button>
+                            </>
+                        :
+                            <div className="text-center p-4">
+                                <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner>
+                            </div>
                     }
-
-                    <InputGroup>
-                        <Form.Control
-                            type="text"
-                            value={newBrand}
-                            onChange={e => setNewBrand(e.target.value)}
-                            placeholder="New Brand Name..."
-                        />
-                        <InputGroup.Text className="p-0">
-                            <Button variant="primary" type="button" onClick={handleAddNewButton}>
-                                Add New
-                            </Button>
-                        </InputGroup.Text>
-                    </InputGroup>
-
-                    <Button variant="success" type="submit">
-                        Save Changes
-                    </Button>
                 </div>
             </Form>
         </div>
