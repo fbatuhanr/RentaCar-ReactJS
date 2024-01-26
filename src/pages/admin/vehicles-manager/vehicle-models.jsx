@@ -27,6 +27,7 @@ const VehicleModels = () => {
                 return docSnap.data();
             } else {
                 console.log("No such document!");
+                return {};
             }
         }
         const fetchModels = async () => {
@@ -38,6 +39,7 @@ const VehicleModels = () => {
                 return docSnap.data();
             } else {
                 console.log("No such document!");
+                return {};
             }
         }
 

@@ -257,7 +257,7 @@ const VehicleAdd = () => {
                                                             />
                                                             <Button variant="warning" type="button"
                                                                     onClick={() => displayCurrentImage(item.image)}>
-                                                                See IMG
+                                                                See Exist IMG
                                                             </Button>
                                                         </InputGroup>
                                                         <InputGroup className="my-1">
