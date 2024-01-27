@@ -24,7 +24,7 @@ const Login = () => {
     return (
         <div id="login">
             <Container className="pt-4 pb-5">
-                <Row className="mb-5">
+                <Row>
                     <Col>
                         <h1 className="fs-1 text-center text-uppercase">Login</h1>
                         {
@@ -33,6 +33,29 @@ const Login = () => {
                             ? <Alert key="danger" variant="danger">{message.content}</Alert>
                             : <Alert key="success" variant="success">{message.content}</Alert>)
                         }
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="text-center">
+                        <p className="m-0">Demo Login Informations (Click for Autofill)</p>
+                        <p className="m-0">
+                            <a href="#" onClick={() => {
+                                setEmail("admin@batuhanozturk.com")
+                                setPassword("123456")
+                                }
+                            }>
+                                For Admin: admin@batuhanozturk.com 123456
+                            </a>
+                        </p>
+                        <p className="m-0">
+                            <a href="#" onClick={() => {
+                                setEmail("user@batuhanozturk.com")
+                                setPassword("123456")
+                                }
+                            }>
+                                For User: user@batuhanozturk.com 123456
+                            </a>
+                        </p>
                     </Col>
                 </Row>
                 <Row>

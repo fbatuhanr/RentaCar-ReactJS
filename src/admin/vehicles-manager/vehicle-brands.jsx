@@ -1,29 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Form, InputGroup, Spinner} from "react-bootstrap";
 import {doc, getDoc, setDoc} from "firebase/firestore";
-import {db} from "../../../config/firebase";
+import {db} from "../../config/firebase";
+
+import {loadingContent} from "../admin-components";
+import {fetchBrands} from "./vehicle-components";
+import Swal from "sweetalert2";
 
 const VehicleBrands = () => {
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [brands, setBrands] = useState(null);
     const [newBrand, setNewBrand] = useState("");
 
-
     useEffect(() => {
-        const fetchBrands = async () => {
 
-            const docRef = doc(db, "vehicle", "brands");
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                return docSnap.data();
-            } else {
-                console.log("No such document!");
-                return {};
-            }
-        }
-
-        fetchBrands().then(response => setBrands(response));
+        fetchBrands().then(response => {
+            setBrands(response);
+            setIsLoading(false);
+        });
 
     }, []);
 
@@ -69,19 +65,38 @@ const VehicleBrands = () => {
         });
     }
 
-    const handleSubmit = async e => {
+    const handleSaveChangesSubmit = async e => {
         e.preventDefault();
 
-        await setDoc(doc(db, "vehicle", "brands"), brands);
+        console.log(brands);
+        setIsLoading(true);
+
+        setDoc(doc(db, "vehicle", "brands"), brands)
+            .then(() => {
+                setIsLoading(false);
+                Swal.fire({
+                    title: "Good job!",
+                    text: "All changes saved!",
+                    icon: "success"
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!"
+                });
+        });
     }
 
     return (
         <div>
             <h1>Vehicle Brands</h1>
-            <Form onSubmit={handleSubmit}>
-                <div className="d-grid gap-2 p-2 border border-1 rounded">
+            <Form onSubmit={handleSaveChangesSubmit}>
+                <div className="d-grid gap-2 p-3">
                     {
-                        brands
+                        brands && !isLoading
                         ?
                             <>
                                 {
@@ -121,11 +136,7 @@ const VehicleBrands = () => {
                                 </Button>
                             </>
                         :
-                            <div className="text-center p-4">
-                                <Spinner animation="border" role="status">
-                                    <span className="visually-hidden">Loading...</span>
-                                </Spinner>
-                            </div>
+                            loadingContent
                     }
                 </div>
             </Form>

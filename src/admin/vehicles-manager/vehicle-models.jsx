@@ -1,9 +1,15 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {doc, getDoc, setDoc} from "firebase/firestore";
-import {db} from "../../../config/firebase";
+import {db} from "../../config/firebase";
 import {Button, Form, InputGroup, Spinner} from "react-bootstrap";
+import Swal from "sweetalert2";
+
+import {loadingContent} from "../admin-components";
+import {fetchBrands, fetchModels} from "./vehicle-components";
 
 const VehicleModels = () => {
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [brands, setBrands] = useState(null);
     const [models, setModels] = useState(null);
@@ -11,37 +17,9 @@ const VehicleModels = () => {
     const [newModelBrandId, setNewModelBrandId] = useState("");
     const [newModel, setNewModel] = useState("");
 
-
     const refs = useRef([]);
 
-
     useEffect(() => {
-
-
-        const fetchBrands = async () => {
-
-            const docRef = doc(db, "vehicle", "brands");
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                return docSnap.data();
-            } else {
-                console.log("No such document!");
-                return {};
-            }
-        }
-        const fetchModels = async () => {
-
-            const docRef = doc(db, "vehicle", "models");
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                return docSnap.data();
-            } else {
-                console.log("No such document!");
-                return {};
-            }
-        }
 
         fetchBrands().then(response => setBrands(response));
         fetchModels().then(response => setModels(response));
@@ -129,21 +107,38 @@ const VehicleModels = () => {
         });
     }
 
-    const handleSubmit = async e => {
+    const handleSaveChangesSubmit = async e => {
         e.preventDefault();
 
         console.log(models);
+        setIsLoading(true);
 
-        await setDoc(doc(db, "vehicle", "models"), models);
+        setDoc(doc(db, "vehicle", "models"), models)
+            .then(() => {
+                setIsLoading(false);
+                Swal.fire({
+                    title: "Good job!",
+                    text: "All changes saved!",
+                    icon: "success"
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!"
+                });
+            });
     }
 
     return (
         <div>
             <h1>Vehicle Models</h1>
-            <Form onSubmit={handleSubmit}>
-                <div className="d-grid gap-2 p-3 border border-1 rounded">
+            <Form onSubmit={handleSaveChangesSubmit}>
+                <div className="d-grid gap-2 p-3">
                     {
-                        models && brands
+                        models && brands && !isLoading
                         ?
                             <>
                             {
@@ -215,11 +210,7 @@ const VehicleModels = () => {
                             </Button>
                             </>
                             :
-                            <div className="text-center p-4">
-                                <Spinner animation="border" role="status">
-                                    <span className="visually-hidden">Loading...</span>
-                                </Spinner>
-                            </div>
+                            loadingContent
                     }
                 </div>
             </Form>

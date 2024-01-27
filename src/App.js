@@ -36,11 +36,14 @@ import CarDetail from "./pages/car-detail";
 import MyRentals from "./pages/my-rentals/my-rentals";
 import AuthGuard from "./guards/AuthGuard";
 import GuestGuard from "./guards/GuestGuard";
-import Admin from "./pages/admin/admin";
+import Admin from "./admin/admin";
 import AdminGuard from "./guards/AdminGuard";
-import VehicleBrands from "./pages/admin/vehicles-manager/vehicle-brands";
-import VehicleModels from "./pages/admin/vehicles-manager/vehicle-models";
-import VehicleAdd from "./pages/admin/vehicles-manager/vehicle-add";
+import VehicleBrands from "./admin/vehicles-manager/vehicle-brands";
+import VehicleModels from "./admin/vehicles-manager/vehicle-models";
+import VehicleAdd from "./admin/vehicles-manager/vehicle-add";
+import VehiclesManager from "./admin/vehicles-manager/vehicles-manager";
+import UsersManager from "./admin/users-manager/users-manager";
+import LocationsManager from "./admin/locations-manager";
 
 function App() {
 
@@ -55,9 +58,13 @@ function App() {
                     <Routes>
 
                         <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>}>
-                            <Route path="brands" element={<AdminGuard><VehicleBrands /></AdminGuard>} />
-                            <Route path="models" element={<AdminGuard><VehicleModels /></AdminGuard>} />
-                            <Route path="add" element={<AdminGuard><VehicleAdd /></AdminGuard>} />
+                            <Route path="users" element={<UsersManager />} />
+                            <Route path="vehicles" element={<VehiclesManager />} >
+                                <Route path="brands" element={<VehicleBrands />} />
+                                <Route path="models" element={<VehicleModels />} />
+                                <Route path="add" element={<VehicleAdd />} />
+                            </Route>
+                            <Route path="locations" element={<LocationsManager />} />
                         </Route>
 
                       <Route path="/" element={<Home />}/>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { db, auth } from "../config/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, addDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { clearUserData, setUser } from "../redux/features/UserSlice";
 
 
@@ -22,9 +22,9 @@ const useAuthentication = () => {
                 password
             );
 
-            const docRef = doc(db, "users", email);
-            const docSnap = await getDoc(docRef);
-            const docData = docSnap.data();
+            const q = query(collection(db, "users"), where("userUID", "==", user.uid));
+            const querySnapshot = await getDocs(q);
+            const docData = querySnapshot.docs[0].data();
 
             const userData = {...user, ...docData};
 
@@ -34,7 +34,8 @@ const useAuthentication = () => {
                 content: "You are successfully logged in!",
                 isError: false
             });
-        } catch (err) {
+        }
+        catch (err) {
             console.log(err);
 
             setMessage({
@@ -57,9 +58,13 @@ const useAuthentication = () => {
                 password
             );
 
-            const docData = {role: "user"};
-            const docRef = doc(db, "users", email);
-            await setDoc(docRef, docData);
+            const docData = {
+                userUID: user.uid,
+                email: email,
+                role: "user"
+            };
+
+            await addDoc(collection(db, "users"), docData);
 
             const userData = {...user, ...docData};
 
