@@ -69,15 +69,15 @@ const CarOffers = () => {
               </Row>
                 <Row>
                     {
-                        cars && brands && models && Object.values(cars).map(car => {
+                        cars && brands && models && Object.entries(cars).map(([key, value]) => {
 
-                            let brand = brands[car.brandId];
-                            let model = Object.values(models).find(i => i.brandId == car.brandId).models[car.modelId];
+                            let brand = brands[value.brandId];
+                            let model = Object.values(models).find(i => i.brandId == value.brandId).models[value.modelId];
                             return (
                                 <Col xs={6} md={4} className="py-2">
                                     <div className="gallery-box p-2">
                                         <div className="gallery-img">
-                                            <img src={car.image} className="img-fluid"/>
+                                            <img src={value.image} className="img-fluid"/>
                                         </div>
                                         <div className="gallery-content text-center">
                                             <h3 className="fs-4 fw-600 p-0">
@@ -87,7 +87,7 @@ const CarOffers = () => {
                                                 {model}
                                             </p>
                                             <div className="d-grid pb-2">
-                                                <Link to={`/cars/${brand}/${model}`}>
+                                                <Link to={`/cars/${brand}/${model}/${key}`}>
                                                     <Button variant="primary rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold">Rent Now</Button>
                                                 </Link>
                                             </div>

@@ -291,8 +291,8 @@ const VehicleAdd = () => {
                                                                     onChange={event => handleInputChange(event, index)}
                                                                 >
                                                                     <option value="">Select a Gearbox...</option>
-                                                                    <option value="manual">Manual</option>
-                                                                    <option value="automatic">Automatic</option>
+                                                                    <option value="Manual">Manual</option>
+                                                                    <option value="Automatic">Automatic</option>
                                                                 </Form.Select>
                                                             </InputGroup>
                                                             <InputGroup className="my-1">

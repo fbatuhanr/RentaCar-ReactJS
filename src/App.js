@@ -79,7 +79,7 @@ function App() {
                       <Route path="/contact" element={<Contact />} />
                       <Route path="/my-rentals" element={<AuthGuard><MyRentals /></AuthGuard>} />
 
-                      <Route path="/cars/:carBrand/:carModel" element={<CarDetail />} />
+                      <Route path="/cars/:carBrand/:carModel/:carId" element={<CarDetail />} />
                     </Routes>
                   { !window.location.pathname.includes("admin") && <Footer /> }
               </Router>
