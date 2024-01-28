@@ -13,8 +13,9 @@ import {PiEngineFill} from "react-icons/pi";
 import {useDispatch} from "react-redux";
 import {makeReservation, reserveNow} from "../redux/features/ReserveSlice";
 
-const CarDetail = () => {
+import {fetchBrands, fetchModels, fetchCars, fetchLocations} from "../hooks/useFetchData";
 
+const CarDetail = () => {
 
     const dispatch = useDispatch();
 
@@ -22,6 +23,28 @@ const CarDetail = () => {
     const navigate = useNavigate();
 
     const [properties, setProperties] = useState(vehiclesData.find(item => item.brand === carBrand).model[carModel]);
+
+
+    const [cars, setCars] = useState(null);
+    const [brands, setBrands] = useState(null);
+    const [models, setModels] = useState(null);
+    const [_locations, _setLocations] = useState(null);
+
+    const getBrandIdByName = str => {
+
+    }
+
+    useEffect(() => {
+
+        fetchBrands().then(response => setBrands(response));
+        fetchModels().then(response => setModels(response));
+        fetchCars().then(response => setCars(response));
+        fetchLocations().then(response => _setLocations(response));
+
+
+
+    }, []);
+
 
     const getDateByInputFormat = (dayOffset= 0, date = null) => {
 
@@ -90,7 +113,6 @@ const CarDetail = () => {
             handleReserveTimeout()
         }
     }, [reservationTimer]);
-
 
     const handleReserveButtonClick = event => {
 

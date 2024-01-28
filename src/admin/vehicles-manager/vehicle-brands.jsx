@@ -53,8 +53,7 @@ const VehicleBrands = () => {
 
         setBrands(current => {
 
-            let copy = {...current};
-
+            const copy = {...current};
             Object.keys(copy).map((id, index) => {
 
                 copy[index] = copy[id];

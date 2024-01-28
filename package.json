@@ -23,6 +23,7 @@
     "react-redux": "^8.1.2",
     "react-router-dom": "^6.15.0",
     "react-scripts": "^2.1.3",
+    "react-select": "^5.8.0",
     "redux-persist": "^6.0.0",
     "sweetalert2": "^11.6.13",
     "web-vitals": "^2.1.4"

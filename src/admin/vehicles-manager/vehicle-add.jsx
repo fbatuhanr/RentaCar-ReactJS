@@ -1,12 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Accordion, Button, Form, InputGroup} from "react-bootstrap";
+import {Accordion, Button, Form, InputGroup, useAccordionButton} from "react-bootstrap";
 
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc} from "firebase/firestore";
+import {doc, getDoc, setDoc} from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import Swal from "sweetalert2";
 import { fetchBrands, fetchModels, fetchCars} from "./vehicle-components";
 import {loadingContent} from "../admin-components";
+
+import Select from "react-select";
 
 const VehicleAdd = () => {
 
@@ -20,11 +22,28 @@ const VehicleAdd = () => {
 
     const [modelsByBrandId, setModelsByBrandId] = useState(null);
 
+    const [locations, setLocations] = useState(null);
+
     useEffect(() => {
 
         fetchBrands().then(response => setBrands(response));
         fetchModels().then(response => setModels(response));
         fetchCars().then(response => setCars(response));
+
+        const fetchLocations = async () => {
+
+            const docRef = doc(db, "vehicle", "locations");
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                return docSnap.data();
+            } else {
+                console.log("No such document (vehicle/locations)!");
+                return {};
+            }
+        }
+
+        fetchLocations().then(response => setLocations(response));
 
     }, []);
 
@@ -32,8 +51,14 @@ const VehicleAdd = () => {
 
         let selectedValue = e.target.value;
 
-        let currentModels = selectedValue && Object.values(models).find(i => i.brandId == selectedValue).models;
-        setModelsByBrandId(currentModels);
+        if(selectedValue && Object.values(models).length > 0) {
+
+            let currentModels = selectedValue && Object.values(models).find(i => i.brandId == selectedValue).models;
+            setModelsByBrandId(currentModels);
+        }
+        else {
+            setModelsByBrandId(null);
+        }
     }
 
 
@@ -130,14 +155,19 @@ const VehicleAdd = () => {
 
         event.preventDefault();
 
+        console.log(event.target.elements)
+
         let eventElementsArray =
             Array.from(event.target.elements)
                 .filter(element => element.name)
                 .map(e => ({
                     [e.name]: e.name != 'image' ? e.value : e.files[0]
                 }));
+        let selectedLocations = eventElementsArray.filter(i => i.availableLocations).map(i => i.availableLocations);
         let newCar = Object.assign({}, ...eventElementsArray);
+        newCar.availableLocations = selectedLocations;
 
+        console.log(newCar);
 
         let newCarIndex = cars ? Object.values(cars).length : 0;
 
@@ -146,17 +176,19 @@ const VehicleAdd = () => {
             [newCarIndex]: newCar,
         }));
 
+        event.target.reset();
     }
     const handleInputChange = (event, index) => {
 
-        const e = event.target;
+        let e = event.target ? event.target : { name: "availableLocations", value: event.map(i => i.value) };
 
         setCars(current => {
             return {
                 ...current,
                 [index]: {
                     ...current[index],
-                    [e.name]: e.name != 'image' ? e.value : e.files[0]
+                    [e.name]: e.name !== 'image' ? e.value : e.files[0]
+                    //[e.name]: (!e && event.length > 0) ? event : (e.name !== 'image' ? e.value : e.files[0])
                 }
             }
         })
@@ -305,6 +337,18 @@ const VehicleAdd = () => {
                                                                     onChange={event => handleInputChange(event, index)}
                                                                 />
                                                             </InputGroup>
+                                                            <InputGroup className="my-1">
+                                                                <InputGroup.Text>Available Locations</InputGroup.Text>
+                                                                <Select
+                                                                    isMulti
+                                                                    name="availableLocations"
+                                                                    defaultValue={item.availableLocations && item.availableLocations.map(i => ({label: locations[i], value: i}))}
+                                                                    options={Object.entries(locations).map(([key, value]) => ({label: value, value: key}))}
+                                                                    className="react-select w-75"
+                                                                    classNamePrefix="select"
+                                                                    onChange={event => handleInputChange(event, index)}
+                                                                />
+                                                            </InputGroup>
                                                         </div>
                                                     </Accordion.Body>
                                                 </Accordion.Item>
@@ -314,7 +358,7 @@ const VehicleAdd = () => {
                                 </Accordion>
 
                                 <Accordion>
-                                    <Accordion.Item eventKey="0">
+                                    <Accordion.Item>
                                         <Accordion.Header className="m-0 p-0">Add a New Car</Accordion.Header>
                                         <Accordion.Body>
                                             <Form onSubmit={handleAddNewSubmit}>
@@ -324,7 +368,9 @@ const VehicleAdd = () => {
                                                         <InputGroup.Text>Brand</InputGroup.Text>
                                                         <Form.Select
                                                             name="brandId"
-                                                            onChange={handleBrandChange}>
+                                                            onChange={handleBrandChange}
+                                                            required={true}
+                                                        >
                                                             <option value="">Select a Brand...</option>
                                                             {
                                                                 brands && Object.entries(brands).map(([key, value])=>
@@ -335,7 +381,7 @@ const VehicleAdd = () => {
                                                     </InputGroup>
                                                     <InputGroup className="my-1">
                                                         <InputGroup.Text>Model</InputGroup.Text>
-                                                        <Form.Select name="modelId">
+                                                        <Form.Select name="modelId" required={true}>
                                                             <option value="">Select a Model...</option>
                                                             {
                                                                 modelsByBrandId && Object.entries(modelsByBrandId).map(([key, value])=>
@@ -346,19 +392,19 @@ const VehicleAdd = () => {
                                                     </InputGroup>
                                                     <InputGroup className="my-1">
                                                         <InputGroup.Text>Image</InputGroup.Text>
-                                                        <Form.Control type="file" name="image" />
+                                                        <Form.Control type="file" name="image" required={true}/>
                                                     </InputGroup>
                                                     <InputGroup className="my-1">
                                                         <InputGroup.Text>Power</InputGroup.Text>
-                                                        <Form.Control type="text" name="power" placeholder="Power" />
+                                                        <Form.Control type="text" name="power" placeholder="Power" required={true}/>
                                                     </InputGroup>
                                                     <InputGroup className="my-1">
                                                         <InputGroup.Text>Engine Size</InputGroup.Text>
-                                                        <Form.Control type="text" name="engineSize" placeholder="Engine Size" />
+                                                        <Form.Control type="text" name="engineSize" placeholder="Engine Size" required={true}/>
                                                     </InputGroup>
                                                     <InputGroup className="my-1">
                                                         <InputGroup.Text>Gearbox</InputGroup.Text>
-                                                        <Form.Select name="gearbox">
+                                                        <Form.Select name="gearbox" required={true}>
                                                             <option value="">Select a Gearbox...</option>
                                                             <option value="manual">Manual</option>
                                                             <option value="automatic">Automatic</option>
@@ -366,7 +412,7 @@ const VehicleAdd = () => {
                                                     </InputGroup>
                                                     <InputGroup className="my-1">
                                                         <InputGroup.Text>Body</InputGroup.Text>
-                                                        <Form.Select name="bodyType">
+                                                        <Form.Select name="bodyType" required={true}>
                                                             <option value="">Select a Body Type...</option>
                                                             <option value="Sedan">Sedan</option>
                                                             <option value="Hatchback">Hatchback</option>
@@ -380,7 +426,7 @@ const VehicleAdd = () => {
                                                     </InputGroup>
                                                     <InputGroup className="my-1">
                                                         <InputGroup.Text>Fuel</InputGroup.Text>
-                                                        <Form.Select name="fuelType">
+                                                        <Form.Select name="fuelType" required={true}>
                                                             <option value="">Select a Fuel Type...</option>
                                                             <option value="Gas">Gas</option>
                                                             <option value="Diesel">Diesel</option>
@@ -392,7 +438,18 @@ const VehicleAdd = () => {
                                                     <h3>Vehicle Info</h3>
                                                     <InputGroup className="my-1">
                                                         <InputGroup.Text>Car Count</InputGroup.Text>
-                                                        <Form.Control type="number" name="carCount" placeholder="Available Car Count..." />
+                                                        <Form.Control type="number" name="carCount" placeholder="Available Car Count..." required={true}/>
+                                                    </InputGroup>
+                                                    <InputGroup className="my-1">
+                                                        <InputGroup.Text>Available Locations</InputGroup.Text>
+                                                        <Select
+                                                            isMulti
+                                                            name="availableLocations"
+                                                            options={Object.entries(locations).map(([key, value]) => ({label: value, value: key}))}
+                                                            className="react-select w-75"
+                                                            classNamePrefix="select"
+                                                            required={true}
+                                                        />
                                                     </InputGroup>
                                                 </div>
                                                 <div className="mt-3 input-groups-3">
