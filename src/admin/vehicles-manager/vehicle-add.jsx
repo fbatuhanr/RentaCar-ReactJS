@@ -161,7 +161,14 @@ const VehicleAdd = () => {
             Array.from(event.target.elements)
                 .filter(element => element.name)
                 .map(e => ({
-                    [e.name]: e.name != 'image' ? e.value : e.files[0]
+                    [e.name]:
+                        e.name !== "image"
+                            ?
+                                e.name === "brandId" || e.name === "modelId" || e.name === "carCount"
+                                    ? e.value ? parseInt(e.value) || 0 : ""
+                                    : e.value
+                            :
+                                e.files[0]
                 }));
         let selectedLocations = eventElementsArray.filter(i => i.availableLocations).map(i => i.availableLocations);
         let newCar = Object.assign({}, ...eventElementsArray);
@@ -178,6 +185,28 @@ const VehicleAdd = () => {
 
         event.target.reset();
     }
+    const handleRemoveButton = (key) => {
+
+        setCars(current => {
+
+            const copy = {...current};
+            delete copy[key];
+
+            return copy;
+        });
+
+        setCars(current => {
+
+            const copy = {...current};
+            Object.keys(copy).map((id, index) => {
+
+                copy[index] = copy[id];
+                if(index != id) delete copy[id];
+            })
+
+            return copy;
+        });
+    }
     const handleInputChange = (event, index) => {
 
         let e = event.target ? event.target : { name: "availableLocations", value: event.map(i => i.value) };
@@ -187,12 +216,19 @@ const VehicleAdd = () => {
                 ...current,
                 [index]: {
                     ...current[index],
-                    [e.name]: e.name !== 'image' ? e.value : e.files[0]
-                    //[e.name]: (!e && event.length > 0) ? event : (e.name !== 'image' ? e.value : e.files[0])
+                    [e.name]:
+                        e.name !== "image"
+                            ?
+                            e.name === "brandId" || e.name === "modelId" || e.name === "carCount"
+                                ? e.value ? parseInt(e.value) || 0 : ""
+                                : e.value
+                            :
+                            e.files[0]
                 }
             }
         })
     }
+
     const handleDisplayImage = imgUrl => {
 
         Swal.fire({
@@ -204,7 +240,7 @@ const VehicleAdd = () => {
 
     return (
         <div>
-            <h1>Vehicle Models</h1>
+            <h1>Cars</h1>
                 <div className="d-grid gap-2 p-3">
                     {
                         cars && brands && models && !isLoading
@@ -214,14 +250,13 @@ const VehicleAdd = () => {
                                     {
                                         Object.values(cars).map((item, index) => {
 
-                                        let brandName = Object.values(brands)[item.brandId];
-                                        let modelName = Object.values(models).find(i => i.brandId == item.brandId).models[item.modelId];
-
-                                        let currentModelsByBrandId = Object.values(models).find(i => i.brandId == item.brandId).models;
+                                            let currBrandName = item.brandId.length != 0 ? Object.values(brands)[item.brandId] : null;
+                                            let currModelsByBrandId =  item.brandId.length != 0 ? Object.values(models).find(i => i.brandId == item.brandId).models : null;
+                                            let currModelName = currModelsByBrandId ? currModelsByBrandId[item.modelId] : null;
 
                                             return (
-                                                <Accordion.Item key={index} eventKey={index}>
-                                                    <Accordion.Header className="m-0 p-0">{brandName} / {modelName}</Accordion.Header>
+                                                <Accordion.Item key={index}>
+                                                    <Accordion.Header className="m-0 p-0">{currBrandName} / {currModelName}</Accordion.Header>
                                                     <Accordion.Body>
                                                         <div className="mb-3 input-groups-1">
                                                             <h3>Vehicle Properties</h3>
@@ -249,7 +284,7 @@ const VehicleAdd = () => {
                                                                 >
                                                                     <option value="">Select a Model...</option>
                                                                     {
-                                                                        Object.entries(currentModelsByBrandId).map(([key, value]) =>
+                                                                        currModelsByBrandId && Object.entries(currModelsByBrandId).map(([key, value]) =>
                                                                             <option value={key} key={key}>{value}</option>
                                                                         )
                                                                     }
@@ -349,6 +384,11 @@ const VehicleAdd = () => {
                                                                     onChange={event => handleInputChange(event, index)}
                                                                 />
                                                             </InputGroup>
+                                                        </div>
+                                                        <div className="mt-3 input-groups-2">
+                                                            <Button variant="danger" type="button" className="w-100" onClick={() => handleRemoveButton(index)}>
+                                                                Remove Car
+                                                            </Button>
                                                         </div>
                                                     </Accordion.Body>
                                                 </Accordion.Item>

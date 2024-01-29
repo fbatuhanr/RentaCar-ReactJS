@@ -5,6 +5,11 @@ import {Link} from "react-router-dom";
 import {doc, getDoc} from "firebase/firestore";
 import {db} from "../config/firebase";
 
+import {loadingContent} from "./general/general-components";
+
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 const CarOffers = () => {
 
     const [isLoading, setIsLoading] = useState(false);
@@ -69,60 +74,44 @@ const CarOffers = () => {
               </Row>
                 <Row>
                     {
-                        cars && brands && models && Object.entries(cars).map(([key, value]) => {
+                        cars && brands && models
+                        ?
+                            Object.entries(cars)
+                                .filter(([key, value]) => value.carCount > 0)
+                                .map(([key, value]) => {
 
-                            let brand = brands[value.brandId];
-                            let model = Object.values(models).find(i => i.brandId == value.brandId).models[value.modelId];
-                            return (
-                                <Col xs={6} md={4} className="py-2">
-                                    <div className="gallery-box p-2">
-                                        <div className="gallery-img">
-                                            <img src={value.image} className="img-fluid"/>
-                                        </div>
-                                        <div className="gallery-content text-center">
-                                            <h3 className="fs-4 fw-600 p-0">
-                                                {brand}
-                                            </h3>
-                                            <p className="fs-5 fw-500 m-0 pt-1 pb-3 primary-color">
-                                                {model}
-                                            </p>
-                                            <div className="d-grid pb-2">
-                                                <Link to={`/cars/${brand}/${model}/${key}`}>
-                                                    <Button variant="primary rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold">Rent Now</Button>
-                                                </Link>
+                                let brand = brands[value.brandId];
+                                let model = Object.values(models).find(i => i.brandId == value.brandId).models[value.modelId];
+                                return (
+                                    <Col xs={6} md={4} className="py-2">
+                                        <div className="gallery-box p-2">
+                                            <div className="gallery-img">
+                                                <LazyLoadImage
+                                                    src={value.image}
+                                                    className="img-fluid"
+                                                    effect="blur"
+                                                />
+                                            </div>
+                                            <div className="gallery-content text-center">
+                                                <h3 className="fs-4 fw-600 p-0">
+                                                    {brand}
+                                                </h3>
+                                                <p className="fs-5 fw-500 m-0 pt-1 pb-3 primary-color">
+                                                    {model}
+                                                </p>
+                                                <div className="d-grid pb-2">
+                                                    <Link to={`/cars/${brand}/${model}/${key}`}>
+                                                        <Button variant="primary rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold">Rent Now</Button>
+                                                    </Link>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Col>
-                                )
-                            }
-                        )
-                    }
-                    {
-                        vehiclesData.map(vehicle =>
-                            Object.entries(vehicle.model).map(model =>
-                                 <Col xs={6} md={4} className="py-2">
-                                    <div className="gallery-box p-2">
-                                        <div className="gallery-img">
-                                            <img src={model[1].imageUrl} className="img-fluid"/>
-                                        </div>
-                                        <div className="gallery-content text-center">
-                                            <h3 className="fs-4 fw-600 p-0">
-                                                {vehicle.brand}
-                                            </h3>
-                                            <p className="fs-5 fw-500 m-0 pt-1 pb-3 primary-color">
-                                                {model[0]}
-                                            </p>
-                                            <div className="d-grid pb-2">
-                                                <Link to={`/cars/${vehicle.brand}/${model[0]}`}>
-                                                    <Button variant="primary rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold">Rent Now</Button>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
+                                    </Col>
+                                    )
+                                }
                             )
-                        )
+                        :
+                            loadingContent
                     }
                 </Row>
             </Container>

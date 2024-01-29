@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {locationsData, vehiclesData} from "../../DATA/data.jsx";
 
@@ -11,11 +11,20 @@ import {Container, Row, Col, Button, Card, ListGroup, InputGroup, Form} from "re
 import {TbEngine, TbManualGearbox} from "react-icons/tb";
 import {BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill} from "react-icons/bs";
 import {PiEngineFill} from "react-icons/pi";
+import {fetchCars} from "../../hooks/useFetchData";
 
 
 const MyRentals = () => {
 
     const {reservations} = useSelector(state => state.ReserveSlice);
+
+    const [cars, setCars] = useState(null);
+
+    useEffect(() => {
+
+        fetchCars().then(response => setCars(response));
+
+    }, []);
 
     return (
         <div id="my-rentals">
@@ -27,10 +36,12 @@ const MyRentals = () => {
                 </Row>
                 <Row>
                     {
-                        reservations && reservations.length
+                        cars && reservations && reservations.length
                             ?
                             reservations.map(reserveData => {
-                                let modelProperties = reserveData ? vehiclesData.find(item => item["brand"] === reserveData["carBrand"]).model[reserveData["carModel"]] : null;
+
+                                console.log(reserveData)
+
                                 return (<Col xs={{ span: 10, offset: 1 }}>
                                     <Card className="my-2">
                                         <Row>
@@ -45,34 +56,34 @@ const MyRentals = () => {
                                         </Row>
                                         <Row>
                                             <Col xs={12} md={6}>
-                                                <img src={modelProperties.imageUrl} alt={`${reserveData.carBrand} / ${reserveData.carModel}`} />
+                                                <img src={cars[reserveData.carId].image} alt={`${reserveData.carBrand} / ${reserveData.carModel}`} />
                                             </Col>
                                             <Col xs={12} md={6}>
                                                 <ListGroup variant="flush">
                                                     <ListGroup.Item>
                                                         <TbEngine size="2em" className="me-2" style={{marginTop: "-8px"}}/>
                                                         <span className="fs-6">HP:</span> &nbsp;
-                                                        <span className="fs-5 fw-bold">{modelProperties.power}</span>
+                                                        <span className="fs-5 fw-bold">{cars[reserveData.carId].power}</span>
                                                     </ListGroup.Item>
                                                     <ListGroup.Item>
                                                         <PiEngineFill size="2em" className="me-2" style={{marginTop: "-8px"}}/>
                                                         <span className="fs-6">Engine Size:</span> &nbsp;
-                                                        <span className="fs-5 fw-bold">{modelProperties.engineSize}</span>
+                                                        <span className="fs-5 fw-bold">{cars[reserveData.carId].engineSize}</span>
                                                     </ListGroup.Item>
                                                     <ListGroup.Item>
                                                         <TbManualGearbox size="2em" className="me-2" style={{marginTop: "-8px"}}/>
                                                         <span className="fs-6">Gear Box:</span> &nbsp;
-                                                        <span className="fs-5 fw-bold">{modelProperties.gearbox}</span>
+                                                        <span className="fs-5 fw-bold">{cars[reserveData.carId].gearbox}</span>
                                                     </ListGroup.Item>
                                                     <ListGroup.Item>
                                                         <BsCarFront size="2em" className="me-2" style={{marginTop: "-10px"}}/>
                                                         <span className="fs-6">Body Type:</span> &nbsp;
-                                                        <span className="fs-5 fw-bold">{modelProperties.bodyType}</span>
+                                                        <span className="fs-5 fw-bold">{cars[reserveData.carId].bodyType}</span>
                                                     </ListGroup.Item>
                                                     <ListGroup.Item>
                                                         <BsFillFuelPumpFill size="2em" className="me-2" style={{marginTop: "-10px"}}/>
                                                         <span className="fs-6">Fuel Type:</span> &nbsp;
-                                                        <span className="fs-5 fw-bold">{modelProperties.fuelType}</span>
+                                                        <span className="fs-5 fw-bold">{cars[reserveData.carId].fuelType}</span>
                                                     </ListGroup.Item>
                                                 </ListGroup>
                                             </Col>

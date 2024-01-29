@@ -87,23 +87,34 @@ const VehicleModels = () => {
         setModels(current => {
 
             const copy = {...current};
-            delete copy[parentKey].models[childKey];
+
+            if(Object.values(copy[parentKey].models).length >= 1)
+                delete copy[parentKey].models[childKey]
+            else
+                delete copy[parentKey]
 
             return copy;
         });
-
 
         setModels(current => {
 
             let copy = {...current};
 
+            if(!copy[parentKey])
+                return copy;
+
+            const newModels = {models:{}};
             Object.keys(copy[parentKey].models).map((id, index) => {
-
-                copy[parentKey].models[index] = copy[parentKey].models[id];
-                if(index != id) delete copy[parentKey].models[id];
+                newModels.models[index] = copy[parentKey].models[id];
             });
+            const newObj = Object.assign({}, copy[parentKey], newModels);
 
-            return copy;
+            const result = {
+                ...copy,
+                [parentKey]: newObj
+            }
+
+            return result;
         });
     }
 
@@ -182,7 +193,7 @@ const VehicleModels = () => {
                                     <Form.Select
                                         defaultValue=""
                                         value={newModelBrandId}
-                                        onChange={e => setNewModelBrandId(e.target.value)}
+                                        onChange={e => setNewModelBrandId(e.target.value ? parseInt(e.target.value) || 0 : "")}
                                     >
                                         <option value="">Select a brand...</option>
                                         {

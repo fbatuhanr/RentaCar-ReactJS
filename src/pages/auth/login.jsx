@@ -5,6 +5,7 @@ import useAuthentication from "../../hooks/useAuthentication";
 import { NavLink, useNavigate } from "react-router-dom"
 
 import {Container, Row, Col, Form, Button, Alert, Spinner} from "react-bootstrap";
+import {loadingContent} from "../../components/general/general-components";
 
 const Login = () => {
 
@@ -65,7 +66,7 @@ const Login = () => {
                                 {
                                     isLoading
                                     ?
-                                        <Spinner animation="border" />
+                                        loadingContent
                                     :
                                         <Form onSubmit={handleLogin}>
                                             <Form.Group className="mb-3" controlId="formBasicEmail">

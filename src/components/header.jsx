@@ -17,8 +17,6 @@ import {RxSlash} from "react-icons/rx";
 
 const Header = () => {
 
-    const navigate = useNavigate();
-
     const user = useSelector(({UserSlice}) => UserSlice.user);
 
     const {signOutCall} = useAuthentication();

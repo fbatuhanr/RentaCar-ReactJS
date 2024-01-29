@@ -1,8 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useParams, useNavigate} from "react-router-dom";
+import {useParams, useNavigate, redirect} from "react-router-dom";
 import Swal from 'sweetalert2'
-
-import {vehiclesData, locationsData} from "../DATA/data.jsx";
 
 import {Container, Row, Col, Form, ListGroup, InputGroup, Button, Spinner} from 'react-bootstrap';
 
@@ -10,16 +8,22 @@ import {TbEngine, TbManualGearbox} from "react-icons/tb";
 import {BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill} from "react-icons/bs";
 import {PiEngineFill} from "react-icons/pi";
 
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {makeReservation, reserveNow} from "../redux/features/ReserveSlice";
 
 import {fetchBrands, fetchModels, fetchCars, fetchLocations} from "../hooks/useFetchData";
-import {collection, getDocs, query, where} from "firebase/firestore";
+
+import {loadingContent} from "../components/general/general-components";
+
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import {addDoc, collection, doc, setDoc} from "firebase/firestore";
 import {db} from "../config/firebase";
 
 const CarDetail = () => {
 
     const dispatch = useDispatch();
+    const user = useSelector(({UserSlice}) => UserSlice.user);
 
     const {carBrand, carModel, carId} = useParams();
     const navigate = useNavigate();
@@ -37,13 +41,12 @@ const CarDetail = () => {
 
     useEffect(() => {
 
-        console.log(carBrand)
-        console.log(carModel)
-        console.log(carId)
-
         fetchBrands().then(response => setBrands(response));
         fetchModels().then(response => setModels(response));
-        fetchCars().then(response => setCars(response));
+        fetchCars().then(response => {
+            setCars(response)
+            setIsReservationTimerEnable(response[carId].carCount > 0)
+        });
         fetchLocations().then(response => {
 
             setLocations(response)
@@ -112,175 +115,226 @@ const CarDetail = () => {
     }, [reservationTimer]);
 
 
-    const handleReserveButtonClick = event => {
+    const handleReserveButtonClick = async event => {
 
         event.currentTarget.disabled = true;
         setIsReservationTimerEnable(false);
-        Swal.fire(
-            'Reservation Completed!',
-            'Car has been reserved for you!',
-            'success'
-        )
 
-        const reservationData = {
+        if(!user.email) {
 
-            carBrand: carBrand,
-            carModel: carModel,
-
-            startDate: rentDate.start,
-            endDate: rentDate.end,
-            pickupLocation: selectedLocations.pickup,
-            dropoffLocation: selectedLocations.dropoff
+            Swal.fire({
+                title: "You have to log in",
+                text: "Please log in for reservation",
+                icon: "info",
+                showConfirmButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate("/login")
+                }
+            });
         }
+        else {
 
-        dispatch(makeReservation(reservationData));
+            const reservationData = {
+
+                reservationOwner: user.email,
+
+                carBrand: carBrand,
+                carModel: carModel,
+                carId: parseInt(carId) || 0,
+
+                startDate: rentDate.start,
+                endDate: rentDate.end,
+                pickupLocation: selectedLocations.pickup,
+                dropoffLocation: selectedLocations.dropoff
+            }
+
+            let carsClone = Object.assign({}, cars);
+            carsClone[carId].carCount = carsClone[carId].carCount - 1;
+
+            setDoc(doc(db, "vehicle", "cars"), carsClone);
+            addDoc(collection(db, "rentals"), reservationData)
+                .then(() => {
+
+                    Swal.fire(
+                        'Reservation Completed!',
+                        'Car has been reserved for you!',
+                        'success'
+                    )
+                })
+                .catch(err => {
+                    console.log(err);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!"
+                    });
+                });
+
+            dispatch(makeReservation(reservationData));
+        }
     }
 
-    return cars && brands && models !== null
-    ?
+    return (
         <div id="car-detail" style={{clear: "both"}}>
             <Container className="py-4">
                 <Row className="mb-5">
                     <Col>
-                        <h1 className="fs-1 text-center text-uppercase">Complete your reservation in <b>{timerToString()}</b></h1>
+                        {
+                            isReservationTimerEnable &&
+                            <h1 className="fs-1 text-center text-uppercase">Complete your reservation in <b>{timerToString()}</b></h1>
+                        }
                     </Col>
                 </Row>
-                <Row className="mb-4">
-                    <Col xs={12} md={6}>
-                        <img src={cars[carId].image} alt={`${carBrand} / ${carModel}`} />
-                    </Col>
-                    <Col xs={12} md={6}>
-                        <ListGroup variant="flush">
-                            <ListGroup.Item variant="secondary" action>
-                                <BsFillCarFrontFill size="2em" className="me-2" style={{marginTop: "-10px"}}/>
-                                <span className="fs-6">Brand & Model:</span> &nbsp;
-                                <span className="fs-5 fw-bold">{`${carBrand} / ${carModel}`}</span>
-                            </ListGroup.Item>
-                            <ListGroup.Item action>
-                                <TbEngine size="2em" className="me-2" style={{marginTop: "-8px"}}/>
-                                <span className="fs-6">HP:</span> &nbsp;
-                                <span className="fs-5 fw-bold">{cars[carId].power}</span>
-                            </ListGroup.Item>
-                            <ListGroup.Item action>
-                                <PiEngineFill size="2em" className="me-2" style={{marginTop: "-8px"}}/>
-                                <span className="fs-6">Engine Size:</span> &nbsp;
-                                <span className="fs-5 fw-bold">{cars[carId].engineSize}</span>
-                            </ListGroup.Item>
-                            <ListGroup.Item action>
-                                <TbManualGearbox size="2em" className="me-2" style={{marginTop: "-8px"}}/>
-                                <span className="fs-6">Gear Box:</span> &nbsp;
-                                <span className="fs-5 fw-bold">{cars[carId].gearbox}</span>
-                            </ListGroup.Item>
-                            <ListGroup.Item action>
-                                <BsCarFront size="2em" className="me-2" style={{marginTop: "-10px"}}/>
-                                <span className="fs-6">Body Type:</span> &nbsp;
-                                <span className="fs-5 fw-bold">{cars[carId].bodyType}</span>
-                            </ListGroup.Item>
-                            <ListGroup.Item action>
-                                <BsFillFuelPumpFill size="2em" className="me-2" style={{marginTop: "-10px"}}/>
-                                <span className="fs-6">Fuel Type:</span> &nbsp;
-                                <span className="fs-5 fw-bold">{cars[carId].fuelType}</span>
-                            </ListGroup.Item>
-                        </ListGroup>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={12} md={6}>
-                        <InputGroup size="lg" className="my-2">
-                            <InputGroup.Text id="pick-up-locations">Pick-up Location</InputGroup.Text>
-                            <Form.Select name="pick-up-locations" size="lg"
-                                 onChange={e => {
-                                     setSelectedLocations(prevState => ({
-                                         ...prevState,
-                                         pickup: e.target.value
-                                     }));
-                                 }}
-                            >
-                                {
-                                    Object.entries(locations).map(([key, value]) =>
-                                        <option key={key} value={key}>{value}</option>
-                                    )
-                                }
-                            </Form.Select>
-                        </InputGroup>
-                    </Col>
-                    <Col xs={12} md={6}>
-                        <InputGroup size="lg" className="my-2">
-                            <InputGroup.Text id="start-date">Start Date</InputGroup.Text>
-                            <Form.Control
-                                type="date"
-                                min={getDateByInputFormat()}
-                                name="start-date"
-                                placeholder="Start Date"
-                                value={rentDate.start}
-                                onKeyDown={e => e.preventDefault()}
-                                onChange={e => {
-                                    setRentDate({
-                                        start: e.target.value,
-                                        end: getDateByInputFormat(1, e.target.value)
-                                    })
-                                }}
-                            />
-                        </InputGroup>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={12} md={6}>
-                        <InputGroup size="lg" className="my-2">
-                            <InputGroup.Text id="drop-off-locations">Drop-off Location</InputGroup.Text>
-                            <Form.Select name="drop-off-locations" size="lg"
-                                 onChange={e => {
-                                     setSelectedLocations(prevState => ({
-                                         ...prevState,
-                                         dropoff: e.target.value
-                                     }));
-                                 }}
-                            >
-                                {
-                                    Object.entries(locations).map(([key, value]) =>
-                                        <option key={key} value={key}>{value}</option>
-                                    )
-                                }
-                            </Form.Select>
-                        </InputGroup>
-                    </Col>
-                    <Col xs={12} md={6}>
-                        <InputGroup size="lg" className="my-2">
-                            <InputGroup.Text id="end-date">End Date</InputGroup.Text>
-                            <Form.Control
-                                type="date"
-                                min={getDateByInputFormat(1, rentDate.start)}
-                                name="end-date"
-                                placeholder="End Date"
-                                value={rentDate.end}
-                                onKeyDown={e => e.preventDefault()}
-                                onChange={e => {
-                                    setRentDate(prevState => ({
-                                        ...prevState,
-                                        end: e.target.value
-                                    }));
-                                }}
-                            />
-                        </InputGroup>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Button variant="success" size="lg" className="w-100 fs-4 fw-bold"
-                        type="button"
-                        onClick={handleReserveButtonClick}>
-                            Reserve Now!
-                        </Button>
-                    </Col>
-                </Row>
+                {
+                    cars && brands && models && locations
+                        ?
+                        <>
+                            <Row className="mb-4">
+                                <Col xs={12} md={6}>
+                                    <LazyLoadImage
+                                        src={cars[carId].image}
+                                        className="img-fluid"
+                                        effect="blur"
+                                        alt={`${carBrand} / ${carModel}`}
+                                    />
+                                </Col>
+                                <Col xs={12} md={6}>
+                                    <ListGroup variant="flush">
+                                        <ListGroup.Item variant="secondary" action>
+                                            <BsFillCarFrontFill size="2em" className="me-2" style={{marginTop: "-10px"}}/>
+                                            <span className="fs-6">Brand & Model:</span> &nbsp;
+                                            <span className="fs-5 fw-bold">{`${carBrand} / ${carModel}`}</span>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item action>
+                                            <TbEngine size="2em" className="me-2" style={{marginTop: "-8px"}}/>
+                                            <span className="fs-6">HP:</span> &nbsp;
+                                            <span className="fs-5 fw-bold">{cars[carId].power}</span>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item action>
+                                            <PiEngineFill size="2em" className="me-2" style={{marginTop: "-8px"}}/>
+                                            <span className="fs-6">Engine Size:</span> &nbsp;
+                                            <span className="fs-5 fw-bold">{cars[carId].engineSize}</span>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item action>
+                                            <TbManualGearbox size="2em" className="me-2" style={{marginTop: "-8px"}}/>
+                                            <span className="fs-6">Gear Box:</span> &nbsp;
+                                            <span className="fs-5 fw-bold">{cars[carId].gearbox}</span>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item action>
+                                            <BsCarFront size="2em" className="me-2" style={{marginTop: "-10px"}}/>
+                                            <span className="fs-6">Body Type:</span> &nbsp;
+                                            <span className="fs-5 fw-bold">{cars[carId].bodyType}</span>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item action>
+                                            <BsFillFuelPumpFill size="2em" className="me-2" style={{marginTop: "-10px"}}/>
+                                            <span className="fs-6">Fuel Type:</span> &nbsp;
+                                            <span className="fs-5 fw-bold">{cars[carId].fuelType}</span>
+                                        </ListGroup.Item>
+                                    </ListGroup>
+
+                                    <div className="text-end">
+                                        <span className="text-secondary fst-italic">Available Stock: {cars[carId].carCount}</span>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={12} md={6}>
+                                    <InputGroup size="lg" className="my-2">
+                                        <InputGroup.Text id="pick-up-locations">Pick-up Location</InputGroup.Text>
+                                        <Form.Select name="pick-up-locations" size="lg"
+                                                     onChange={e => {
+                                                         setSelectedLocations(prevState => ({
+                                                             ...prevState,
+                                                             pickup: e.target.value
+                                                         }));
+                                                     }}
+                                        >
+                                            {
+                                                Object.entries(locations).map(([key, value]) =>
+                                                    <option key={key} value={key}>{value}</option>
+                                                )
+                                            }
+                                        </Form.Select>
+                                    </InputGroup>
+                                </Col>
+                                <Col xs={12} md={6}>
+                                    <InputGroup size="lg" className="my-2">
+                                        <InputGroup.Text id="start-date">Start Date</InputGroup.Text>
+                                        <Form.Control
+                                            type="date"
+                                            min={getDateByInputFormat()}
+                                            name="start-date"
+                                            placeholder="Start Date"
+                                            value={rentDate.start}
+                                            onKeyDown={e => e.preventDefault()}
+                                            onChange={e => {
+                                                setRentDate({
+                                                    start: e.target.value,
+                                                    end: getDateByInputFormat(1, e.target.value)
+                                                })
+                                            }}
+                                        />
+                                    </InputGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={12} md={6}>
+                                    <InputGroup size="lg" className="my-2">
+                                        <InputGroup.Text id="drop-off-locations">Drop-off Location</InputGroup.Text>
+                                        <Form.Select name="drop-off-locations" size="lg"
+                                                     onChange={e => {
+                                                         setSelectedLocations(prevState => ({
+                                                             ...prevState,
+                                                             dropoff: e.target.value
+                                                         }));
+                                                     }}
+                                        >
+                                            {
+                                                Object.entries(locations).map(([key, value]) =>
+                                                    <option key={key} value={key}>{value}</option>
+                                                )
+                                            }
+                                        </Form.Select>
+                                    </InputGroup>
+                                </Col>
+                                <Col xs={12} md={6}>
+                                    <InputGroup size="lg" className="my-2">
+                                        <InputGroup.Text id="end-date">End Date</InputGroup.Text>
+                                        <Form.Control
+                                            type="date"
+                                            min={getDateByInputFormat(1, rentDate.start)}
+                                            name="end-date"
+                                            placeholder="End Date"
+                                            value={rentDate.end}
+                                            onKeyDown={e => e.preventDefault()}
+                                            onChange={e => {
+                                                setRentDate(prevState => ({
+                                                    ...prevState,
+                                                    end: e.target.value
+                                                }));
+                                            }}
+                                        />
+                                    </InputGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button variant="success" size="lg" className="w-100 fs-4 fw-bold"
+                                            type="button"
+                                            onClick={handleReserveButtonClick}
+                                            disabled={cars[carId].carCount <= 0}>
+                                        Reserve Now!
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </>
+                        :
+                            loadingContent
+                }
             </Container>
         </div>
-    :
-        <div className="text-center p-4">
-            <Spinner animation="border" role="status">
-                <span className="visually-hidden">Loading...</span>
-            </Spinner>
-        </div>
+    )
 };
 
 export default CarDetail;

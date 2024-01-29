@@ -5,6 +5,7 @@ import useAuthentication from "../../hooks/useAuthentication";
 import { NavLink, useNavigate } from "react-router-dom"
 
 import {Alert, Button, Col, Container, Form, Row, Spinner} from "react-bootstrap"
+import {loadingContent} from "../../components/general/general-components";
 
 const Signup = () => {
 
@@ -47,7 +48,7 @@ const Signup = () => {
                                 {
                                     isLoading
                                     ?
-                                    <Spinner animation="border" />
+                                        loadingContent
                                     :
                                     <Form onSubmit={handleSignup}>
                                         <Form.Group className="mb-3" controlId="formBasicEmail">
