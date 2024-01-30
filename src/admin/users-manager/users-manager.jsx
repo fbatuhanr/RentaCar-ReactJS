@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Button, Form, InputGroup} from "react-bootstrap";
-import {collection, doc, updateDoc, getDocs, setDoc} from "firebase/firestore";
+import {doc, updateDoc} from "firebase/firestore";
 import {db} from "../../config/firebase";
 import Swal from "sweetalert2";
 import {useSelector} from "react-redux";
@@ -8,7 +8,8 @@ import {useSelector} from "react-redux";
 import {fetchUsers} from "../../hooks/useFetchData";
 import {loadingContent} from "../../components/general/general-components";
 
-const UserRoles = { admin: "Admin", user: "User" };
+import {UserRoles, isAdmin} from "../../config/general";
+
 const UsersManager = () => {
 
     const user = useSelector(({UserSlice}) => UserSlice.user);
@@ -61,7 +62,6 @@ const UsersManager = () => {
     return (
         <div>
             <h1>Users Management</h1>
-            <Form onSubmit={null}>
                 <div className="d-grid gap-2 p-3">
                     {
                         users && !isLoading
@@ -71,7 +71,7 @@ const UsersManager = () => {
                                 {
                                     Object.entries(users).map(([key, value]) => {
 
-                                        let isAdmin = value.role == Object.keys(UserRoles).find(key => UserRoles[key] == UserRoles.admin);
+                                        let isAnAdmin = isAdmin(value.role);
                                         let isCurrentUser = value.email == user.email;
                                         return (
                                             <div key={key} className="my-2">
@@ -92,7 +92,7 @@ const UsersManager = () => {
                                                     <Form.Select
                                                         name="userRole"
                                                         defaultValue={value.role}
-                                                        disabled={isAdmin && isCurrentUser}
+                                                        disabled={isAnAdmin && isCurrentUser}
                                                         ref={event => refs.current[key] = event}
                                                     >
                                                         <option value="">Select a role...</option>
@@ -107,7 +107,7 @@ const UsersManager = () => {
 
                                                     <Button variant="success" type="button"
                                                             onClick={() => handleUpdateButton(key)}
-                                                            disabled={isAdmin && isCurrentUser}>
+                                                            disabled={isAnAdmin && isCurrentUser}>
                                                         Update
                                                     </Button>
 
@@ -122,7 +122,6 @@ const UsersManager = () => {
                             loadingContent
                     }
                 </div>
-            </Form>
         </div>
     );
 };

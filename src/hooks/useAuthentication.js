@@ -2,10 +2,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { db, auth } from "../config/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, getDoc, addDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { clearUserData, setUser } from "../redux/features/UserSlice";
-
-
 
 const useAuthentication = () => {
 

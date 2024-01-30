@@ -12,8 +12,7 @@ import store from "./redux/app/store";
 import {
     BrowserRouter as Router,
     Routes,
-    Route,
-    Link, useLocation
+    Route
 } from "react-router-dom"
 
 import ScrollToTop from "./config/ScrollToTop";
@@ -56,37 +55,36 @@ function App() {
       <Provider store={store}>
           <PersistGate persistor={persistor}>
               <Router>
-                  <ScrollToTop />
-                  { !window.location.pathname.includes("admin") && <Header /> }
-                    <Routes>
-
-                        <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>
-                            <Route path="" element={<Admin />} /> // this never renders
-                            <Route path="users" element={<UsersManager />} />
-                            <Route path="vehicles" element={<VehiclesManager />} >
-                                <Route path="brands" element={<VehicleBrands />} />
-                                <Route path="models" element={<VehicleModels />} />
-                                <Route path="cars" element={<VehicleCars />} />
-                            </Route>
-                            <Route path="locations" element={<LocationsManager />} />
-                            <Route path="rentals" element={<RentalsManager />} />
+                <ScrollToTop />
+                <Header />
+                <Routes>
+                    <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>
+                        <Route path="" element={<Admin />} /> // this never renders
+                        <Route path="users" element={<UsersManager />} />
+                        <Route path="vehicles" element={<VehiclesManager />} >
+                            <Route path="brands" element={<VehicleBrands />} />
+                            <Route path="models" element={<VehicleModels />} />
+                            <Route path="cars" element={<VehicleCars />} />
                         </Route>
+                        <Route path="locations" element={<LocationsManager />} />
+                        <Route path="rentals" element={<RentalsManager />} />
+                    </Route>
 
-                      <Route path="/" element={<Home />}/>
+                  <Route path="/" element={<Home />}/>
 
-                      <Route path="/login" element={<GuestGuard><Login /></GuestGuard>} />
-                      <Route path="/sign-up" element={<GuestGuard><Signup /></GuestGuard>} />
+                  <Route path="/login" element={<GuestGuard><Login /></GuestGuard>} />
+                  <Route path="/sign-up" element={<GuestGuard><Signup /></GuestGuard>} />
 
-                      <Route path="/about" element={<About />} />
-                      <Route path="/client" element={<Client />} />
-                      <Route path="/services" element={<Services />} />
-                      <Route path="/vehicles" element={<Vehicles />} />
-                      <Route path="/contact" element={<Contact />} />
-                      <Route path="/my-rentals" element={<AuthGuard><MyRentals /></AuthGuard>} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/client" element={<Client />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/vehicles" element={<Vehicles />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/my-rentals" element={<AuthGuard><MyRentals /></AuthGuard>} />
 
-                      <Route path="/cars/:carBrand/:carModel/:carId" element={<CarDetail />} />
-                    </Routes>
-                  { !window.location.pathname.includes("admin") && <Footer /> }
+                  <Route path="/cars/:carBrand/:carModel/:carId" element={<CarDetail />} />
+                </Routes>
+                <Footer />
               </Router>
           </PersistGate>
       </Provider>
