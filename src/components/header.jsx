@@ -44,7 +44,7 @@ const Header = () => {
             <header id="header">
                 {
                     isAdmin(user.role) &&
-                    <NavLink to="/admin" target="_blank">
+                    <NavLink to="/admin">
                         <Button variant="primary" className="w-100 rounded-0 fw-bold">
                             Click here for Admin Panel!
                         </Button>

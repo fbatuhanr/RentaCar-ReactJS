@@ -1,25 +1,79 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {vehiclesData} from "../DATA/data.jsx";
 
 import Form from 'react-bootstrap/Form';
 import {Link} from "react-router-dom";
 
 import {Container, Row, Col, Button} from "react-bootstrap";
+import {fetchBrands, fetchCars, fetchModels} from "../hooks/useFetchData";
 
 
 const CarSearch = () => {
 
-    const [carBrand, setCarBrand] = useState(null);
-    const [carModel, setCarModel] = useState(null);
+    const [cars, setCars] = useState(null);
+    const [brands, setBrands] = useState(null);
+    const [models, setModels] = useState(null);
 
-    const handleBrandChange = event => {
-        setCarBrand(event.target.value !== "" ? event.target.value : null);
-    }
-    const handleModelChange = event => {
+    const [brandModelIds, setBrandModelIds] = useState(null);
 
-        setCarModel(event.target.value !== "" ? event.target.value : null);
+    const [selectedBrand, setSelectedBrand] = useState("");
+    const [selectedModel, setSelectedModel] = useState("");
+
+    const [carResults, setCarResults] = useState(null);
+    const [selectedCarId, setSelectedCarId] = useState("");
+
+    const handleBrandChange = e => {
+
+        let value = e.target.value ? parseInt(e.target.value) || 0 : "";
+        setSelectedBrand(value);
+
+        if(value === "")
+            setSelectedModel("")
     }
-    
+    const handleModelChange = e => {
+
+        let value = e.target.value ? parseInt(e.target.value) || 0 : "";
+        setSelectedModel(value);
+
+        if(value !== "") {
+
+            let carResults = Object.entries(cars).filter(([k, v]) => v.brandId == selectedBrand && v.modelId == value);
+            let carResultsIds = carResults.map(i => i[0]);
+
+            setCarResults(carResultsIds);
+            console.log(carResultsIds)
+        }
+    }
+
+    const handleCarChange = e => {
+
+        let value = e.target.value ? parseInt(e.target.value) || 0 : "";
+        setSelectedCarId(value);
+    }
+
+    useEffect(() => {
+
+        fetchBrands().then(response => setBrands(response));
+        fetchModels().then(response => setModels(response));
+
+        fetchCars().then(response => {
+            setCars(response)
+
+            const brandIds = Object.values(response).map(item => ({brandId: item.brandId, modelId: item.modelId}));
+            const brandModelIds = Object.values(brandIds.reduce((acc, obj) => {
+                acc[obj.brandId] = acc[obj.brandId] || { brandId: obj.brandId, modelId: [] };
+
+                if(!acc[obj.brandId].modelId.includes(obj.modelId))
+                    acc[obj.brandId].modelId.push(obj.modelId);
+
+                return acc;
+            }, {}));
+
+            console.log(brandModelIds)
+            setBrandModelIds(brandModelIds);
+        });
+
+    }, []);
     
     return (
         <div id="car-search" className="pb-1">
@@ -35,34 +89,63 @@ const CarSearch = () => {
                         <Container>
                             <Row>
                                 <Col xs={12} md={3} className="my-2">
-                                    <Form.Select size="lg" onChange={handleBrandChange}>
+                                    <Form.Select
+                                         size="lg"
+                                         value={selectedBrand}
+                                         onChange={handleBrandChange}
+                                    >
                                         <option value="">Choose a Brand</option>
                                         {
-                                            vehiclesData.map(car =>
-                                                <option value={car.brand}>{car.brand}</option>
+                                            brandModelIds && brandModelIds.map(item =>
+                                                <option value={item.brandId}>{brands[item.brandId]}</option>
                                             )
                                         }
                                     </Form.Select>
                                 </Col>
                                 <Col xs={12} md={3} className="my-2">
-                                    <Form.Select size="lg" onChange={handleModelChange}>
-                                        <option>{carBrand ? "Choose a Model" : "---"}</option>
+                                    <Form.Select
+                                        size="lg"
+                                        value={selectedModel}
+                                        onChange={handleModelChange}
+                                    >
+                                        <option value="">{selectedBrand ? "Choose a Model" : "---"}</option>
                                         {
-                                            carBrand &&
-                                            Object.keys(vehiclesData.find(item => item.brand === carBrand).model).map(model =>
-                                                <option value={model}>{model}</option>
+                                            selectedBrand !== "" && brandModelIds && brandModelIds
+                                                .filter(i => i.brandId == selectedBrand)
+                                                .map(item =>
+                                                    item.modelId.map(i =>
+                                                        <option value={i}>{Object.values(models).find(i => i.brandId == selectedBrand).models[i]}</option>
+                                                    )
                                             )
                                         }
                                     </Form.Select>
                                 </Col>
                                 <Col xs={12} md={3} className="my-2">
-                                    <Form.Select size="lg" onChange={null}>
-                                        <option>{carModel ? new Date().getFullYear() : "---"}</option>
+                                    <Form.Select
+                                        size="lg"
+                                        value={selectedCarId}
+                                        onChange={handleCarChange}
+                                    >
+                                        <option value="">---</option>
+                                        {
+                                            selectedBrand !== "" && selectedModel !== "" &&
+                                            carResults && carResults.map(id =>
+                                                <option value={id}>{`${new Date().getFullYear()} (${id})`}</option>
+                                            )
+                                        }
                                     </Form.Select>
                                 </Col>
                                 <Col xs={12} md={3} className="my-2">
                                     <div className="d-grid">
-                                        <Link to={carModel ? `/cars/${carBrand}/${carModel}` : null} disabled={!carModel ? true : false}>
+                                        <Link to={
+                                                selectedCarId !== ""
+                                                    ?
+                                                        `/cars/${brands[selectedBrand]}/${Object.values(models).find(i => i.brandId == selectedBrand).models[selectedModel]}/${selectedCarId}`
+                                                    :
+                                                        null
+                                        }
+                                              disabled={selectedCarId === ""}
+                                        >
                                             <Button variant="primary" size="lg" className="search-btn w-100">Search Now</Button>
                                         </Link>
                                     </div>
