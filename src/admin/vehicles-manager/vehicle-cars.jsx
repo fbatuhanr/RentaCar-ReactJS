@@ -10,7 +10,7 @@ import Select from "react-select";
 import {fetchBrands, fetchModels, fetchCars, fetchLocations} from "../../hooks/useFetchData";
 import {loadingContent} from "../../components/general/general-components";
 
-const VehicleAdd = () => {
+const VehicleCars = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -500,4 +500,4 @@ const VehicleAdd = () => {
     );
 };
 
-export default VehicleAdd;
+export default VehicleCars;

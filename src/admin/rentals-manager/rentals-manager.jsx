@@ -7,6 +7,10 @@ import {BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill} from "react-icons/bs
 import {TbEngine, TbManualGearbox} from "react-icons/tb";
 import {PiEngineFill} from "react-icons/pi";
 
+import {doc, getDocs, deleteDoc, query, collection, where} from "firebase/firestore";
+import { db } from "../../config/firebase";
+import Swal from "sweetalert2";
+
 const RentalsManager = () => {
 
     const [isLoading, setIsLoading] = useState(true);
@@ -36,20 +40,100 @@ const RentalsManager = () => {
             fetchLocations(),
             fetchReservations(),
         ])
-            .then(responses => {
-                console.log("all fetched")
-                setCars(responses[0])
-                setLocations(responses[1])
-                setReservations( groupReservationsWithSameOwner(responses[2]) )
-                setIsLoading(false);
-            });
+        .then(responses => {
+            setCars(responses[0])
+            setLocations(responses[1])
+            setReservations( groupReservationsWithSameOwner(responses[2]) )
+
+            setIsLoading(false);
+        });
     }, []);
 
     const handleCancelAllReservations = () => {
 
     }
-    const handleCancelReservation = () => {
+    const handleCancelUserReservations = async (owner) => {
 
+        Swal.fire({
+            title: "Do you want to cancel all reservation of this user?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, cancel all!",
+            cancelButtonText: "No"
+        }).then(async (result) => {
+
+            if (result.isConfirmed) {
+
+                const q = query(collection(db, "rentals"), where("reservationOwner", "==", owner));
+                const querySnapshot = await getDocs(q);
+
+                Promise.all(querySnapshot.docs.map(async (doc) => {
+                    await deleteDoc(doc.ref)
+                }))
+                    .then(() => {
+
+                        Swal.fire(
+                            `User's All Reservations Cancelled!`,
+                            `Reservations has been removed!`,
+                            'success'
+                        ).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!"
+                        });
+                    });;
+            }
+        });
+    }
+
+    const handleCancelSpecificReservation = async documentId => {
+
+        Swal.fire({
+            title: "Do you want to cancel this reservation?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, cancel it!",
+            cancelButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                deleteDoc(doc(db, "rentals", documentId))
+                    .then(() => {
+
+                        Swal.fire(
+                            'Reservation Cancelled!',
+                            'Selected car has been removed!',
+                            'success'
+                        ).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!"
+                        });
+                    });
+            }
+        });
     }
 
     return (
@@ -59,7 +143,7 @@ const RentalsManager = () => {
                 {
                     !isLoading
                     ?
-                        reservations
+                        reservations && reservations.length
                         ?
                             <Accordion>
                                 {
@@ -167,7 +251,9 @@ const RentalsManager = () => {
                                                                         </Row>
                                                                         <Row>
                                                                             <Col>
-                                                                                <Button variant="danger" className="w-100">
+                                                                                <Button variant="danger" className="w-100" type="button"
+                                                                                    onClick={() => handleCancelSpecificReservation(reserveData.documentId)}
+                                                                                >
                                                                                     Cancel this Reservation
                                                                                 </Button>
                                                                             </Col>
@@ -180,7 +266,9 @@ const RentalsManager = () => {
                                                 </Accordion>
 
                                                 <div className="mt-2">
-                                                    <Button variant="danger" className="w-100">
+                                                    <Button variant="danger" className="w-100" type="button"
+                                                        onClick={() => handleCancelUserReservations(groupKey)}
+                                                    >
                                                         Cancel all reservations for this user
                                                     </Button>
                                                 </div>
@@ -190,7 +278,7 @@ const RentalsManager = () => {
                                 }
                             </Accordion>
                             :
-                            null
+                            <p>No reservations have been made by users...</p>
                     :
                         loadingContent
                 }

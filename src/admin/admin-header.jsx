@@ -18,7 +18,7 @@ const AdminHeader = () => {
         <header>
             <Navbar className="bg-body-tertiary">
                 <Container>
-                    <Navbar.Brand href="#home">Rent a Car | Management</Navbar.Brand>
+                    <Navbar.Brand as={Link} to="/admin">Rent a Car | Management</Navbar.Brand>
                     <Navbar.Toggle />
                     <Navbar.Collapse className="justify-content-center">
                         <Navbar.Text>
@@ -37,11 +37,11 @@ const AdminHeader = () => {
                     <Navbar.Collapse className="justify-content-start">
                         <Nav className="ms-2">
                             <Nav.Link as={Link} to="users">Users</Nav.Link>
-                            <NavDropdown title="Vehicle" id="basic-nav-dropdown">
+                            <NavDropdown title="Vehicle">
                                 <NavDropdown.Item as={Link} to="vehicles/brands">Brands</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to="vehicles/models">Models</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item as={Link} to="vehicles/add">Add Car</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="vehicles/cars">Cars</NavDropdown.Item>
                             </NavDropdown>
                             <Nav.Link as={Link} to="locations">Locations</Nav.Link>
                         </Nav>

@@ -36,12 +36,14 @@ import CarDetail from "./pages/car-detail";
 import MyRentals from "./pages/my-rentals/my-rentals";
 import AuthGuard from "./guards/AuthGuard";
 import GuestGuard from "./guards/GuestGuard";
-import Admin from "./admin/admin";
 import AdminGuard from "./guards/AdminGuard";
+
+import AdminLayout from "./admin/admin-layout";
+import Admin from "./admin/admin";
+import VehiclesManager from "./admin/vehicles-manager/vehicles-manager";
 import VehicleBrands from "./admin/vehicles-manager/vehicle-brands";
 import VehicleModels from "./admin/vehicles-manager/vehicle-models";
-import VehicleAdd from "./admin/vehicles-manager/vehicle-add";
-import VehiclesManager from "./admin/vehicles-manager/vehicles-manager";
+import VehicleCars from "./admin/vehicles-manager/vehicle-cars";
 import UsersManager from "./admin/users-manager/users-manager";
 import LocationsManager from "./admin/locations-manager/locations-manager";
 import RentalsManager from "./admin/rentals-manager/rentals-manager";
@@ -58,12 +60,13 @@ function App() {
                   { !window.location.pathname.includes("admin") && <Header /> }
                     <Routes>
 
-                        <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>}>
+                        <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>
+                            <Route path="" element={<Admin />} /> // this never renders
                             <Route path="users" element={<UsersManager />} />
                             <Route path="vehicles" element={<VehiclesManager />} >
                                 <Route path="brands" element={<VehicleBrands />} />
                                 <Route path="models" element={<VehicleModels />} />
-                                <Route path="add" element={<VehicleAdd />} />
+                                <Route path="cars" element={<VehicleCars />} />
                             </Route>
                             <Route path="locations" element={<LocationsManager />} />
                             <Route path="rentals" element={<RentalsManager />} />

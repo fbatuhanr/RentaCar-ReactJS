@@ -81,7 +81,13 @@ const fetchReservations = async (owner) => {
         q = collection(db, "rentals");
 
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(i => i.data());
+
+    return querySnapshot.docs.map(doc => {
+
+        let result = doc.data();
+        result["documentId"] = doc.id;
+            return result;
+    });
 }
 
 
