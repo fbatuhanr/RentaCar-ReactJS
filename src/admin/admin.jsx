@@ -10,7 +10,7 @@ const Admin = () => {
         <>
             <Container fluid className="bg-dark min-vh-100">
                 <Row className="justify-content-md-center">
-                    <Col xs={8}>
+                    <Col xs={12} md={8}>
                         <AdminHeader />
                         <div className="bg-white mt-2 mb-4 p-4 border border-1 rounded">
                             <Outlet />

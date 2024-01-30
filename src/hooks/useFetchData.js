@@ -1,5 +1,26 @@
-import {doc, getDoc} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
 import {db} from "../config/firebase";
+
+const fetchUsers = async () => {
+
+    const querySnapshot = await getDocs(collection(db, "users"));
+    const compareByName = (a, b) => {
+        const isRoleSame = a.role === b.role;
+        return isRoleSame ? a.email.localeCompare(b.email) : a.role.localeCompare(b.role);
+    }
+
+    if (querySnapshot.docs) {
+
+        const resultData = querySnapshot.docs.map(i => Object.assign({id: i.id}, i.data()));
+        resultData.sort(compareByName);
+
+        console.log(resultData)
+        return resultData;
+    } else {
+        console.log("No such document (users)!");
+        return {};
+    }
+}
 
 const fetchBrands = async () => {
 
@@ -51,5 +72,17 @@ const fetchLocations = async () => {
     }
 }
 
+const fetchReservations = async (owner) => {
 
-export {fetchBrands, fetchModels, fetchCars, fetchLocations}
+    let q;
+    if(owner)
+        q = query(collection(db, "rentals"), where("reservationOwner", "==", owner));
+    else
+        q = collection(db, "rentals");
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(i => i.data());
+}
+
+
+export {fetchUsers, fetchBrands, fetchModels, fetchCars, fetchLocations, fetchReservations}

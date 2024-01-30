@@ -32,11 +32,10 @@ const AdminHeader = () => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Navbar className="bg-body-tertiary rounded-bottom">
+            <Navbar className="bg-body-tertiary rounded-bottom fw-500">
                 <Container>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
+                    <Navbar.Collapse className="justify-content-start">
+                        <Nav className="ms-2">
                             <Nav.Link as={Link} to="users">Users</Nav.Link>
                             <NavDropdown title="Vehicle" id="basic-nav-dropdown">
                                 <NavDropdown.Item as={Link} to="vehicles/brands">Brands</NavDropdown.Item>
@@ -45,6 +44,11 @@ const AdminHeader = () => {
                                 <NavDropdown.Item as={Link} to="vehicles/add">Add Car</NavDropdown.Item>
                             </NavDropdown>
                             <Nav.Link as={Link} to="locations">Locations</Nav.Link>
+                        </Nav>
+                    </Navbar.Collapse>
+                    <Navbar.Collapse className="justify-content-end">
+                        <Nav className="me-4">
+                            <Nav.Link as={Link} to="rentals">User Rentals</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

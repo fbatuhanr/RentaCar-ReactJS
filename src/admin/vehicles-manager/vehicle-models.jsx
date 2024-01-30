@@ -4,8 +4,8 @@ import {db} from "../../config/firebase";
 import {Button, Form, InputGroup, Spinner} from "react-bootstrap";
 import Swal from "sweetalert2";
 
-import {loadingContent} from "../admin-components";
-import {fetchBrands, fetchModels} from "./vehicle-components";
+import {fetchBrands, fetchModels} from "../../hooks/useFetchData";
+import {loadingContent} from "../../components/general/general-components";
 
 const VehicleModels = () => {
 
@@ -145,7 +145,7 @@ const VehicleModels = () => {
 
     return (
         <div>
-            <h1>Vehicle Models</h1>
+            <h1>Vehicle Models Management</h1>
             <Form onSubmit={handleSaveChangesSubmit}>
                 <div className="d-grid gap-2 p-3">
                     {

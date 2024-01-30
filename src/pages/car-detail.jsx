@@ -33,11 +33,11 @@ const CarDetail = () => {
     const [models, setModels] = useState(null);
     const [locations, setLocations] = useState(null);
 
-    const [selectedLocations, setSelectedLocations] = useState(null);
+    const [selectedLocations, setSelectedLocations] = useState({pickup: "", dropoff: ""});
     const [rentDate, setRentDate] = useState({start: getDateByInputFormat(), end: getDateByInputFormat(1)});
 
     const [isReservationTimerEnable, setIsReservationTimerEnable] = useState(true);
-    const [reservationTimer, setReservationTimer] = useState(59); //in seconds
+    const [reservationTimer, setReservationTimer] = useState(300); //in seconds
 
     useEffect(() => {
 
@@ -47,14 +47,7 @@ const CarDetail = () => {
             setCars(response)
             setIsReservationTimerEnable(response[carId].carCount > 0)
         });
-        fetchLocations().then(response => {
-
-            setLocations(response)
-            setSelectedLocations({
-                pickup: response[0],
-                dropoff: response[0]
-            })
-        });
+        fetchLocations().then(response => { setLocations(response) });
 
     }, []);
 
@@ -117,6 +110,19 @@ const CarDetail = () => {
 
     const handleReserveButtonClick = async event => {
 
+        if(Object.values(selectedLocations).some(value => value === "")){
+
+            let title = Object.values(selectedLocations).every(value => value === "")
+                        ? "Please choose locations!"
+                        : selectedLocations.pickup === ""
+                            ? "Please choose pick-up location!"
+                            : "Please choose drop-off location!"
+
+            Swal.fire(title)
+
+            return;
+        }
+
         event.currentTarget.disabled = true;
         setIsReservationTimerEnable(false);
 
@@ -139,17 +145,17 @@ const CarDetail = () => {
 
                 reservationOwner: user.email,
 
+                carId: parseInt(carId) || 0,
                 carBrand: carBrand,
                 carModel: carModel,
-                carId: parseInt(carId) || 0,
 
                 startDate: rentDate.start,
                 endDate: rentDate.end,
-                pickupLocation: selectedLocations.pickup,
-                dropoffLocation: selectedLocations.dropoff
+                pickupLocation: parseInt(selectedLocations.pickup) || 0,
+                dropoffLocation: parseInt(selectedLocations.dropoff) || 0
             }
 
-            let carsClone = Object.assign({}, cars);
+            const carsClone = Object.assign({}, cars);
             carsClone[carId].carCount = carsClone[carId].carCount - 1;
 
             setDoc(doc(db, "vehicle", "cars"), carsClone);
@@ -171,7 +177,12 @@ const CarDetail = () => {
                     });
                 });
 
-            dispatch(makeReservation(reservationData));
+
+            // IT WAS USING BEFORE DATABASE USAGE (FOR GLOBAL STATE MANAGEMENT)
+            //
+            // dispatch(makeReservation(reservationData));
+            //
+            // NOT REQUIRED ANYMORE (BECAUSE RESERVATION DATA WILL FETCH FROM DB)
         }
     }
 
@@ -234,7 +245,9 @@ const CarDetail = () => {
                                     </ListGroup>
 
                                     <div className="text-end">
-                                        <span className="text-secondary fst-italic">Available Stock: {cars[carId].carCount}</span>
+                                        <span className={`text-secondary fst-italic ${cars[carId].carCount > 0 ? "text-success" : "text-danger"}`}>
+                                            Available Stock: {cars[carId].carCount}
+                                        </span>
                                     </div>
                                 </Col>
                             </Row>
@@ -242,14 +255,17 @@ const CarDetail = () => {
                                 <Col xs={12} md={6}>
                                     <InputGroup size="lg" className="my-2">
                                         <InputGroup.Text id="pick-up-locations">Pick-up Location</InputGroup.Text>
-                                        <Form.Select name="pick-up-locations" size="lg"
-                                                     onChange={e => {
-                                                         setSelectedLocations(prevState => ({
-                                                             ...prevState,
-                                                             pickup: e.target.value
-                                                         }));
-                                                     }}
+                                        <Form.Select
+                                            name="pick-up-locations" size="lg"
+                                            defaultValue={selectedLocations.pickup}
+                                            onChange={e => {
+                                                setSelectedLocations(prevState => ({
+                                                    ...prevState,
+                                                    pickup: e.target.value
+                                                }));
+                                            }}
                                         >
+                                            <option value="">Choose a location...</option>
                                             {
                                                 Object.entries(locations).map(([key, value]) =>
                                                     <option key={key} value={key}>{value}</option>
@@ -282,14 +298,17 @@ const CarDetail = () => {
                                 <Col xs={12} md={6}>
                                     <InputGroup size="lg" className="my-2">
                                         <InputGroup.Text id="drop-off-locations">Drop-off Location</InputGroup.Text>
-                                        <Form.Select name="drop-off-locations" size="lg"
-                                                     onChange={e => {
-                                                         setSelectedLocations(prevState => ({
-                                                             ...prevState,
-                                                             dropoff: e.target.value
-                                                         }));
-                                                     }}
+                                        <Form.Select
+                                             name="drop-off-locations" size="lg"
+                                             defaultValue={selectedLocations.dropoff}
+                                             onChange={e => {
+                                                 setSelectedLocations(prevState => ({
+                                                     ...prevState,
+                                                     dropoff: e.target.value
+                                                 }));
+                                             }}
                                         >
+                                            <option value="">Choose a location...</option>
                                             {
                                                 Object.entries(locations).map(([key, value]) =>
                                                     <option key={key} value={key}>{value}</option>

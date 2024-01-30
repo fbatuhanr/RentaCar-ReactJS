@@ -3,9 +3,10 @@ import {Button, Form, InputGroup, Spinner} from "react-bootstrap";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import {db} from "../../config/firebase";
 
-import {loadingContent} from "../admin-components";
-import {fetchBrands} from "./vehicle-components";
 import Swal from "sweetalert2";
+
+import {fetchBrands} from "../../hooks/useFetchData";
+import {loadingContent} from "../../components/general/general-components";
 
 const VehicleBrands = () => {
 
@@ -91,7 +92,7 @@ const VehicleBrands = () => {
 
     return (
         <div>
-            <h1>Vehicle Brands</h1>
+            <h1>Vehicle Brands Management</h1>
             <Form onSubmit={handleSaveChangesSubmit}>
                 <div className="d-grid gap-2 p-3">
                     {

@@ -1,10 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Button, Form, InputGroup} from "react-bootstrap";
-import {loadingContent} from "../admin-components";
 import {collection, doc, updateDoc, getDocs, setDoc} from "firebase/firestore";
 import {db} from "../../config/firebase";
 import Swal from "sweetalert2";
 import {useSelector} from "react-redux";
+
+import {fetchUsers} from "../../hooks/useFetchData";
+import {loadingContent} from "../../components/general/general-components";
 
 const UserRoles = { admin: "Admin", user: "User" };
 const UsersManager = () => {
@@ -17,29 +19,7 @@ const UsersManager = () => {
 
     const refs = useRef([]);
 
-    const compareByName = (a, b) => {
-        const isRoleSame = a.role === b.role;
-        return isRoleSame ? a.email.localeCompare(b.email) : a.role.localeCompare(b.role);
-    }
-
     useEffect(() => {
-
-        const fetchUsers = async () => {
-
-            const querySnapshot = await getDocs(collection(db, "users"));
-
-            if (querySnapshot.docs) {
-
-                const resultData = querySnapshot.docs.map(i => Object.assign({id: i.id}, i.data()));
-                resultData.sort(compareByName);
-
-                console.log(resultData)
-                return resultData;
-            } else {
-                console.log("No such document (users)!");
-                return {};
-            }
-        }
 
         fetchUsers().then(response => setUsers(response));
 
@@ -80,7 +60,7 @@ const UsersManager = () => {
 
     return (
         <div>
-            <h1>Users</h1>
+            <h1>Users Management</h1>
             <Form onSubmit={null}>
                 <div className="d-grid gap-2 p-3">
                     {

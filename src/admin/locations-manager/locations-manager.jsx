@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Form, InputGroup} from "react-bootstrap";
-import {loadingContent} from "./admin-components";
 import {collection, doc, getDoc, getDocs, setDoc} from "firebase/firestore";
-import {db} from "../config/firebase";
+import {db} from "../../config/firebase";
 import Swal from "sweetalert2";
+
+import {fetchLocations} from "../../hooks/useFetchData";
+import {loadingContent} from "../../components/general/general-components";
 
 const LocationsManager = () => {
 
@@ -13,19 +15,6 @@ const LocationsManager = () => {
     const [newLocation, setNewLocation] = useState("");
 
     useEffect(() => {
-
-        const fetchLocations = async () => {
-
-            const docRef = doc(db, "vehicle", "locations");
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                return docSnap.data();
-            } else {
-                console.log("No such document (vehicle/locations)!");
-                return {};
-            }
-        }
 
         fetchLocations().then(response => setLocations(response));
 
@@ -102,7 +91,7 @@ const LocationsManager = () => {
 
     return (
         <div>
-            <h1>Locations</h1>
+            <h1>Locations Management</h1>
             <Form onSubmit={handleSaveChangesSubmit}>
                 <div className="d-grid gap-2 p-3">
                     {

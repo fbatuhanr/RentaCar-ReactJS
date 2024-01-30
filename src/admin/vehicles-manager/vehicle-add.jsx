@@ -5,10 +5,10 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import Swal from "sweetalert2";
-import { fetchBrands, fetchModels, fetchCars} from "./vehicle-components";
-import {loadingContent} from "../admin-components";
 
 import Select from "react-select";
+import {fetchBrands, fetchModels, fetchCars, fetchLocations} from "../../hooks/useFetchData";
+import {loadingContent} from "../../components/general/general-components";
 
 const VehicleAdd = () => {
 
@@ -29,20 +29,6 @@ const VehicleAdd = () => {
         fetchBrands().then(response => setBrands(response));
         fetchModels().then(response => setModels(response));
         fetchCars().then(response => setCars(response));
-
-        const fetchLocations = async () => {
-
-            const docRef = doc(db, "vehicle", "locations");
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                return docSnap.data();
-            } else {
-                console.log("No such document (vehicle/locations)!");
-                return {};
-            }
-        }
-
         fetchLocations().then(response => setLocations(response));
 
     }, []);
@@ -240,13 +226,13 @@ const VehicleAdd = () => {
 
     return (
         <div>
-            <h1>Cars</h1>
+            <h1>Cars Management</h1>
                 <div className="d-grid gap-2 p-3">
                     {
                         cars && brands && models && !isLoading
                         ?
                             <>
-                                <Accordion defaultActiveKey="0">
+                                <Accordion>
                                     {
                                         Object.values(cars).map((item, index) => {
 
@@ -255,7 +241,7 @@ const VehicleAdd = () => {
                                             let currModelName = currModelsByBrandId ? currModelsByBrandId[item.modelId] : null;
 
                                             return (
-                                                <Accordion.Item key={index}>
+                                                <Accordion.Item key={index} eventKey={index}>
                                                     <Accordion.Header className="m-0 p-0">{currBrandName} / {currModelName}</Accordion.Header>
                                                     <Accordion.Body>
                                                         <div className="mb-3 input-groups-1">
