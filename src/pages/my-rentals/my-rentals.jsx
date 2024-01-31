@@ -60,7 +60,7 @@ const MyRentals = () => {
                     {
                         !isLoading
                         ?
-                            reservations.length
+                            reservations
                                 ?
                                 reservations.map(reserveData => {
 
