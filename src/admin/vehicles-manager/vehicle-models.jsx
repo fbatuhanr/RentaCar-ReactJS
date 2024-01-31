@@ -88,7 +88,7 @@ const VehicleModels = () => {
 
             const copy = {...current};
 
-            if(Object.values(copy[parentKey].models).length >= 1)
+            if(Object.values(copy[parentKey].models).length > 0)
                 delete copy[parentKey].models[childKey]
             else
                 delete copy[parentKey]

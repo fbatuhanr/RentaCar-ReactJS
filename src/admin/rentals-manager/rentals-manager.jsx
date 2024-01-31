@@ -43,7 +43,7 @@ const RentalsManager = () => {
         .then(responses => {
             setCars(responses[0])
             setLocations(responses[1])
-            setReservations( groupReservationsWithSameOwner(responses[2]) )
+            setReservations( responses[2] ? groupReservationsWithSameOwner(responses[2]) : responses[2] )
 
             setIsLoading(false);
         });
@@ -143,7 +143,7 @@ const RentalsManager = () => {
                 {
                     !isLoading
                     ?
-                        reservations && reservations.length
+                        reservations
                         ?
                             <Accordion>
                                 {
@@ -153,7 +153,7 @@ const RentalsManager = () => {
                                             <Accordion.Header className="m-0 p-0">
                                                 <h3 className="m-0 p-0">
                                                     <span>USER: </span>
-                                                    <span className="fw-bold">{groupKey}</span>
+                                                    <span className="fw-600">{groupKey}</span>
                                                 </h3>
                                             </Accordion.Header>
                                             <Accordion.Body>

@@ -82,12 +82,18 @@ const fetchReservations = async (owner) => {
 
     const querySnapshot = await getDocs(q);
 
-    return querySnapshot.docs.map(doc => {
+    if(querySnapshot.docs.length){
 
-        let result = doc.data();
-        result["documentId"] = doc.id;
+        return querySnapshot.docs.map(doc => {
+
+            let result = doc.data();
+            result["documentId"] = doc.id;
             return result;
-    });
+        });
+    }
+    else {
+        return null;
+    }
 }
 
 
