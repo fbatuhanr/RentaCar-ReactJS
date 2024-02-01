@@ -130,7 +130,7 @@ const CarSearch = () => {
                                         {
                                             selectedBrand !== "" && selectedModel !== "" &&
                                             carResults && carResults.map(id =>
-                                                <option value={id}>{`${new Date().getFullYear()} (${id})`}</option>
+                                                <option value={id}>{`${new Date().getFullYear()} (ID: ${id})`}</option>
                                             )
                                         }
                                     </Form.Select>
