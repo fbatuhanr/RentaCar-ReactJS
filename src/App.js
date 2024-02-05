@@ -46,6 +46,7 @@ import VehicleCars from "./admin/vehicles-manager/vehicle-cars";
 import UsersManager from "./admin/users-manager/users-manager";
 import LocationsManager from "./admin/locations-manager/locations-manager";
 import RentalsManager from "./admin/rentals-manager/rentals-manager";
+import ContactFormManager from "./admin/contact-form-manager/contact-form-manager";
 
 function App() {
 
@@ -68,6 +69,7 @@ function App() {
                         </Route>
                         <Route path="locations" element={<LocationsManager />} />
                         <Route path="rentals" element={<RentalsManager />} />
+                        <Route path="contact-form" element={<ContactFormManager />} />
                     </Route>
 
                   <Route path="/" element={<Home />}/>

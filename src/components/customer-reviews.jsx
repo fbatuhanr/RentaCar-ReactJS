@@ -21,22 +21,20 @@ const CustomerReview = () => {
     const resultsRender = [];
     for (let i = 0; i < reviewsData.length; i += 2) {
         resultsRender.push(
-            <Carousel.Item interval={99999}>
+            <Carousel.Item key={`review_carousel_${i}`} interval={99999}>
                 <Carousel.Caption className="carousel-caption text-dark text-start">
                     <Row>
                     {
                         reviewsData.slice(i, i + 2)
-                            .map(review => (
-                                <Col xs={6} className="d-flex align-items-stretch">
+                            .map((review, index) => (
+                                <Col xs={6} key={`review_${i+index}`} className="d-flex align-items-stretch">
                                     <Card>
                                         <Card.Img variant="top" src={review.customerImageUrl} className="image-fluid"/>
                                         <Card.Body>
                                             <Card.Title className="text-center">{review.customerName}</Card.Title>
                                             <Card.Text className="m-0">{review.customerReview}</Card.Text>
                                             <div className="review-star text-center">
-                                                {
-                                                    Array.from({length: review.customerStar}).map(()=><AiFillStar/>)
-                                                }
+                                                { Array.from({length: review.customerStar}).map((val, inx) => <AiFillStar key={`star_${inx}`} />) }
                                             </div>
                                         </Card.Body>
                                     </Card>

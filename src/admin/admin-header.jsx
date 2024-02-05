@@ -39,7 +39,7 @@ const AdminHeader = () => {
                     </Row>
                 </Container>
             </div>
-            <Navbar className="bg-body-tertiary rounded-bottom fw-500 py-1">
+            <Navbar className="bg-body-tertiary rounded-bottom fw-600 fs-6 py-1">
                 <Container>
                     <Navbar.Collapse className="justify-content-start">
                         <Nav className="ms-2">
@@ -56,6 +56,7 @@ const AdminHeader = () => {
                     <Navbar.Collapse className="justify-content-end">
                         <Nav className="me-4">
                             <Nav.Link as={Link} to="rentals">User Rentals</Nav.Link>
+                            <Nav.Link as={Link} to="contact-form">Contact Form</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

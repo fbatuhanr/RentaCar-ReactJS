@@ -96,5 +96,19 @@ const fetchReservations = async (owner) => {
     }
 }
 
+const fetchContactForms = async () => {
 
-export {fetchUsers, fetchBrands, fetchModels, fetchCars, fetchLocations, fetchReservations}
+    const querySnapshot = await getDocs(collection(db, "forms"));
+
+    if (querySnapshot.docs) {
+
+        const resultData = querySnapshot.docs.map(i => Object.assign({id: i.id}, i.data()));
+        return resultData;
+    } else {
+        console.log("No such document (forms)!");
+        return {};
+    }
+}
+
+
+export {fetchUsers, fetchBrands, fetchModels, fetchCars, fetchLocations, fetchReservations, fetchContactForms}

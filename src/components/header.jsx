@@ -71,7 +71,7 @@ const Header = () => {
                                         :
                                         <>
                                             <Nav.Link as={Link} to="/login" className="d-inline px-0-md">Login <FaUser className="align-text-top"/></Nav.Link>
-                                            <RxSlash className="mt-2 d-none d-md-block"/>
+                                            <RxSlash className="mt-2 d-none d-lg-block"/>
                                             <Nav.Link as={Link} to="/sign-up" className="d-inline px-0-md">Sign Up <FaUserPlus size="1.1em" className="align-text-top"/></Nav.Link>
                                         </>
                                 }

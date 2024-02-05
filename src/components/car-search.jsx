@@ -41,10 +41,8 @@ const CarSearch = () => {
             let carResultsIds = carResults.map(i => i[0]);
 
             setCarResults(carResultsIds);
-            console.log(carResultsIds)
         }
     }
-
     const handleCarChange = e => {
 
         let value = e.target.value ? parseInt(e.target.value) || 0 : "";
@@ -55,7 +53,6 @@ const CarSearch = () => {
 
         fetchBrands().then(response => setBrands(response));
         fetchModels().then(response => setModels(response));
-
         fetchCars().then(response => {
             setCars(response)
 
@@ -69,7 +66,6 @@ const CarSearch = () => {
                 return acc;
             }, {}));
 
-            console.log(brandModelIds)
             setBrandModelIds(brandModelIds);
         });
 
@@ -97,7 +93,9 @@ const CarSearch = () => {
                                         <option value="">Choose a Brand</option>
                                         {
                                             brandModelIds && brandModelIds.map(item =>
-                                                <option value={item.brandId}>{brands[item.brandId]}</option>
+                                                <option key={`brand_${item.brandId}`} value={item.brandId}>
+                                                    {brands[item.brandId]}
+                                                </option>
                                             )
                                         }
                                     </Form.Select>
@@ -114,7 +112,9 @@ const CarSearch = () => {
                                                 .filter(i => i.brandId == selectedBrand)
                                                 .map(item =>
                                                     item.modelId.map(i =>
-                                                        <option value={i}>{Object.values(models).find(i => i.brandId == selectedBrand).models[i]}</option>
+                                                        <option key={`model_${i}`} value={i}>
+                                                            {Object.values(models).find(i => i.brandId == selectedBrand).models[i]}
+                                                        </option>
                                                     )
                                             )
                                         }
@@ -130,7 +130,9 @@ const CarSearch = () => {
                                         {
                                             selectedBrand !== "" && selectedModel !== "" &&
                                             carResults && carResults.map(id =>
-                                                <option value={id}>{`${new Date().getFullYear()} (ID: ${id})`}</option>
+                                                <option key={`car_${id}`} value={id}>
+                                                    {`${new Date().getFullYear()} (ID: ${id})`}
+                                                </option>
                                             )
                                         }
                                     </Form.Select>

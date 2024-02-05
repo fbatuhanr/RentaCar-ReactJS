@@ -74,10 +74,8 @@ const Footer = () => {
             <Row>
               <Col>
                 <p className="text-white text-center fs-6 mt-2 mb-1">
-                  {new Date().getFullYear()} All Rights Reserved. Design by &nbsp;
+                  {new Date().getFullYear()} All Rights Reserved. Developed & Designed by &nbsp;
                   <a href="https://github.com/fbatuhanr/" target="_blank" className="text-primary">fbatuhanr</a>
-                  &nbsp;&amp;&nbsp;
-                  <a href="https://github.com/RidvanOzturk" target="_blank" className="text-primary">RidvanOzturk</a>
                 </p>
               </Col>
             </Row>

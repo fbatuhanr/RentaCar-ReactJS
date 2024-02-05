@@ -110,22 +110,6 @@ const CarDetail = () => {
 
     const handleReserveButtonClick = async event => {
 
-        if(Object.values(selectedLocations).some(value => value === "")){
-
-            let title = Object.values(selectedLocations).every(value => value === "")
-                        ? "Please choose locations!"
-                        : selectedLocations.pickup === ""
-                            ? "Please choose pick-up location!"
-                            : "Please choose drop-off location!"
-
-            Swal.fire(title)
-
-            return;
-        }
-
-        event.currentTarget.disabled = true;
-        setIsReservationTimerEnable(false);
-
         if(!user.email) {
 
             Swal.fire({
@@ -140,6 +124,22 @@ const CarDetail = () => {
             });
         }
         else {
+
+            if(Object.values(selectedLocations).some(value => value === "")){
+
+                let resultContent = Object.values(selectedLocations).every(value => value === "")
+                    ? "Please choose locations!"
+                    : selectedLocations.pickup === ""
+                        ? "Please choose pick-up location!"
+                        : "Please choose drop-off location!"
+
+                Swal.fire({title: resultContent, icon: "warning"});
+
+                return;
+            }
+
+            event.currentTarget.disabled = true;
+            setIsReservationTimerEnable(false);
 
             const reservationData = {
 

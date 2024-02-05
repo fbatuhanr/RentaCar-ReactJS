@@ -83,7 +83,7 @@ const CarOffers = () => {
                                 let brand = brands[value.brandId];
                                 let model = Object.values(models).find(i => i.brandId == value.brandId).models[value.modelId];
                                 return (
-                                    <Col xs={6} md={4} className="py-2">
+                                    <Col xs={6} md={4} className="py-2" key={`offer_${key}`}>
                                         <div className="gallery-box p-2">
                                             <div className="gallery-img">
                                                 <LazyLoadImage
