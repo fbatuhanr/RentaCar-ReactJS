@@ -72,10 +72,12 @@ const ContactSection = () => {
                                             <Form.Control as="textarea" name="message" rows={3} placeholder="Message" className="mb-2" onChange={handleFormChange} required={true}/>
                                             <ReCAPTCHA
                                                 className="recaptcha mb-2"
-                                                sitekey={
+                                                sitekey={ process.env.REACT_APP_RECAPTCHA_TEST_SITE_KEY
+                                                    /*
                                                     window.location.href.includes("localhost")
                                                         ? process.env.REACT_APP_RECAPTCHA_TEST_SITE_KEY
                                                         : process.env.REACT_APP_RECAPTCHA_SITE_KEY
+                                                     */
                                                 }
                                                 onChange={handleCaptchaChange}
                                             />
