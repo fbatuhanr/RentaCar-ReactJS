@@ -1,5 +1,5 @@
 ## 'Rent a Car' application created by React and Google Firebase
-#### Live Demo <a href='https://rent-a-car-reactjs.vercel.app/' target='_blank'>https://rent-a-car-reactjs.vercel.app/</a>
+#### Live Demo <a href='https://rentacar-reactjs.vercel.app/' target='_blank'>https://rentacar-reactjs.vercel.app/</a>
 ### Modules:
 <ul>
     <li>
