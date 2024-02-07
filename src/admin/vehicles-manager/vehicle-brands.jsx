@@ -34,6 +34,8 @@ const VehicleBrands = () => {
 
     const handleAddNewButton = () => {
 
+        if(!newBrand.trim().length) return;
+
         let newBrandIndex = Object.values(brands).length;
         setBrands((prevState) => ({
             ...prevState,

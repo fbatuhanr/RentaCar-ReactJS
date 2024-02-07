@@ -22,6 +22,8 @@ const LocationsManager = () => {
 
     const handleAddNewButton = () => {
 
+        if(!newLocation.trim().length) return;
+
         let newIndex = Object.values(locations).length;
 
         setLocations((prevState) => ({

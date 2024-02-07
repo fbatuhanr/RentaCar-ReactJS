@@ -165,3 +165,11 @@ header#header > .header-line-2 .header-line-2-icon {
 .recaptcha > div > div {
     margin: auto;
 }
+
+header.admin-header .navbar-expand-lg .navbar-nav .nav-link {
+    color: $tertiaryColor;
+}
+header.admin-header .dropdown-item.active, .dropdown-item:active {
+    color: $tertiaryColor;
+    background-color: #ffffff;
+}

@@ -46,6 +46,8 @@ const VehicleModels = () => {
 
     const handleCreateNewButton = () => {
 
+        if(newModelBrandId === "" || !newModel.trim().length) return;
+
         let newModelIndex = models ? Object.values(models).length : 0;
         setModels(current => {
 
@@ -65,6 +67,8 @@ const VehicleModels = () => {
     }
 
     const handleAddNewButton = (key) => {
+
+        if(!refs.current[key].value.trim().length) return;
 
         let newModelIndex = Object.values(models[key].models).length;
         setModels(current => {
@@ -195,9 +199,12 @@ const VehicleModels = () => {
                                         value={newModelBrandId}
                                         onChange={e => setNewModelBrandId(e.target.value ? parseInt(e.target.value) || 0 : "")}
                                     >
-                                        <option value="">Select a brand...</option>
+                                        <option value="">Select a new brand...</option>
                                         {
-                                            brands && Object.entries(brands).map(([key, value])=>
+                                            // this structure will filter unique brands that not used before
+                                            Object.entries(brands)
+                                                .filter(([k, brand]) => !Object.values(models).some(model => model.brandId === Object.values(brands).indexOf(brand)))
+                                                .map(([key, value]) =>
                                                 <option value={key}>{value}</option>
                                             )
                                         }

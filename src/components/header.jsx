@@ -56,28 +56,28 @@ const Header = () => {
                         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                         <Navbar.Collapse id="responsive-navbar-nav">
                             <Nav className="me-auto">
-                                <Nav.Link as={Link} to="/">Home</Nav.Link>
-                                <Nav.Link as={Link} to="/about">About</Nav.Link>
-                                <Nav.Link as={Link} to="/services">Services</Nav.Link>
-                                <Nav.Link as={Link} to="/vehicles">Vehicles</Nav.Link>
-                                <Nav.Link as={Link} to="/client">Client</Nav.Link>
-                                <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
+                                <Nav.Link as={Link} to="/" eventKey="i">Home</Nav.Link>
+                                <Nav.Link as={Link} to="/about" eventKey="i">About</Nav.Link>
+                                <Nav.Link as={Link} to="/services" eventKey="i">Services</Nav.Link>
+                                <Nav.Link as={Link} to="/vehicles" eventKey="i">Vehicles</Nav.Link>
+                                <Nav.Link as={Link} to="/client" eventKey="i">Client</Nav.Link>
+                                <Nav.Link as={Link} to="/contact" eventKey="i">Contact</Nav.Link>
                             </Nav>
                             <Nav>
                                 {
                                     user.email
                                         ?
-                                        <Nav.Link as={Link} to="/my-rentals">My Rentals <LiaCarSideSolid size="1.25em" className="align-text-top"/></Nav.Link>
+                                        <Nav.Link as={Link} to="/my-rentals" eventKey="i">My Rentals <LiaCarSideSolid size="1.25em" className="align-text-top"/></Nav.Link>
                                         :
                                         <>
-                                            <Nav.Link as={Link} to="/login" className="d-inline px-0-md">Login <FaUser className="align-text-top"/></Nav.Link>
+                                            <Nav.Link as={Link} to="/login" className="d-inline px-0-md" eventKey="i">Login <FaUser className="align-text-top"/></Nav.Link>
                                             <RxSlash className="mt-2 d-none d-lg-block"/>
-                                            <Nav.Link as={Link} to="/sign-up" className="d-inline px-0-md">Sign Up <FaUserPlus size="1.1em" className="align-text-top"/></Nav.Link>
+                                            <Nav.Link as={Link} to="/sign-up" className="d-inline px-0-md" eventKey="i">Sign Up <FaUserPlus size="1.1em" className="align-text-top"/></Nav.Link>
                                         </>
                                 }
                                 <Nav.Link as={Link} to="/" onClick={handleHelpButtonClick}>Help <LiaHandsHelpingSolid size="1.25em" className="align-text-bottom"/></Nav.Link>
                                 {
-                                    user.email && <Button variant="danger" className="py-0" onClick={handleLogout}>Log out</Button>
+                                    user.email && <Button variant="danger" className="py-0" onClick={handleLogout} eventKey="i">Log out</Button>
                                 }
                             </Nav>
                         </Navbar.Collapse>

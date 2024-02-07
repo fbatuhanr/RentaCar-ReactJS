@@ -22,6 +22,9 @@ const MyRentals = () => {
     // const {reservations} = useSelector(state => state.ReserveSlice);
     // NOT REQUIRED ANYMORE (BECAUSE RESERVATION DATA WILL FETCH FROM DB)
 
+    const locale = 'en';
+    const [date, setDate] = useState(new Date());
+
     const [isLoading, setIsLoading] = useState(true);
 
     const user = useSelector(({UserSlice}) => UserSlice.user);
@@ -33,20 +36,41 @@ const MyRentals = () => {
 
     useEffect(() => {
 
+        setInterval(() => {
+            setDate(new Date());
+        }, 60 * 1000);
+
         Promise.all([
             fetchCars(),
             fetchLocations(),
             fetchReservations(user.email),
         ])
         .then(responses => {
-            console.log("all fetched")
+
             setCars(responses[0])
             setLocations(responses[1])
             setReservations(responses[2])
 
             setIsLoading(false);
         });
+
     }, []);
+
+
+    const welcomeMessage = () => {
+
+        let day = `${date.toLocaleDateString(locale, { weekday: 'long' })}, ${date.getDate()} ${date.toLocaleDateString(locale, { month: 'long' })}`;
+        let hour = date.getHours();
+        let wish = `Good ${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}, `;
+
+        let time = date.toLocaleTimeString(locale, { hour: 'numeric', hour12: true, minute: 'numeric' });
+
+        return <h4 className="mb-1">
+            {day} <span className="text-black-50">|</span> {time}
+            <hr className="my-1"/>
+            {wish} <span className="fw-600">{user.email}</span>
+        </h4>
+    }
 
     return (
         <div id="my-rentals">
@@ -56,6 +80,12 @@ const MyRentals = () => {
                         <h1 className="fs-1 text-center text-uppercase">My Rentals</h1>
                     </Col>
                 </Row>
+                {
+                    user.email &&
+                    <div className="d-flex justify-content-center mb-1">
+                        {welcomeMessage()}
+                    </div>
+                }
                 <Row>
                     {
                         !isLoading
@@ -63,8 +93,6 @@ const MyRentals = () => {
                             reservations
                                 ?
                                 reservations.map(reserveData => {
-
-                                    console.log(reserveData)
 
                                     return (<Col xs={{ span: 10, offset: 1 }}>
                                         <Card className="my-2">

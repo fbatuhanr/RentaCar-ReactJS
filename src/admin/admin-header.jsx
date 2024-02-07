@@ -15,7 +15,7 @@ const AdminHeader = () => {
     }
 
     return (
-        <header>
+        <header className="admin-header">
             <div className="bg-body-tertiary px-2 pt-4 pb-2">
                 <Container>
                     <Row>
@@ -39,24 +39,24 @@ const AdminHeader = () => {
                     </Row>
                 </Container>
             </div>
-            <Navbar className="bg-body-tertiary rounded-bottom fw-600 fs-6 py-1">
+            <Navbar expand="lg" bg="white" collapseOnSelect data-bs-theme="white" className="rounded-bottom py-2">
                 <Container>
-                    <Navbar.Collapse className="justify-content-start">
+                    <Navbar.Brand href="#" className="d-block d-lg-none fs-6 ms-3">Admin Menu</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-admin-navbar-nav" />
+                    <Navbar.Collapse id="responsive-admin-navbar-nav">
                         <Nav className="ms-2">
-                            <Nav.Link as={Link} to="users">Users</Nav.Link>
+                            <Nav.Link as={Link} to="users" eventKey="i">Users</Nav.Link>
                             <NavDropdown title="Vehicle">
-                                <NavDropdown.Item as={Link} to="vehicles/brands">Brands</NavDropdown.Item>
-                                <NavDropdown.Item as={Link} to="vehicles/models">Models</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="vehicles/brands" eventKey="i">Brands</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="vehicles/models" eventKey="i">Models</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item as={Link} to="vehicles/cars">Cars</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="vehicles/cars" eventKey="i">Cars</NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link as={Link} to="locations">Locations</Nav.Link>
+                            <Nav.Link as={Link} to="locations" eventKey="i">Locations</Nav.Link>
                         </Nav>
-                    </Navbar.Collapse>
-                    <Navbar.Collapse className="justify-content-end">
-                        <Nav className="me-4">
-                            <Nav.Link as={Link} to="rentals">User Rentals</Nav.Link>
-                            <Nav.Link as={Link} to="contact-form">Contact Form</Nav.Link>
+                        <Nav className="ms-lg-3 mt-2 mt-lg-0">
+                            <Nav.Link as={Link} to="rentals" eventKey="i">User Rentals</Nav.Link>
+                            <Nav.Link as={Link} to="contact-form" eventKey="i">Contact Form</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

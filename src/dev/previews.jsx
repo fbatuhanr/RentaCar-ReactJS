@@ -4,6 +4,7 @@ import {PaletteTree} from './palette'
 import Header from "../components/header";
 import App from "../App";
 import VehicleModels from "../admin/vehicles-manager/vehicle-models";
+import VehicleBrands from "../admin/vehicles-manager/vehicle-brands";
 
 const ComponentPreviews = () => {
     return (
@@ -16,6 +17,9 @@ const ComponentPreviews = () => {
             </ComponentPreview>
             <ComponentPreview path="/VehicleModels">
                 <VehicleModels/>
+            </ComponentPreview>
+            <ComponentPreview path="/VehicleBrands">
+                <VehicleBrands/>
             </ComponentPreview>
         </Previews>
     )
