@@ -93,15 +93,13 @@ const VehicleModels = () => {
 
             const copy = {...current};
 
-            delete copy[parentKey].models[childKey]
-
-            if(Object.values(copy[parentKey].models).length <= 0)
-                delete copy[parentKey]
+            if(Object.values(copy[parentKey].models).length > 1)
+                delete copy[parentKey].models[childKey];
+            else
+                delete copy[parentKey];
 
             return copy;
         });
-
-        console.log(models)
 
         setModels(current => {
 
@@ -128,7 +126,6 @@ const VehicleModels = () => {
     const handleSaveChangesSubmit = async e => {
         e.preventDefault();
 
-        console.log(models);
         setIsLoading(true);
 
         setDoc(doc(db, "vehicle", "models"), models)
