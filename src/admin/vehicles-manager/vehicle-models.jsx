@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 
 import {fetchBrands, fetchModels} from "../../hooks/useFetchData";
 import {loadingContent} from "../../components/general/general-components";
+import {current} from "@reduxjs/toolkit";
 
 const VehicleModels = () => {
 
@@ -92,13 +93,15 @@ const VehicleModels = () => {
 
             const copy = {...current};
 
-            if(Object.values(copy[parentKey].models).length > 0)
-                delete copy[parentKey].models[childKey]
-            else
+            delete copy[parentKey].models[childKey]
+
+            if(Object.values(copy[parentKey].models).length <= 0)
                 delete copy[parentKey]
 
             return copy;
         });
+
+        console.log(models)
 
         setModels(current => {
 
