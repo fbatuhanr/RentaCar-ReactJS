@@ -24,11 +24,23 @@
 
 ### Screenshots from Project:
 ![rent-a-car](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/33b709f4-e6ca-468a-8c49-c602151f8e70)
+
+##### Car Reservation:
 ![reservation](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/1e27d38f-74ba-4018-b64a-fa16c2bc872a)
+
+##### User/Admin Login/Sign-up:
 ![login](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/23a377f2-fc75-44f5-aa83-e24e8e03bb75)
+
+##### My Rentals:
 ![rentals](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/6a1a95f7-4693-40ce-abbe-28af4df24103)
+
+##### Cars Management (Admin):
 ![cars-management](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/09c475ce-ebe4-4db7-919f-0d09e6f1f0cd)
+
+##### Rentals Management (Admin):
 ![rentals-management](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/10f554f2-9936-4526-9d26-93e1ade5feba)
+
+##### Vehicle Model Management (Admin):
 ![model-management](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/c7eb16b9-7dab-4995-8acc-0c5d3ee8ee6e)
 
 
