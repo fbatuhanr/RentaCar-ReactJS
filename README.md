@@ -3,7 +3,7 @@
 ### Modules:
 <ul>
     <li>
-        ✔️-> React Bootstrap for responsive development
+        ✔️-> React Bootstrap and SASS for responsive development
     </li>
     <li>
         ✔️-> React Router Dom v6 for client and server-side routing
