@@ -65,6 +65,7 @@ const fetchLocations = async () => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
+        console.log(docSnap.data())
         return docSnap.data();
     } else {
         console.log("No such document (vehicle/locations)!");
