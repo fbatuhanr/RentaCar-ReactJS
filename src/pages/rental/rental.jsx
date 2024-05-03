@@ -1,12 +1,12 @@
 import React from 'react';
 import CarOffers from '../../components/car-offers';
 
-const Vehicles = () => {
+const Rental = () => {
 
     return (
-        <div id='vehicles'>
+        <div id='rental'>
             <CarOffers />
         </div>
     );
 };
-export default Vehicles;
+export default Rental;

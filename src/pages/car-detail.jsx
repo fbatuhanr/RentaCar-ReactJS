@@ -1,31 +1,31 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {useParams, useNavigate, redirect} from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams, useNavigate, redirect } from "react-router-dom";
 import Swal from 'sweetalert2'
 
-import {Container, Row, Col, Form, ListGroup, InputGroup, Button, Spinner} from 'react-bootstrap';
+import { Container, Row, Col, Form, ListGroup, InputGroup, Button, Spinner } from 'react-bootstrap';
 
-import {TbEngine, TbManualGearbox} from "react-icons/tb";
-import {BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill} from "react-icons/bs";
-import {PiEngineFill} from "react-icons/pi";
+import { TbEngine, TbManualGearbox } from "react-icons/tb";
+import { BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill } from "react-icons/bs";
+import { PiEngineFill } from "react-icons/pi";
 
-import {useDispatch, useSelector} from "react-redux";
-import {makeReservation, reserveNow} from "../redux/features/ReserveSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { makeReservation, reserveNow } from "../redux/features/ReserveSlice";
 
-import {fetchBrands, fetchModels, fetchCars, fetchLocations} from "../hooks/useFetchData";
+import { fetchBrands, fetchModels, fetchCars, fetchLocations } from "../hooks/useFetchData";
 
-import {loadingContent} from "../components/general/general-components";
+import { loadingContent } from "../components/general/general-components";
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import {addDoc, collection, doc, setDoc} from "firebase/firestore";
-import {db} from "../config/firebase";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
 
 const CarDetail = () => {
 
     const dispatch = useDispatch();
-    const user = useSelector(({UserSlice}) => UserSlice.user);
+    const user = useSelector(({ UserSlice }) => UserSlice.user);
 
-    const {carBrand, carModel, carId} = useParams();
+    const { carBrand, carModel, carId } = useParams();
     const navigate = useNavigate();
 
     const [cars, setCars] = useState(null);
@@ -33,11 +33,11 @@ const CarDetail = () => {
     const [models, setModels] = useState(null);
     const [locations, setLocations] = useState(null);
 
-    const [selectedLocations, setSelectedLocations] = useState({pickup: "", dropoff: ""});
-    const [rentDate, setRentDate] = useState({start: getDateByInputFormat(), end: getDateByInputFormat(1)});
+    const [fullName, setFullName] = useState(null);
+    const [phoneNumber, setPhoneNumber] = useState(null);
 
-    const [isReservationTimerEnable, setIsReservationTimerEnable] = useState(true);
-    const [reservationTimer, setReservationTimer] = useState(300); //in seconds
+    const [selectedLocations, setSelectedLocations] = useState({ pickup: "", dropoff: "" });
+    const [rentDate, setRentDate] = useState({ start: getDateByInputFormat(), end: getDateByInputFormat(1) });
 
     useEffect(() => {
 
@@ -45,72 +45,25 @@ const CarDetail = () => {
         fetchModels().then(response => setModels(response));
         fetchCars().then(response => {
             setCars(response)
-            setIsReservationTimerEnable(response[carId].carCount > 0)
         });
         fetchLocations().then(response => { setLocations(response) });
 
     }, []);
 
 
-    function getDateByInputFormat(dayOffset= 0, date = null) {
+    function getDateByInputFormat(dayOffset = 0, date = null) {
 
         let currentDate = date === null ? new Date() : new Date(date)
-        if(dayOffset === 0) return currentDate.toISOString().split('T')[0]
+        if (dayOffset === 0) return currentDate.toISOString().split('T')[0]
 
         const offsetDate = new Date(currentDate)
         offsetDate.setDate(currentDate.getDate() + dayOffset)
         return offsetDate.toISOString().split('T')[0]
     }
-    function timerToString() {
-        let hours = ('0' + Math.floor(reservationTimer/3600)).slice(-2);
-        let minutes = ('0' + Math.floor(reservationTimer/60)).slice(-2);
-        let seconds = ('0' + reservationTimer%60).slice(-2);
-        return /*hours + ":" +*/ minutes + ":" + seconds;
-    }
-    function handleReserveTimeout() {
-
-        let redirectTimerInterval
-        Swal.fire({
-            title: 'You did not complete the reservation!',
-            html:
-                'You are being redirected in <strong>5</strong> seconds',
-            timer: 5000,
-            didOpen: () => {
-                const content = Swal.getHtmlContainer()
-                const $ = content.querySelector.bind(content)
-
-                Swal.showLoading()
-
-                redirectTimerInterval = setInterval(() => {
-                    Swal.getHtmlContainer().querySelector('strong')
-                        .textContent = (Swal.getTimerLeft() / 1000)
-                        .toFixed(0)
-                }, 100)
-            },
-            willClose: () => {
-                clearInterval(redirectTimerInterval);
-                navigate("/")
-            }
-        })
-    }
-
-    useEffect(() => {
-        if(!isReservationTimerEnable) return;
-
-        if(reservationTimer > 0){
-            setTimeout(()=>{
-                setReservationTimer(reservationTimer-1);
-            }, 1000)
-        }
-        else {
-            handleReserveTimeout()
-        }
-    }, [reservationTimer]);
-
 
     const handleReserveButtonClick = async event => {
 
-        if(!user.email) {
+        if (!user.email) {
 
             Swal.fire({
                 title: "You have to log in",
@@ -125,7 +78,7 @@ const CarDetail = () => {
         }
         else {
 
-            if(Object.values(selectedLocations).some(value => value === "")){
+            if (Object.values(selectedLocations).some(value => value === "")) {
 
                 let resultContent = Object.values(selectedLocations).every(value => value === "")
                     ? "Please choose locations!"
@@ -133,13 +86,12 @@ const CarDetail = () => {
                         ? "Please choose pick-up location!"
                         : "Please choose drop-off location!"
 
-                Swal.fire({title: resultContent, icon: "warning"});
+                Swal.fire({ title: resultContent, icon: "warning" });
 
                 return;
             }
 
             event.currentTarget.disabled = true;
-            setIsReservationTimerEnable(false);
 
             const reservationData = {
 
@@ -187,13 +139,12 @@ const CarDetail = () => {
     }
 
     return (
-        <div id="car-detail" style={{clear: "both"}}>
+        <div id="car-detail" style={{ clear: "both" }}>
             <Container className="py-4">
                 <Row className="mb-5">
                     <Col>
                         {
-                            isReservationTimerEnable &&
-                            <h1 className="fs-1 text-center text-uppercase">Complete your reservation in <b>{timerToString()}</b></h1>
+                            <h1 className="fs-1 text-center text-uppercase">Complete your reservation information</h1>
                         }
                     </Col>
                 </Row>
@@ -213,32 +164,32 @@ const CarDetail = () => {
                                 <Col xs={12} md={6}>
                                     <ListGroup variant="flush">
                                         <ListGroup.Item variant="secondary" action>
-                                            <BsFillCarFrontFill size="2em" className="me-2" style={{marginTop: "-10px"}}/>
+                                            <BsFillCarFrontFill size="2em" className="me-2" style={{ marginTop: "-10px" }} />
                                             <span className="fs-6">Brand & Model:</span> &nbsp;
                                             <span className="fs-5 fw-bold">{`${carBrand} / ${carModel}`}</span>
                                         </ListGroup.Item>
                                         <ListGroup.Item action>
-                                            <TbEngine size="2em" className="me-2" style={{marginTop: "-8px"}}/>
+                                            <TbEngine size="2em" className="me-2" style={{ marginTop: "-8px" }} />
                                             <span className="fs-6">HP:</span> &nbsp;
                                             <span className="fs-5 fw-bold">{cars[carId].power}</span>
                                         </ListGroup.Item>
                                         <ListGroup.Item action>
-                                            <PiEngineFill size="2em" className="me-2" style={{marginTop: "-8px"}}/>
+                                            <PiEngineFill size="2em" className="me-2" style={{ marginTop: "-8px" }} />
                                             <span className="fs-6">Engine Size:</span> &nbsp;
                                             <span className="fs-5 fw-bold">{cars[carId].engineSize}</span>
                                         </ListGroup.Item>
                                         <ListGroup.Item action>
-                                            <TbManualGearbox size="2em" className="me-2" style={{marginTop: "-8px"}}/>
+                                            <TbManualGearbox size="2em" className="me-2" style={{ marginTop: "-8px" }} />
                                             <span className="fs-6">Gear Box:</span> &nbsp;
                                             <span className="fs-5 fw-bold">{cars[carId].gearbox}</span>
                                         </ListGroup.Item>
                                         <ListGroup.Item action>
-                                            <BsCarFront size="2em" className="me-2" style={{marginTop: "-10px"}}/>
+                                            <BsCarFront size="2em" className="me-2" style={{ marginTop: "-10px" }} />
                                             <span className="fs-6">Body Type:</span> &nbsp;
                                             <span className="fs-5 fw-bold">{cars[carId].bodyType}</span>
                                         </ListGroup.Item>
                                         <ListGroup.Item action>
-                                            <BsFillFuelPumpFill size="2em" className="me-2" style={{marginTop: "-10px"}}/>
+                                            <BsFillFuelPumpFill size="2em" className="me-2" style={{ marginTop: "-10px" }} />
                                             <span className="fs-6">Fuel Type:</span> &nbsp;
                                             <span className="fs-5 fw-bold">{cars[carId].fuelType}</span>
                                         </ListGroup.Item>
@@ -249,6 +200,34 @@ const CarDetail = () => {
                                             Available Stock: {cars[carId].carCount}
                                         </span>
                                     </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Row className="justify-content-center">
+                                        <Form.Group className="mb-3" controlId="formBasicFullName">
+                                            <Form.Label>Full name</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Enter full name"
+                                                value={fullName}
+                                                onChange={(e) => setFullName(e.target.value)}
+                                                required={true}
+                                                style={{ width: '600px', height: '40px' }}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3" controlId="formBasicPhoneNumber">
+                                            <Form.Label>Phone number</Form.Label>
+                                            <Form.Control
+                                                type="phone"
+                                                placeholder="Enter phone Number"
+                                                value={phoneNumber}
+                                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                                required={true}
+                                                style={{ width: '600px', height: '40px' }}
+                                            />
+                                        </Form.Group>
+                                    </Row>
                                 </Col>
                             </Row>
                             <Row>
@@ -299,14 +278,14 @@ const CarDetail = () => {
                                     <InputGroup size="lg" className="my-2">
                                         <InputGroup.Text id="drop-off-locations">Drop-off Location</InputGroup.Text>
                                         <Form.Select
-                                             name="drop-off-locations" size="lg"
-                                             defaultValue={selectedLocations.dropoff}
-                                             onChange={e => {
-                                                 setSelectedLocations(prevState => ({
-                                                     ...prevState,
-                                                     dropoff: e.target.value
-                                                 }));
-                                             }}
+                                            name="drop-off-locations" size="lg"
+                                            defaultValue={selectedLocations.dropoff}
+                                            onChange={e => {
+                                                setSelectedLocations(prevState => ({
+                                                    ...prevState,
+                                                    dropoff: e.target.value
+                                                }));
+                                            }}
                                         >
                                             <option value="">Choose a location...</option>
                                             {
@@ -340,19 +319,19 @@ const CarDetail = () => {
                             <Row>
                                 <Col>
                                     <Button variant="success" size="lg" className="w-100 fs-4 fw-bold"
-                                            type="button"
-                                            onClick={handleReserveButtonClick}
-                                            disabled={cars[carId].carCount <= 0}>
+                                        type="button"
+                                        onClick={handleReserveButtonClick}
+                                        disabled={cars[carId].carCount <= 0}>
                                         Reserve Now!
                                     </Button>
                                 </Col>
                             </Row>
                         </>
                         :
-                            loadingContent
+                        loadingContent
                 }
-            </Container>
-        </div>
+            </Container >
+        </div >
     )
 };
 

@@ -28,7 +28,7 @@ import Signup from './pages/auth/signup';
 import About from './pages/about/about';
 import Client from './pages/client/client';
 import Services from './pages/services/services';
-import Vehicles from './pages/vehicles/vehicles';
+import Rental from './pages/rental/rental';
 import Contact from './pages/contact/contact';
 
 import CarDetail from "./pages/car-detail";
@@ -52,45 +52,45 @@ function App() {
 
     const persistor = persistStore(store);
 
-  return (
-      <Provider store={store}>
-          <PersistGate persistor={persistor}>
-              <Router>
-                <ScrollToTop />
-                <Header />
-                <Routes>
-                    <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>
-                        <Route path="" element={<Admin />} /> // this never renders
-                        <Route path="users" element={<UsersManager />} />
-                        <Route path="vehicles" element={<VehiclesManager />} >
-                            <Route path="brands" element={<VehicleBrands />} />
-                            <Route path="models" element={<VehicleModels />} />
-                            <Route path="cars" element={<VehicleCars />} />
+    return (
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <Router>
+                    <ScrollToTop />
+                    <Header />
+                    <Routes>
+                        <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>
+                            <Route path="" element={<Admin />} /> // this never renders
+                            <Route path="users" element={<UsersManager />} />
+                            <Route path="rental" element={<VehiclesManager />} >
+                                <Route path="brands" element={<VehicleBrands />} />
+                                <Route path="models" element={<VehicleModels />} />
+                                <Route path="cars" element={<VehicleCars />} />
+                            </Route>
+                            <Route path="locations" element={<LocationsManager />} />
+                            <Route path="rentals" element={<RentalsManager />} />
+                            <Route path="contact-form" element={<ContactFormManager />} />
                         </Route>
-                        <Route path="locations" element={<LocationsManager />} />
-                        <Route path="rentals" element={<RentalsManager />} />
-                        <Route path="contact-form" element={<ContactFormManager />} />
-                    </Route>
 
-                  <Route path="/" element={<Home />}/>
+                        <Route path="/" element={<Home />} />
 
-                  <Route path="/login" element={<GuestGuard><Login /></GuestGuard>} />
-                  <Route path="/sign-up" element={<GuestGuard><Signup /></GuestGuard>} />
+                        <Route path="/login" element={<GuestGuard><Login /></GuestGuard>} />
+                        <Route path="/sign-up" element={<GuestGuard><Signup /></GuestGuard>} />
 
-                  <Route path="/about" element={<About />} />
-                  <Route path="/client" element={<Client />} />
-                  <Route path="/services" element={<Services />} />
-                  <Route path="/vehicles" element={<Vehicles />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/my-rentals" element={<AuthGuard><MyRentals /></AuthGuard>} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/client" element={<Client />} />
+                        <Route path="/services" element={<Services />} />
+                        <Route path="/rental" element={<Rental />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/my-rentals" element={<AuthGuard><MyRentals /></AuthGuard>} />
 
-                  <Route path="/cars/:carBrand/:carModel/:carId" element={<CarDetail />} />
-                </Routes>
-                <Footer />
-              </Router>
-          </PersistGate>
-      </Provider>
-  );
+                        <Route path="/cars/:carBrand/:carModel/:carId" element={<CarDetail />} />
+                    </Routes>
+                    <Footer />
+                </Router>
+            </PersistGate>
+        </Provider>
+    );
 }
 
 export default App;
