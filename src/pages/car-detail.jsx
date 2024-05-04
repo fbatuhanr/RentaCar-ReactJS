@@ -19,11 +19,13 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { setUserData } from '../hooks/userSlice';
 
 const CarDetail = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(({ UserSlice }) => UserSlice.user);
+
 
     const { carBrand, carModel, carId } = useParams();
     const navigate = useNavigate();
@@ -47,6 +49,9 @@ const CarDetail = () => {
             setCars(response)
         });
         fetchLocations().then(response => { setLocations(response) });
+
+        // Dispatch the action after setting fullName and phoneNumber
+        //dispatch(setUserData({ fullName: setFullName, phoneNumber: phoneNumber }));
 
     }, []);
 
@@ -205,28 +210,32 @@ const CarDetail = () => {
                             <Row>
                                 <Col>
                                     <Row className="justify-content-center">
-                                        <Form.Group className="mb-3" controlId="formBasicFullName">
-                                            <Form.Label>Full name</Form.Label>
-                                            <Form.Control
+                                        <div className="mb-3">
+                                            <label htmlFor="fullName" className="form-label">Full name</label>
+                                            <input
                                                 type="text"
+                                                className="form-control"
+                                                id="fullName"
                                                 placeholder="Enter full name"
                                                 value={fullName}
                                                 onChange={(e) => setFullName(e.target.value)}
                                                 required={true}
                                                 style={{ width: '600px', height: '40px' }}
                                             />
-                                        </Form.Group>
-                                        <Form.Group className="mb-3" controlId="formBasicPhoneNumber">
-                                            <Form.Label>Phone number</Form.Label>
-                                            <Form.Control
-                                                type="phone"
-                                                placeholder="Enter phone Number"
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor="phoneNumber" className="form-label">Phone number</label>
+                                            <input
+                                                type="tel"
+                                                className="form-control"
+                                                id="phoneNumber"
+                                                placeholder="Enter phone number"
                                                 value={phoneNumber}
                                                 onChange={(e) => setPhoneNumber(e.target.value)}
                                                 required={true}
                                                 style={{ width: '600px', height: '40px' }}
                                             />
-                                        </Form.Group>
+                                        </div>
                                     </Row>
                                 </Col>
                             </Row>

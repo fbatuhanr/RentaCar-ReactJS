@@ -27,7 +27,7 @@ const Footer = () => {
               <Row>
                 <Col md={{ span: 3, offset: 2 }}>
                   <h4 className="fs-4 text-white fw-700">Information</h4>
-                  <p className="fs-6 text-white m-0">Day la bao cao cuoi ky mon LTCSDL, toi van chua hoan thanh no, toi thay bat luc va met moi, toi muon tu bo moi thu. Hay chi loi cho toi </p>
+                  <p className="fs-6 text-white m-0">Write something </p>
                 </Col>
                 <Col md={{ span: 3, offset: 2 }}>
                   <h4 className="fs-4 text-white fw-700">Contact Us</h4>

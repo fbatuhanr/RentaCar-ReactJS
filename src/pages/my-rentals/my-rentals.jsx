@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {locationsData, vehiclesData} from "../../DATA/data.jsx";
+import { locationsData, vehiclesData } from "../../DATA/data.jsx";
 
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import {Container, Row, Col, Button, Card, ListGroup, InputGroup, Form} from "react-bootstrap";
+import { Container, Row, Col, Button, Card, ListGroup, InputGroup, Form } from "react-bootstrap";
 
-import {TbEngine, TbManualGearbox} from "react-icons/tb";
-import {BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill} from "react-icons/bs";
-import {PiEngineFill} from "react-icons/pi";
+import { TbEngine, TbManualGearbox } from "react-icons/tb";
+import { BsCarFront, BsFillCarFrontFill, BsFillFuelPumpFill } from "react-icons/bs";
+import { PiEngineFill } from "react-icons/pi";
 
-import {fetchBrands, fetchModels, fetchCars, fetchReservations, fetchLocations} from "../../hooks/useFetchData";
-import {loadingContent} from "../../components/general/general-components";
-
+import { fetchBrands, fetchModels, fetchCars, fetchReservations, fetchLocations } from "../../hooks/useFetchData";
+import { loadingContent } from "../../components/general/general-components";
+import { useLocation } from 'react-router-dom';
 
 const MyRentals = () => {
 
@@ -27,10 +27,15 @@ const MyRentals = () => {
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const user = useSelector(({UserSlice}) => UserSlice.user);
+    const user = useSelector(({ UserSlice }) => UserSlice.user);
 
     const [cars, setCars] = useState(null);
     const [locations, setLocations] = useState(null);
+
+    const location = useLocation();
+
+    const userState = useSelector((state) => state.UserSlice.user);
+    const { fullName, phoneNumber } = userState || {};
 
     const [reservations, setReservations] = useState(null);
 
@@ -45,14 +50,14 @@ const MyRentals = () => {
             fetchLocations(),
             fetchReservations(user.email),
         ])
-        .then(responses => {
+            .then(responses => {
 
-            setCars(responses[0])
-            setLocations(responses[1])
-            setReservations(responses[2])
+                setCars(responses[0])
+                setLocations(responses[1])
+                setReservations(responses[2])
 
-            setIsLoading(false);
-        });
+                setIsLoading(false);
+            });
 
     }, []);
 
@@ -67,7 +72,7 @@ const MyRentals = () => {
 
         return <h4 className="mb-1">
             {day} <span className="text-black-50">|</span> {time}
-            <hr className="my-1"/>
+            <hr className="my-1" />
             {wish} <span className="fw-600">{user.email}</span>
         </h4>
     }
@@ -89,7 +94,7 @@ const MyRentals = () => {
                 <Row>
                     {
                         !isLoading
-                        ?
+                            ?
                             reservations
                                 ?
                                 reservations.map(reserveData => {
@@ -100,7 +105,7 @@ const MyRentals = () => {
                                                 <Col xs={12}>
                                                     <ListGroup variant="flush" className="text-center">
                                                         <ListGroup.Item variant="secondary" action>
-                                                            <BsFillCarFrontFill size="2em" className="me-2" style={{marginTop: "-10px"}}/>
+                                                            <BsFillCarFrontFill size="2em" className="me-2" style={{ marginTop: "-10px" }} />
                                                             <span className="fs-5 fw-bold">{`${reserveData.carBrand} / ${reserveData.carModel}`}</span>
                                                         </ListGroup.Item>
                                                     </ListGroup>
@@ -113,33 +118,37 @@ const MyRentals = () => {
                                                 <Col xs={12} md={6}>
                                                     <ListGroup variant="flush">
                                                         <ListGroup.Item>
-                                                            <TbEngine size="2em" className="me-2" style={{marginTop: "-8px"}}/>
+                                                            <TbEngine size="2em" className="me-2" style={{ marginTop: "-8px" }} />
                                                             <span className="fs-6">HP:</span> &nbsp;
                                                             <span className="fs-5 fw-bold">{cars[reserveData.carId].power}</span>
                                                         </ListGroup.Item>
                                                         <ListGroup.Item>
-                                                            <PiEngineFill size="2em" className="me-2" style={{marginTop: "-8px"}}/>
+                                                            <PiEngineFill size="2em" className="me-2" style={{ marginTop: "-8px" }} />
                                                             <span className="fs-6">Engine Size:</span> &nbsp;
                                                             <span className="fs-5 fw-bold">{cars[reserveData.carId].engineSize}</span>
                                                         </ListGroup.Item>
                                                         <ListGroup.Item>
-                                                            <TbManualGearbox size="2em" className="me-2" style={{marginTop: "-8px"}}/>
+                                                            <TbManualGearbox size="2em" className="me-2" style={{ marginTop: "-8px" }} />
                                                             <span className="fs-6">Gear Box:</span> &nbsp;
                                                             <span className="fs-5 fw-bold">{cars[reserveData.carId].gearbox}</span>
                                                         </ListGroup.Item>
                                                         <ListGroup.Item>
-                                                            <BsCarFront size="2em" className="me-2" style={{marginTop: "-10px"}}/>
+                                                            <BsCarFront size="2em" className="me-2" style={{ marginTop: "-10px" }} />
                                                             <span className="fs-6">Body Type:</span> &nbsp;
                                                             <span className="fs-5 fw-bold">{cars[reserveData.carId].bodyType}</span>
                                                         </ListGroup.Item>
                                                         <ListGroup.Item>
-                                                            <BsFillFuelPumpFill size="2em" className="me-2" style={{marginTop: "-10px"}}/>
+                                                            <BsFillFuelPumpFill size="2em" className="me-2" style={{ marginTop: "-10px" }} />
                                                             <span className="fs-6">Fuel Type:</span> &nbsp;
                                                             <span className="fs-5 fw-bold">{cars[reserveData.carId].fuelType}</span>
                                                         </ListGroup.Item>
                                                     </ListGroup>
                                                 </Col>
                                             </Row>
+                                            <div>
+                                                <p>Full Name: {fullName}</p>
+                                                <p>Phone Number: {phoneNumber}</p>
+                                            </div>
                                             <Row>
                                                 <Col>
                                                     <Row>
@@ -198,7 +207,7 @@ const MyRentals = () => {
                                         </Link>
                                     </Card>
                                 </Col>
-                        :
+                            :
                             loadingContent
                     }
                 </Row>
