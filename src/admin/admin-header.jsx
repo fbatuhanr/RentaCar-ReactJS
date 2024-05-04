@@ -86,17 +86,17 @@ const AdminHeader = () => {
                         <Nav className="ms-2">
                             <Nav.Link as={Link} to="users" eventKey="i">Users</Nav.Link>
                             <NavDropdown title="Vehicle">
-                                <NavDropdown.Item as={Link} to="vehicles/brands" eventKey="i">Brands</NavDropdown.Item>
+                                {/* <NavDropdown.Item as={Link} to="vehicles/brands" eventKey="i">Brands</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to="vehicles/models" eventKey="i">Models</NavDropdown.Item>
-                                <NavDropdown.Divider />
+                                <NavDropdown.Divider /> */}
                                 <NavDropdown.Item as={Link} to="vehicles/cars" eventKey="i">Cars</NavDropdown.Item>
                             </NavDropdown>
                             <Nav.Link as={Link} to="locations" eventKey="i">Locations</Nav.Link>
                         </Nav>
-                        <Nav className="ms-lg-3 mt-2 mt-lg-0">
+                        {/* <Nav className="ms-lg-3 mt-2 mt-lg-0">
                             <Nav.Link as={Link} to="rentals" eventKey="i">User Rentals</Nav.Link>
                             <Nav.Link as={Link} to="contact-form" eventKey="i">Contact Form</Nav.Link>
-                        </Nav>
+                        </Nav> */}
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
