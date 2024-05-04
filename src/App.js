@@ -26,10 +26,8 @@ import Login from './pages/auth/login';
 import Signup from './pages/auth/signup';
 
 import About from './pages/about/about';
-import Client from './pages/client/client';
 import Services from './pages/services/services';
 import Rental from './pages/rental/rental';
-import Contact from './pages/contact/contact';
 
 import CarDetail from "./pages/car-detail";
 import MyRentals from "./pages/my-rentals/my-rentals";
@@ -78,10 +76,8 @@ function App() {
                         <Route path="/sign-up" element={<GuestGuard><Signup /></GuestGuard>} />
 
                         <Route path="/about" element={<About />} />
-                        <Route path="/client" element={<Client />} />
                         <Route path="/services" element={<Services />} />
                         <Route path="/rental" element={<Rental />} />
-                        <Route path="/contact" element={<Contact />} />
                         <Route path="/my-rentals" element={<AuthGuard><MyRentals /></AuthGuard>} />
 
                         <Route path="/cars/:carBrand/:carModel/:carId" element={<CarDetail />} />

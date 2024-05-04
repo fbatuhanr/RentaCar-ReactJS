@@ -50,8 +50,6 @@ const Header = () => {
                                 <Nav.Link as={Link} to="/about" eventKey="i">About</Nav.Link>
                                 <Nav.Link as={Link} to="/services" eventKey="i">Services</Nav.Link>
                                 <Nav.Link as={Link} to="/rental" eventKey="i">Rental</Nav.Link>
-                                <Nav.Link as={Link} to="/client" eventKey="i">Client</Nav.Link>
-                                <Nav.Link as={Link} to="/contact" eventKey="i">Contact</Nav.Link>
                             </Nav>
                             <Nav>
                                 {
@@ -80,19 +78,19 @@ const Header = () => {
                                 <Col xs={12} md={4}>
                                     <span className="fs-6">
                                         <IoLocation className="header-line-2-icon" />&nbsp;
-                                        <a href="https://goo.gl/maps/2rkkAA9FP5pegCXF9" target="_blank" className="text-white">New York</a>
+                                        <a href="https://maps.app.goo.gl/wphsTnigtYHeVGfz8" target="_blank" className="text-white">Nha Be Campus</a>
                                     </span>
                                 </Col>
                                 <Col xs={12} md={4}>
                                     <span className="fs-6">
                                         <BsTelephoneFill size="0.9em" className="header-line-2-icon" />&nbsp;
-                                        <a href="tel:+12126583916" target="_blank" className="text-white">(212) 658-3916</a>
+                                        <a href="tel:+12126583916" target="_blank" className="text-white">(84)(89)815-4773</a>
                                     </span>
                                 </Col>
                                 <Col xs={12} md={4}>
                                     <span className="fs-6">
                                         <GrMail className="header-line-2-icon" />&nbsp;
-                                        <a href="mailto:info@rentacar" target="_blank" className="text-white">info@rentacar</a>
+                                        <a href="mailto:info@rentacar" target="_blank" className="text-white">info@carworld</a>
                                     </span>
                                 </Col>
                             </Row>
