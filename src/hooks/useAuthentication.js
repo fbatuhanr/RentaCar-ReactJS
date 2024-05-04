@@ -11,11 +11,11 @@ const useAuthentication = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState(null);
 
-    const signInCall = async ({email, password}) => {
+    const signInCall = async ({ email, password }) => {
 
-        setIsLoading (true);
+        setIsLoading(true);
         try {
-            const {user} = await signInWithEmailAndPassword(auth,
+            const { user } = await signInWithEmailAndPassword(auth,
                 email,
                 password
             );
@@ -24,7 +24,7 @@ const useAuthentication = () => {
             const querySnapshot = await getDocs(q);
             const docData = querySnapshot.docs[0].data();
 
-            const userData = {...user, ...docData};
+            const userData = { ...user, ...docData };
 
             dispatch(setUser(userData));
 
@@ -37,21 +37,21 @@ const useAuthentication = () => {
             console.log(err);
 
             setMessage({
-                content: "Incorrect mail or password, please try again!",
+                content: "Incorrect email or password, please try again!",
                 isError: true
             });
 
         } finally {
-            setIsLoading (false);
+            setIsLoading(false);
         }
     };
 
-    const signUpCall = async ({email, password}) => {
+    const signUpCall = async ({ email, password }) => {
 
-        setIsLoading (true);
+        setIsLoading(true);
 
         try {
-            const {user} = await createUserWithEmailAndPassword(auth,
+            const { user } = await createUserWithEmailAndPassword(auth,
                 email,
                 password
             );
@@ -64,7 +64,7 @@ const useAuthentication = () => {
 
             await addDoc(collection(db, "users"), docData);
 
-            const userData = {...user, ...docData};
+            const userData = { ...user, ...docData };
 
             dispatch(setUser(userData));
 
@@ -88,10 +88,10 @@ const useAuthentication = () => {
 
     const signOutCall = async () => {
 
-        setIsLoading (true);
+        setIsLoading(true);
 
         try {
-            await signOut (auth);
+            await signOut(auth);
             dispatch(clearUserData());
 
             setMessage({
@@ -108,11 +108,11 @@ const useAuthentication = () => {
             });
         }
         finally {
-            setIsLoading (false);
+            setIsLoading(false);
         }
     };
 
-    return {isLoading, message, signInCall, signUpCall, signOutCall};
+    return { isLoading, message, signInCall, signUpCall, signOutCall };
 }
 
 export default useAuthentication;

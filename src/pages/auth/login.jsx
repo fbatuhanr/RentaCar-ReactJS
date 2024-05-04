@@ -1,17 +1,17 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import useAuthentication from "../../hooks/useAuthentication";
 
 import { NavLink, useNavigate } from "react-router-dom"
 
-import {Container, Row, Col, Form, Button, Alert, Spinner} from "react-bootstrap";
-import {loadingContent} from "../../components/general/general-components";
+import { Container, Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
+import { loadingContent } from "../../components/general/general-components";
 
 const Login = () => {
 
     const navigate = useNavigate();
 
-    const {isLoading, message, signInCall} = useAuthentication();
+    const { isLoading, message, signInCall } = useAuthentication();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -19,7 +19,7 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        await signInCall({email, password})
+        await signInCall({ email, password })
     }
 
     return (
@@ -31,8 +31,8 @@ const Login = () => {
                         {
                             message !== null &&
                             (message.isError
-                            ? <Alert key="danger" variant="danger">{message.content}</Alert>
-                            : <Alert key="success" variant="success">{message.content}</Alert>)
+                                ? <Alert key="danger" variant="danger">{message.content}</Alert>
+                                : <Alert key="success" variant="success">{message.content}</Alert>)
                         }
                     </Col>
                 </Row>
@@ -43,7 +43,7 @@ const Login = () => {
                             <a href="#" onClick={() => {
                                 setEmail("admin@batuhanozturk.com")
                                 setPassword("123456")
-                                }
+                            }
                             }>
                                 For Admin: admin@batuhanozturk.com 123456
                             </a>
@@ -52,7 +52,7 @@ const Login = () => {
                             <a href="#" onClick={() => {
                                 setEmail("user@batuhanozturk.com")
                                 setPassword("123456")
-                                }
+                            }
                             }>
                                 For User: user@batuhanozturk.com 123456
                             </a>
@@ -65,11 +65,11 @@ const Login = () => {
                             <Col xs={12} md={8} className={isLoading ? "text-center" : null}>
                                 {
                                     isLoading
-                                    ?
+                                        ?
                                         loadingContent
-                                    :
+                                        :
                                         <Form onSubmit={handleLogin}>
-                                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                            <Form.Group className="mb-3" controlId="formBasicemail">
                                                 <Form.Label>Email address</Form.Label>
                                                 <Form.Control
                                                     type="email"
@@ -85,7 +85,7 @@ const Login = () => {
                                                     type="password"
                                                     placeholder="Password"
                                                     value={password}
-                                                    onChange={(e)=>setPassword(e.target.value)}
+                                                    onChange={(e) => setPassword(e.target.value)}
                                                     required={true}
                                                 />
                                             </Form.Group>
@@ -93,7 +93,7 @@ const Login = () => {
                                                 <Form.Check type="checkbox" label="Check me out" />
                                             </Form.Group>
                                             <Button
-                                                variant="primary rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold"
+                                                variant="success rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold"
                                                 type="submit"
                                             >
                                                 Login
