@@ -37,17 +37,11 @@ const Login = () => {
     return (
         <div id="login">
             <Container className="pt-4 pb-5">
-                {/* <Row>
+                <Row className="mb-5">
                     <Col>
-                        <h1 className="fs-1 text-center text-uppercase">Login</h1>
-                        {
-                            message !== null &&
-                            (message.isError
-                                ? <Alert key="danger" variant="danger">{message.content}</Alert>
-                                : <Alert key="success" variant="success">{message.content}</Alert>)
-                        }
+                        <h1 className="fs-1 text-center text-uppercase">Log In</h1>
                     </Col>
-                </Row> */}
+                </Row>
                 <Row>
                     <Col className="text-center">
                         <p className="m-0">Demo Login Informations (Click for Autofill)</p>
@@ -89,37 +83,37 @@ const Login = () => {
                                         ?
                                         loadingContent
                                         : */}
-                                        <Form onSubmit={handleLogin}>
-                                            <Form.Group className="mb-3" controlId="formBasicusername">
-                                                <Form.Label>username address</Form.Label>
-                                                <Form.Control
-                                                    type="username"
-                                                    placeholder="Enter username"
-                                                    value={username}
-                                                    onChange={(e) => setUsername(e.target.value)}
-                                                    required={true}
-                                                />
-                                            </Form.Group>
-                                            <Form.Group className="mb-3" controlId="formBasicPassword">
-                                                <Form.Label>Password</Form.Label>
-                                                <Form.Control
-                                                    type="password"
-                                                    placeholder="Password"
-                                                    value={password}
-                                                    onChange={(e) => setPassword(e.target.value)}
-                                                    required={true}
-                                                />
-                                            </Form.Group>
-                                            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                                                <Form.Check type="checkbox" label="Check me out" />
-                                            </Form.Group>
-                                            <Button
-                                                variant="success rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold"
-                                                type="submit"
-                                            >
-                                                Login
-                                            </Button>
-                                        </Form>
+                                <Form onSubmit={handleLogin}>
+                                    <Form.Group className="mb-3" controlId="formBasicusername">
+                                        <Form.Label>Username address</Form.Label>
+                                        <Form.Control
+                                            type="username"
+                                            placeholder="Enter username"
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
+                                            required={true}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            placeholder="Password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required={true}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                                        <Form.Check type="checkbox" label="Check me out" />
+                                    </Form.Group>
+                                    <Button
+                                        variant="success rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold"
+                                        type="submit"
+                                    >
+                                        Login
+                                    </Button>
+                                </Form>
                                 {/* } */}
                                 <p>
                                     No account yet? {' '}

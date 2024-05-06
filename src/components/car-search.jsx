@@ -116,7 +116,6 @@ const CarSearch = () => {
                             Search Your Best Cars
                         </h1>
                         <p className="quinary-color fs-5 p-0 m-0 mb-5">
-                            Using 'Content here, content here', making it look like readable
                         </p>
                         <Container>
                             <Row>
@@ -179,7 +178,7 @@ const CarSearch = () => {
                     vehicles.length > 0 &&
                     vehicles.map(vehicle => {
                         return (
-                            <Col style={{ backgroundColor:'#fff', marginRight:'20px', marginBottom:'20px' }} xs={6} md={4} className="py-2" key={vehicle.id}>
+                            <Col style={{ backgroundColor: '#fff', marginRight: '20px', marginBottom: '20px' }} xs={6} md={4} className="py-2" key={vehicle.id}>
                                 <div className="gallery-box p-2">
                                     <div style={{ width: '100%', height: '100%' }} className="gallery-img">
                                         <img

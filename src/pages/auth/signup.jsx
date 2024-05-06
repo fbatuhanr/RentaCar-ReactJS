@@ -53,17 +53,11 @@ const Signup = () => {
     return (
         <div id="sign-up">
             <Container className="pt-4 pb-5">
-                {/* <Row className="mb-5">
+                <Row className="mb-5">
                     <Col>
                         <h1 className="fs-1 text-center text-uppercase">Sign Up</h1>
-                        {
-                            message !== null &&
-                            (message.isError
-                                ? <Alert key="danger" variant="danger">{message.content}</Alert>
-                                : <Alert key="success" variant="success">{message.content}</Alert>)
-                        }
                     </Col>
-                </Row> */}
+                </Row>
                 <Row>
                     <Col>
                         <Row className="justify-content-center">

@@ -247,7 +247,7 @@ button {
 
 .navbar-light .navbar-nav .nav-link:focus,
 .navbar-light .navbar-nav .nav-link:hover {
-    color: #fe5b29;
+    color: #fd4e4e;
 }
 
 
@@ -259,7 +259,7 @@ button {
 .call_text_main{
     width: 100%;
     float: left;
-    background-color: #fe5b29;
+    background-color: #fe292996;
     height: auto;
     padding: 10px 0px;
 }
@@ -375,7 +375,7 @@ span.current {
     float: left;
     font-size: 18px;
     color: #fefefd;
-    background-color: #fe5b29;
+    background-color: #fe2929;
     padding: 10px;
     text-align: center;
     text-transform: uppercase;
@@ -451,7 +451,7 @@ span.current {
     width: 100%;
     float: left;
     font-size: 18px;
-    color: #fe5b29;
+    color: #fe2929;
     text-align: center;
     margin: 0px;
     font-weight: bold;
@@ -471,7 +471,7 @@ span.current {
     font-size: 16px;
     color: #fefefd;
     text-align: center;
-    background-color: #fe5b29;
+    background-color: #fe2929;
     font-weight: bold;
     padding: 10px;
 }
@@ -653,7 +653,7 @@ span.current {
     width: 100%;
     margin: 0 auto;
     padding: 110px 20px 50px 20px;
-    background-color: #fe5b29;
+    background-color: #fe2929;
     border-top-left-radius: 540px;
     border-top-right-radius: 540px;
     margin-top: 50px;
@@ -817,7 +817,7 @@ textarea#comment.massage-bt::placeholder {
 }
 
 .social_icon li a:hover {
-    background-color: #fe5b29;
+    background-color: #fe2929;
     color: #ffffff;
 }
 
@@ -853,7 +853,7 @@ textarea#comment::placeholder {
     font-size: 16px;
     padding: 8px 0px;
     text-transform: uppercase;
-    background-color: #fe5b29;
+    background-color: #fe2929;
     text-align: center;
     border-radius: 3px;
 }
@@ -876,7 +876,7 @@ textarea#comment::placeholder {
 }
 
 .location_text a:hover {
-    color: #fe5b29;
+    color: #fe2929;
 }
 
 .padding_left_15 {
@@ -912,7 +912,7 @@ textarea#comment::placeholder {
 }
 
 .copyright_text a:hover {
-    color: #fe5b29;
+    color: #fe2929;
 }
 
 
