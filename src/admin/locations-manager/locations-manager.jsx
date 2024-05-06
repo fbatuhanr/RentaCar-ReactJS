@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Form, InputGroup} from "react-bootstrap";
-import {collection, doc, getDoc, getDocs, setDoc} from "firebase/firestore";
-import {db} from "../../config/firebase";
+import React, { useEffect, useState } from 'react';
+import { Button, Form, InputGroup } from "react-bootstrap";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { db } from "../../config/firebase";
 import Swal from "sweetalert2";
 
-import {fetchLocations} from "../../hooks/useFetchData";
-import {loadingContent} from "../../components/general/general-components";
+import { fetchLocations } from "../../hooks/useFetchData";
+import { loadingContent } from "../../components/general/general-components";
 
 const LocationsManager = () => {
 
@@ -22,7 +22,7 @@ const LocationsManager = () => {
 
     const handleAddNewButton = () => {
 
-        if(!newLocation.trim().length) return;
+        if (!newLocation.trim().length) return;
 
         let newIndex = Object.values(locations).length;
 
@@ -38,7 +38,7 @@ const LocationsManager = () => {
 
         setLocations(current => {
 
-            const copy = {...current};
+            const copy = { ...current };
             delete copy[key];
 
             return copy;
@@ -46,11 +46,11 @@ const LocationsManager = () => {
 
         setLocations(current => {
 
-            const copy = {...current};
+            const copy = { ...current };
             Object.keys(copy).map((id, index) => {
 
                 copy[index] = copy[id];
-                if(index != id) delete copy[id];
+                if (index != id) delete copy[id];
             })
 
             return copy;
@@ -93,14 +93,14 @@ const LocationsManager = () => {
 
     return (
         <div>
-            <h1>Locations Management</h1>
+            <h1>Showrooms Management</h1>
             <Form onSubmit={handleSaveChangesSubmit}>
                 <div className="d-grid gap-2 p-3">
                     {
                         locations && !isLoading
                             ?
                             <>
-                                <h2>Edit Cities</h2>
+                                <h2>Edit Showrooms</h2>
                                 {
                                     Object.entries(locations).map(([key, value]) =>
 
@@ -121,7 +121,7 @@ const LocationsManager = () => {
                                     )
                                 }
                                 <div className="my-2">
-                                    <h2>Add New City</h2>
+                                    <h2>Add New Showroom</h2>
                                     <InputGroup>
                                         <Form.Control
                                             type="text"

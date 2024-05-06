@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Button, Form, InputGroup} from "react-bootstrap";
-import {doc, updateDoc} from "firebase/firestore";
+import {doc, updateDoc, deleteDoc} from "firebase/firestore";
 import {db} from "../../config/firebase";
 import Swal from "sweetalert2";
 import {useSelector} from "react-redux";
@@ -59,6 +59,38 @@ const UsersManager = () => {
 
     }
 
+
+const handleDeleteButton = async key => {
+    setIsLoading(true);
+
+    const userRef = doc(db, "users", users[key].id);
+
+    deleteDoc(userRef)
+        .then(() => {
+            // setIsLoading(false);
+            Swal.fire({
+                title: "User Deleted!",
+                text: "The user has been successfully deleted.",
+                icon: "success",
+                showConfirmButton: true
+            }).then((result) => {
+                if (result.isConfirmed)
+                    window.location.reload()
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            setIsLoading(false);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong while deleting the user!"
+            });
+        });
+}
+
+    
+
     return (
         <div>
             <h1>Users Management</h1>
@@ -109,6 +141,12 @@ const UsersManager = () => {
                                                             onClick={() => handleUpdateButton(key)}
                                                             disabled={isAnAdmin && isCurrentUser}>
                                                         Update
+                                                    </Button>
+
+                                                    <Button variant="success" type="button"
+                                                            onClick={() => handleDeleteButton(key)}
+                                                            disabled={isAnAdmin && isCurrentUser}>
+                                                        Delete
                                                     </Button>
 
                                                 </InputGroup>

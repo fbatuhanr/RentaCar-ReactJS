@@ -1,26 +1,27 @@
-import React, {useState} from "react"
+import React, { useState } from "react"
 
 import useAuthentication from "../../hooks/useAuthentication";
 
 import { NavLink, useNavigate } from "react-router-dom"
 
-import {Alert, Button, Col, Container, Form, Row, Spinner} from "react-bootstrap"
-import {loadingContent} from "../../components/general/general-components";
+import { Alert, Button, Col, Container, Form, Row, Spinner } from "react-bootstrap"
+import { loadingContent } from "../../components/general/general-components";
 
 const Signup = () => {
 
     const navigate = useNavigate();
 
-    const {isLoading, message, signUpCall} = useAuthentication();
+    const { isLoading, message, signUpCall } = useAuthentication();
 
     const [email, setEmail] = useState("");
+    const [clientName, setclientName] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSignup = async (e) => {
         e.preventDefault();
 
-        try{
-            const signUp = await signUpCall({email, password})
+        try {
+            const signUp = await signUpCall({ email, password })
         }
         catch (e) {
 
@@ -36,8 +37,8 @@ const Signup = () => {
                         {
                             message !== null &&
                             (message.isError
-                            ? <Alert key="danger" variant="danger">{message.content}</Alert>
-                            : <Alert key="success" variant="success">{message.content}</Alert>)
+                                ? <Alert key="danger" variant="danger">{message.content}</Alert>
+                                : <Alert key="success" variant="success">{message.content}</Alert>)
                         }
                     </Col>
                 </Row>
@@ -47,44 +48,52 @@ const Signup = () => {
                             <Col xs={12} md={8} className={isLoading ? "text-center" : null}>
                                 {
                                     isLoading
-                                    ?
+                                        ?
                                         loadingContent
-                                    :
-                                    <Form onSubmit={handleSignup}>
-                                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                                            <Form.Label>Email address</Form.Label>
-                                            <Form.Control
-                                                type="email"
-                                                placeholder="Enter email"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                required={true}
-                                            />
-                                            <Form.Text className="text-muted">
-                                                We'll never share your email with anyone else.
-                                            </Form.Text>
-                                        </Form.Group>
+                                        :
+                                        <Form onSubmit={handleSignup}>
+                                            <Form.Group className="mb-3" controlId="formBasicClientName">
+                                                <Form.Label>Full name</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Enter full name"
+                                                    value={clientName}
+                                                    onChange={(e) => setclientName(e.target.value)}
+                                                    required={true}
+                                                />
+                                            </Form.Group>
 
-                                        <Form.Group className="mb-3" controlId="formBasicPassword">
-                                            <Form.Label>Password</Form.Label>
-                                            <Form.Control
-                                                type="password"
-                                                placeholder="Password"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                required={true}
-                                            />
-                                        </Form.Group>
-                                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                                            <Form.Check type="checkbox" label="Check me out" />
-                                        </Form.Group>
-                                        <Button
-                                            variant="primary rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold"
-                                            type="submit"
-                                        >
-                                            Sign Up
-                                        </Button>
-                                    </Form>
+                                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                <Form.Label>Email address</Form.Label>
+                                                <Form.Control
+                                                    type="email"
+                                                    placeholder="Enter email"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    required={true}
+                                                />
+                                            </Form.Group>
+
+                                            <Form.Group className="mb-3" controlId="formBasicPassword">
+                                                <Form.Label>Password</Form.Label>
+                                                <Form.Control
+                                                    type="password"
+                                                    placeholder="Enter password"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    required={true}
+                                                />
+                                            </Form.Group>
+                                            <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                                                <Form.Check type="checkbox" label="Check me out" />
+                                            </Form.Group>
+                                            <Button
+                                                variant="success rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold"
+                                                type="submit"
+                                            >
+                                                Sign Up
+                                            </Button>
+                                        </Form>
                                 }
                                 <p>
                                     Already have an account?{' '}

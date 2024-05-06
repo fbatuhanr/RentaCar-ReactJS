@@ -35,15 +35,15 @@ const AdminHeader = () => {
                     await setDoc(doc(db, "vehicle", "models"), demoModels);
                     await setDoc(doc(db, "vehicle", "cars"), demoCars);
                     await setDoc(doc(db, "vehicle", "locations"), demoLocations);
-    
+
                     Swal.fire("Reloaded!", "", "success")
                         .then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.reload();
-                        }
-                    })
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        })
                 }
-                catch(err) {
+                catch (err) {
                     console.log(err)
                     Swal.fire("Error!", "", "error")
                 }
@@ -59,7 +59,7 @@ const AdminHeader = () => {
                     <Row>
                         <Col xs={12} md={6} className="text-center text-sm-start">
                             <h2 className="mt-1 mb-2">
-                                <Link as={Link} to="/admin">Rent a Car | Management</Link>
+                                <Link as={Link} to="/admin">Car World | Management</Link>
                                 <Button variant="info" className="my-2 py-1 text-white" type="button" onClick={handleReloadDemoContent}>Reload Demo Content!</Button>
                             </h2>
                         </Col>
@@ -91,7 +91,7 @@ const AdminHeader = () => {
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item as={Link} to="vehicles/cars" eventKey="i">Cars</NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link as={Link} to="locations" eventKey="i">Locations</Nav.Link>
+                            <Nav.Link as={Link} to="locations" eventKey="i">Showrooms</Nav.Link>
                         </Nav>
                         <Nav className="ms-lg-3 mt-2 mt-lg-0">
                             <Nav.Link as={Link} to="rentals" eventKey="i">User Rentals</Nav.Link>
