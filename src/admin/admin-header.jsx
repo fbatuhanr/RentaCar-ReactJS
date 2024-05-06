@@ -39,15 +39,15 @@ const AdminHeader = () => {
                     await setDoc(doc(db, "vehicle", "models"), demoModels);
                     await setDoc(doc(db, "vehicle", "cars"), demoCars);
                     await setDoc(doc(db, "vehicle", "locations"), demoLocations);
-    
+
                     Swal.fire("Reloaded!", "", "success")
                         .then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.reload();
-                        }
-                    })
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        })
                 }
-                catch(err) {
+                catch (err) {
                     console.log(err)
                     Swal.fire("Error!", "", "error")
                 }
@@ -95,7 +95,6 @@ const AdminHeader = () => {
                         </Nav>
                         <Nav className="ms-lg-3 mt-2 mt-lg-0">
                             <Nav.Link as={Link} to="rentals" eventkey="i">User Rentals</Nav.Link>
-                            <Nav.Link as={Link} to="contact-form" eventkey="i">Contact Form</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
