@@ -62,12 +62,12 @@ function App() {
                         <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>
                             <Route path="" element={<Admin />} /> // this never renders
                             <Route path="users" element={<UsersManager />} />
-                            <Route path="rental" element={<VehiclesManager />} >
-                                <Route path="brands" element={<VehicleBrands />} />
+                            <Route path="vehicles" element={<VehiclesManager />} >
+                                {/* <Route path="brands" element={<VehicleBrands />} />
                                 <Route path="models" element={<VehicleModels />} />
-                                <Route path="cars" element={<VehicleCars />} />
+                                <Route path="cars" element={<VehicleCars />} /> */}
                             </Route>
-                            <Route path="locations" element={<LocationsManager />} />
+                            <Route path="showrooms" element={<LocationsManager />} />
                             <Route path="rentals" element={<RentalsManager />} />
                             <Route path="contact-form" element={<ContactFormManager />} />
                         </Route>
@@ -84,7 +84,7 @@ function App() {
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/my-rentals" element={<AuthGuard><MyRentals /></AuthGuard>} />
 
-                        <Route path="/cars/:carBrand/:carModel/:carId" element={<CarDetail />} />
+                        <Route path="/vehicles/:vehicleId" element={<CarDetail />} />
                     </Routes>
                     <Footer />
                 </Router>

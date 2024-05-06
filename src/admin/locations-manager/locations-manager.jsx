@@ -1,60 +1,67 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Form, InputGroup} from "react-bootstrap";
-import {collection, doc, getDoc, getDocs, setDoc} from "firebase/firestore";
-import {db} from "../../config/firebase";
+import React, { useEffect, useState } from 'react';
+import { Button, Form, InputGroup } from "react-bootstrap";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { db } from "../../config/firebase";
 import Swal from "sweetalert2";
 
-import {fetchLocations} from "../../hooks/useFetchData";
-import {loadingContent} from "../../components/general/general-components";
+import { fetchLocations } from "../../hooks/useFetchData";
+import { loadingContent } from "../../components/general/general-components";
+import { useSelector } from 'react-redux';
+import newRequet from '../../utils/request';
 
 const LocationsManager = () => {
-
     const [isLoading, setIsLoading] = useState(false);
 
     const [locations, setLocations] = useState(null);
-    const [newLocation, setNewLocation] = useState("");
+    const [name, setName] = useState("");
+    const [location, setLocation] = useState('')
+
+    const [showrooms, setShowrooms] = useState([])
+
+    const accessToken = localStorage.getItem("accessToken")
+    const { roleName } = useSelector(state => state.UserSlice)
+
+    const getShowrooms = async () => {
+        await newRequet.get('/showrooms/')
+            .then(data => {
+                setShowrooms(data.data)
+            })
+            .catch(err => {
+                console.log("ERR when get showrooms: ", err)
+            })
+    }
 
     useEffect(() => {
-
-        fetchLocations().then(response => setLocations(response));
+        getShowrooms()
 
     }, [])
 
-    const handleAddNewButton = () => {
+    const handleAddNewShowroom = async () => {
+        if (roleName === 'ADMIN') {
+            if (!name.trim().length) return;
+            if (!location.trim().length) return;
 
-        if(!newLocation.trim().length) return;
+            await newRequet.post('/showrooms/create/', { name, location },
+                {
+                    headers: {
+                        "Authorization": `Bearer ${accessToken}`
+                    }
+                })
+                .then(data => {
+                    getShowrooms()
+                })
+                .catch(err => {
+                    console.log("ERR when create showroom: ", err)
+                })
+        } else {
+            alert("You dont have permission to handle this action!")
+        }
 
-        let newIndex = Object.values(locations).length;
-
-        setLocations((prevState) => ({
-            ...prevState,
-            [newIndex]: newLocation,
-        }));
-
-        setNewLocation("");
     }
 
-    const handleRemoveButton = (key) => {
+    const handleRemoveButton = async (showroom) => {
 
-        setLocations(current => {
-
-            const copy = {...current};
-            delete copy[key];
-
-            return copy;
-        });
-
-        setLocations(current => {
-
-            const copy = {...current};
-            Object.keys(copy).map((id, index) => {
-
-                copy[index] = copy[id];
-                if(index != id) delete copy[id];
-            })
-
-            return copy;
-        });
+        await newRequet.delete('/showrooms/')
 
     }
 
@@ -93,51 +100,44 @@ const LocationsManager = () => {
 
     return (
         <div>
-            <h1>Locations Management</h1>
+            <h1>Showrooms Management</h1>
             <Form onSubmit={handleSaveChangesSubmit}>
                 <div className="d-grid gap-2 p-3">
                     {
-                        locations && !isLoading
+                        showrooms
                             ?
                             <>
-                                <h2>Edit Cities</h2>
+                                <h2>Edit</h2>
                                 {
-                                    Object.entries(locations).map(([key, value]) =>
+                                    showrooms.map((showroom) =>
 
-                                        <div key={key} className="my-2">
-                                            <InputGroup>
-                                                <Form.Control
-                                                    type="text"
-                                                    name={key}
-                                                    value={value || ''}
-                                                    onChange={handleInputChange}
-                                                    placeholder="Location..."
-                                                />
-                                                <Button variant="danger" type="button" onClick={() => handleRemoveButton(key)}>
-                                                    Remove
-                                                </Button>
-                                            </InputGroup>
+                                        <div style={{ marginBottom: '10px' }} key={showroom.id} className="my-2">
+                                            <p style={{ marginBottom: '2px', marginTop: '0px' }}>ID: {showroom.id}</p>
+                                            <p style={{ marginBottom: '2px', marginTop: '0px' }}>Name: {showroom.name}</p>
+                                            <p style={{ marginBottom: '2px', marginTop: '0px' }}>Location: {showroom.location}</p>
                                         </div>
                                     )
                                 }
                                 <div className="my-2">
-                                    <h2>Add New City</h2>
+                                    <h2>Add New Showroom</h2>
                                     <InputGroup>
                                         <Form.Control
                                             type="text"
-                                            value={newLocation}
-                                            onChange={e => setNewLocation(e.target.value)}
-                                            placeholder="Location..."
+                                            value={name}
+                                            onChange={e => setName(e.target.value)}
+                                            placeholder="Showroom name..."
                                         />
-                                        <Button variant="primary" type="button" onClick={handleAddNewButton}>
+                                        <Form.Control
+                                            type="text"
+                                            value={location}
+                                            onChange={e => setLocation(e.target.value)}
+                                            placeholder="Showroom location..."
+                                        />
+                                        <Button variant="primary" type="button" onClick={handleAddNewShowroom}>
                                             Add
                                         </Button>
                                     </InputGroup>
                                 </div>
-
-                                <Button variant="success" type="submit">
-                                    Save All Changes
-                                </Button>
                             </>
                             :
                             loadingContent

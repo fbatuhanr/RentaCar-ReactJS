@@ -4,7 +4,7 @@ import {Navigate} from "react-router-dom";
 
 const AuthGuard = ({children}) => {
 
-    const user = useSelector(({UserSlice}) => UserSlice.user);
+    const user = useSelector(({UserSlice}) => UserSlice);
 
     if(!user.email){
         return <Navigate to="/login" />

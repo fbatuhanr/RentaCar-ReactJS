@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navbar, Container, Row, Col, Button, NavDropdown } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import useAuthentication from "../hooks/useAuthentication";
+import { useDispatch, useSelector } from "react-redux";
 import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2';
@@ -9,14 +8,19 @@ import Swal from 'sweetalert2';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { demoBrands, demoCars, demoLocations, demoModels } from '../utils/demo-content';
+import { logout } from '../redux/features/accountSlice';
+import { clearUserData } from '../redux/features/UserSlice';
 
 const AdminHeader = () => {
 
-    const user = useSelector(({ UserSlice }) => UserSlice.user);
+    const user = useSelector(({ UserSlice }) => UserSlice);
 
-    const { signOutCall } = useAuthentication();
-    const handleLogout = async () => {
-        await signOutCall();
+    const dispatch = useDispatch()
+
+    const handleLogout = async (e) => {
+        e.preventDefault()
+        dispatch(logout())
+        dispatch(clearUserData())
     }
 
     const handleReloadDemoContent = () => {
@@ -67,7 +71,7 @@ const AdminHeader = () => {
                             <Row>
                                 <Col xs={8} md={9}>
                                     <h6>
-                                        Signed in as: <br /><label className="text-dark fw-500">{`${user.email} (${user.role})`}</label>
+                                        Signed in as: <br /><label className="text-dark fw-500">{`${user.email} (${user.roleName})`}</label>
                                     </h6>
                                 </Col>
                                 <Col xs={4} md={3}>
@@ -84,18 +88,14 @@ const AdminHeader = () => {
                     <Navbar.Toggle aria-controls="responsive-admin-navbar-nav" />
                     <Navbar.Collapse id="responsive-admin-navbar-nav">
                         <Nav className="ms-2">
-                            <Nav.Link as={Link} to="users" eventKey="i">Users</Nav.Link>
-                            <NavDropdown title="Vehicle">
-                                <NavDropdown.Item as={Link} to="vehicles/brands" eventKey="i">Brands</NavDropdown.Item>
-                                <NavDropdown.Item as={Link} to="vehicles/models" eventKey="i">Models</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item as={Link} to="vehicles/cars" eventKey="i">Cars</NavDropdown.Item>
-                            </NavDropdown>
-                            <Nav.Link as={Link} to="locations" eventKey="i">Locations</Nav.Link>
+                            <Nav.Link as={Link} to="users" eventkey="i">Users</Nav.Link>
+                            <Nav.Link as={Link} to="vehicles" eventkey="i">Vehicles</Nav.Link>
+
+                            <Nav.Link as={Link} to="showrooms" eventkey="i">Showrooms</Nav.Link>
                         </Nav>
                         <Nav className="ms-lg-3 mt-2 mt-lg-0">
-                            <Nav.Link as={Link} to="rentals" eventKey="i">User Rentals</Nav.Link>
-                            <Nav.Link as={Link} to="contact-form" eventKey="i">Contact Form</Nav.Link>
+                            <Nav.Link as={Link} to="rentals" eventkey="i">User Rentals</Nav.Link>
+                            <Nav.Link as={Link} to="contact-form" eventkey="i">Contact Form</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

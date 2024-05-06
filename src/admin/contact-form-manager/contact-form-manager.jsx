@@ -74,7 +74,7 @@ const ContactFormManager = () => {
                             <Accordion>
                                 {
                                     Object.entries(contactForms).map(([key, value]) =>
-                                        <Accordion.Item key={key} eventKey={key}>
+                                        <Accordion.Item key={key} eventkey={key}>
                                             <Accordion.Header className="m-0 p-0">
                                                 <h3 className="m-0 p-0">
                                                     <span>From: </span>

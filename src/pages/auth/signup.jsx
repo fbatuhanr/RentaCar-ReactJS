@@ -1,17 +1,19 @@
 import React, { useState } from "react"
 
-import useAuthentication from "../../hooks/useAuthentication";
 
 import { NavLink, useNavigate } from "react-router-dom"
 
 import { Alert, Button, Col, Container, Form, Row, Spinner } from "react-bootstrap"
 import { loadingContent } from "../../components/general/general-components";
+import { fetchRegister } from "../../redux/features/accountSlice";
+import { useDispatch } from "react-redux";
 
 const Signup = () => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch()
 
-    const { isLoading, message, signUpCall } = useAuthentication();
+    let isLoading
 
     const [email, setEmail] = useState("");
     const [clientName, setclientName] = useState("");
@@ -20,18 +22,38 @@ const Signup = () => {
     const handleSignup = async (e) => {
         e.preventDefault();
 
-        try {
-            const signUp = await signUpCall({ email, password })
+        const userData = {
+            username: clientName.trim(),
+            password: password.trim(),
+            email: email.trim(),
+            roleName: "CUSTOMER"
         }
-        catch (e) {
 
+        if (clientName.trim() === '') {
+            alert("Username is requied!")
+        }
+        else if (password.trim() === '') {
+            alert("Password is requied!")
+        }
+        else if (email.trim() === '') {
+            alert("Email is requied!")
+        } else {
+            console.log(userData)
+            dispatch(fetchRegister(userData))
+                .then(data => {
+                    console.log(data)
+                    navigate('/login')
+                })
+                .catch(err => {
+                    console.log('err: ', err)
+                })
         }
     }
 
     return (
         <div id="sign-up">
             <Container className="pt-4 pb-5">
-                <Row className="mb-5">
+                {/* <Row className="mb-5">
                     <Col>
                         <h1 className="fs-1 text-center text-uppercase">Sign Up</h1>
                         {
@@ -41,7 +63,7 @@ const Signup = () => {
                                 : <Alert key="success" variant="success">{message.content}</Alert>)
                         }
                     </Col>
-                </Row>
+                </Row> */}
                 <Row>
                     <Col>
                         <Row className="justify-content-center">
