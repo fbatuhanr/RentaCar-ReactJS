@@ -26,7 +26,7 @@ import Login from './pages/auth/login';
 import Signup from './pages/auth/signup';
 
 import About from './pages/about/about';
-import Services from './pages/services/services';
+import Payment from './pages/payment/payment';
 import Rental from './pages/rental/rental';
 
 import CarDetail from "./pages/car-detail";
@@ -67,7 +67,7 @@ function App() {
                         <Route path="/sign-up" element={<GuestGuard><Signup /></GuestGuard>} />
 
                         <Route path="/about" element={<About />} />
-                        <Route path="/services" element={<Services />} />
+                        <Route path="/payment" element={<Payment />} />
                         <Route path="/rental" element={<Rental />} />
                         <Route path="/my-rentals" element={<AuthGuard><MyRentals /></AuthGuard>} />
                         <Route path="/vehicles/:vehicleId" element={<CarDetail />} />
