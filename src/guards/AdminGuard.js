@@ -4,9 +4,9 @@ import {Navigate} from "react-router-dom";
 
 const AdminGuard = ({children}) => {
 
-    const user = useSelector(({UserSlice}) => UserSlice.user);
+    const user = useSelector(({UserSlice}) => UserSlice);
 
-    if(user.role !== "admin"){
+    if(user.roleName !== "ADMIN" && user.roleName !== "STAFF"){
         return <Navigate to="/" />
     }
 

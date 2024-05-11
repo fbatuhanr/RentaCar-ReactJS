@@ -1,9 +1,9 @@
 
 /* GENERAL SETTINGS START */
-$primaryColor: #fe5b29;
+$primaryColor: #800606;
 $secondaryColor: #111111;
 $tertiaryColor: #2b3036;
-$quaternaryColor: #cf4419;
+$quaternaryColor: #800606;
 $quinaryColor: #fcf8f8;
 
 .primary-color { color: $primaryColor; }
@@ -69,7 +69,7 @@ header#header > .header-line-2 .header-line-2-icon {
 }
 
 #slider .banner-section {
-    background-image: url("assets/images/banner-bg.jpg");
+    background-image: url("assets/images/banner-bg.png");
     background-repeat: no-repeat;
     background-position-x: right;
     background-position-y: top;

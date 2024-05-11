@@ -5,10 +5,14 @@ import thunk from "redux-thunk";
 
 import UserSlice from "../features/UserSlice";
 import ReserveSlice from "../features/ReserveSlice";
+import accountSlice from "../features/accountSlice";
+import { showroomSlice } from "../features/showroomsSlice";
 
 const reducers = combineReducers({
     UserSlice,
-    ReserveSlice
+    ReserveSlice,
+    account: accountSlice,
+    showrooms: showroomSlice
 });
 
 const persistConfig = {

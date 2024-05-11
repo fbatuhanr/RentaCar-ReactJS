@@ -5,14 +5,14 @@ import {db} from "../../config/firebase";
 import Swal from "sweetalert2";
 import {useSelector} from "react-redux";
 
-import {fetchUsers} from "../../hooks/useFetchData";
 import {loadingContent} from "../../components/general/general-components";
 
 import {UserRoles, isAdmin} from "../../config/general";
+import newRequet from '../../utils/request';
 
 const UsersManager = () => {
 
-    const user = useSelector(({UserSlice}) => UserSlice.user);
+    const user = useSelector(({UserSlice}) => UserSlice);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -20,9 +20,19 @@ const UsersManager = () => {
 
     const refs = useRef([]);
 
-    useEffect(() => {
+    const handleGetUsers = async () => {
+        await newRequet.get('/users/')
+        .then(data => {
+            setUsers(data.data)
+        })
+        .catch(err => {
+            console.log('ERR when get users: ', err)
+        })
+    }
 
-        fetchUsers().then(response => setUsers(response));
+    useEffect(() => {
+        handleGetUsers()
+        
 
     }, [])
 
@@ -67,7 +77,7 @@ const UsersManager = () => {
                         users && !isLoading
                             ?
                             <>
-                                <h2>Edit Users</h2>
+                                {/* <h2>Edit Users</h2> */}
                                 {
                                     Object.entries(users).map(([key, value]) => {
 
@@ -89,13 +99,26 @@ const UsersManager = () => {
                                                         }}
                                                         */
                                                     />
-                                                    <Form.Select
+                                                    <Form.Control
+                                                        type="text"
                                                         name="userRole"
-                                                        defaultValue={value.role}
+                                                        value={value.roleName}
+                                                        placeholder="User role..."
+                                                        disabled={true}
+                                                        /*
+                                                        ref={event => {
+                                                            refs.current[key] = refs.current[key] || [];
+                                                            refs.current[key][0] = event;
+                                                        }}
+                                                        */
+                                                    />
+                                                    {/* <Form.Select
+                                                        name="userRole"
+                                                        defaultValue={value.roleName}
                                                         disabled={isAnAdmin && isCurrentUser}
                                                         ref={event => refs.current[key] = event}
-                                                    >
-                                                        <option value="">Select a role...</option>
+                                                    > */}
+                                                        {/* <option value="">Select a role...</option>
                                                         {
                                                             Object.keys(UserRoles).map(key => (
                                                                 <option key={key} value={key}>
@@ -103,13 +126,13 @@ const UsersManager = () => {
                                                                 </option>
                                                             ))
                                                         }
-                                                    </Form.Select>
+                                                    </Form.Select> */}
 
-                                                    <Button variant="success" type="button"
+                                                    {/* <Button variant="success" type="button"
                                                             onClick={() => handleUpdateButton(key)}
                                                             disabled={isAnAdmin && isCurrentUser}>
                                                         Update
-                                                    </Button>
+                                                    </Button> */}
 
                                                 </InputGroup>
                                             </div>

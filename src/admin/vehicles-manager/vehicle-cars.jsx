@@ -1,221 +1,111 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Accordion, Button, Form, InputGroup, useAccordionButton} from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { Accordion, Button, Form, InputGroup } from "react-bootstrap";
 
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import {doc, getDoc, setDoc} from "firebase/firestore";
-import { db, storage } from "../../config/firebase";
 import Swal from "sweetalert2";
 
-import Select from "react-select";
-import {fetchBrands, fetchModels, fetchCars, fetchLocations} from "../../hooks/useFetchData";
-import {loadingContent} from "../../components/general/general-components";
+import { loadingContent } from "../../components/general/general-components";
+import newRequet from '../../utils/request';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const VehicleCars = () => {
 
     const [isLoading, setIsLoading] = useState(false);
+    const [vehicles, setVehicle] = useState()
+    const [showrooms, setShowrooms] = useState([])
+    const accessToken = localStorage.getItem("accessToken")
+    const { roleName } = useSelector(state => state.UserSlice)
 
-    const [cars, setCars] = useState(null);
-    const [isChangesCompleted, setIsChangesCompleted] = useState(false);
-
-    const [brands, setBrands] = useState(null);
-    const [models, setModels] = useState(null);
-
-    const [modelsByBrandId, setModelsByBrandId] = useState(null);
-
-    const [locations, setLocations] = useState(null);
-
-    useEffect(() => {
-
-        fetchBrands().then(response => setBrands(response));
-        fetchModels().then(response => setModels(response));
-        fetchCars().then(response => setCars(response));
-        fetchLocations().then(response => setLocations(response));
-
-    }, []);
-
-    const handleBrandChange = e => {
-
-        let selectedValue = e.target.value;
-
-        if(selectedValue && Object.values(models).length > 0) {
-
-            let currentModels = selectedValue && Object.values(models).find(i => i.brandId == selectedValue).models;
-            setModelsByBrandId(currentModels);
-        }
-        else {
-            setModelsByBrandId(null);
-        }
-    }
-
-
-    useEffect(() => {
-
-        if(cars && isChangesCompleted){
-            uploadDocToFirebase();
-            setIsChangesCompleted(false);
-        }
-
-    }, [cars, isChangesCompleted])
-
-    const handleSaveChangesButton = async event => {
-
-       event.preventDefault();
-
-        console.log(cars);
-        setIsLoading(true);
-
-        await Promise.all(
-
-            Object.values(cars).map(async (item, index) => {
-
-                if(!('File' in window && item.image instanceof File)) // if it is not file (firebaseurl) then no changes happened so skip upload
-                    return null;
-
-                const uploadedImageUrl = await uploadImageToStorage(item.image);
-                setCars((prevState) => ({
-                    ...prevState,
-                    [index]: {
-                        ...prevState[index],
-                        image: uploadedImageUrl
-                    }
-                }))
-            })
-        );
-
-        console.log(cars);
-        setIsChangesCompleted(true);
-    }
-
-    const uploadDocToFirebase = async () => {
-
-        setDoc(doc(db, "vehicle", "cars"), cars)
-            .then(() => {
-                setIsLoading(false);
-                Swal.fire({
-                    title: "Good job!",
-                    text: "All changes saved!",
-                    icon: "success"
-                });
+    const getVehicles = async () => {
+        await newRequet.get('/vehicles/')
+            .then(data => {
+                console.log(data.data)
+                setVehicle(data.data)
             })
             .catch(err => {
-                console.log(err);
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!"
-                });
-            });
-    }
-
-    const uploadImageToStorage = async file => {
-
-        return new Promise((resolve, reject) => {
-
-            const storageRef = ref(storage, `vehicle-images/${file.name}`);
-            const uploadTask = uploadBytesResumable(storageRef, file, file.type);
-
-            uploadTask.on('state_changed', (snapshot) => {
-
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log(`Upload is ${progress}% Done!`);
-
-                }, (err) => {
-
-                    console.log(`Upload Error: ${err}`)
-                    reject();
-
-                }, () => {
-
-                    console.log("Upload is Completed!");
-                    getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-
-                        console.log("download url ready: " + downloadURL);
-                        resolve(downloadURL)
-                    });
-                }
-            );
-        });
-    }
-
-    const handleAddNewSubmit = event => {
-
-        event.preventDefault();
-
-        console.log(event.target.elements)
-
-        let eventElementsArray =
-            Array.from(event.target.elements)
-                .filter(element => element.name)
-                .map(e => ({
-                    [e.name]:
-                        e.name !== "image"
-                            ?
-                                e.name === "brandId" || e.name === "modelId" || e.name === "carCount"
-                                    ? e.value ? parseInt(e.value) || 0 : ""
-                                    : e.value
-                            :
-                                e.files[0]
-                }));
-        let selectedLocations = eventElementsArray.filter(i => i.availableLocations).map(i => i.availableLocations);
-        let newCar = Object.assign({}, ...eventElementsArray);
-        newCar.availableLocations = selectedLocations;
-
-        console.log(newCar);
-
-        let newCarIndex = cars ? Object.values(cars).length : 0;
-
-        setCars((prevState) => ({
-            ...prevState,
-            [newCarIndex]: newCar,
-        }));
-
-        event.target.reset();
-    }
-    const handleRemoveButton = (key) => {
-
-        setCars(current => {
-
-            const copy = {...current};
-            delete copy[key];
-
-            return copy;
-        });
-
-        setCars(current => {
-
-            const copy = {...current};
-            Object.keys(copy).map((id, index) => {
-
-                copy[index] = copy[id];
-                if(index != id) delete copy[id];
+                console.log("ERR when get vehicles: ", err)
             })
-
-            return copy;
-        });
     }
-    const handleInputChange = (event, index) => {
 
-        let e = event.target ? event.target : { name: "availableLocations", value: event.map(i => i.value) };
+    const getShowrooms = async () => {
+        await newRequet.get('/showrooms/')
+            .then(data => {
+                setShowrooms(data.data)
+            })
+            .catch(err => {
+                console.log("ERR when get showrooms: ", err)
+            })
+    }
 
-        setCars(current => {
-            return {
-                ...current,
-                [index]: {
-                    ...current[index],
-                    [e.name]:
-                        e.name !== "image"
-                            ?
-                            e.name === "brandId" || e.name === "modelId" || e.name === "carCount"
-                                ? e.value ? parseInt(e.value) || 0 : ""
-                                : e.value
-                            :
-                            e.files[0]
+    useEffect(() => {
+        getVehicles()
+        getShowrooms()
+    }, []);
+    const handleAddNewVehicle = async (event) => {
+        event.preventDefault();
+        if (roleName === 'ADMIN') {
+            setIsLoading(true);
+
+            let brand = event.target.elements.brand.value
+            let description = event.target.elements.description.value
+            let image = event.target.elements.image.files[0]
+            let name = event.target.elements.name.value
+            let price = parseInt(event.target.elements.price.value)
+            let showroomId = event.target.elements.showroomId.value
+            let specifications = event.target.elements.specifications.value
+
+            const formData = new FormData()
+
+            formData.append("image", image)
+
+            await axios.post(
+                'http://localhost:8080/Showroom/cloudinary/upload',
+                formData)
+                .then(data => {
+                    console.log(data.data.url)
+                    newRequet.post('/vehicles/create/', {
+                        name, price, specifications, description, brand, status: "available", showroomId, image: data.data.url
+                    }, {
+                        headers: {
+                            "Authorization": `Bearer ${accessToken}`
+                        }
+                    }).then(data => {
+                        console.log(data.data)
+                        setIsLoading(false)
+                        getVehicles()
+                        event.target.reset();
+                    })
+                        .catch(err => {
+                            console.log("ERR when add vehicle: ", err)
+                        })
+                })
+                .catch(err => {
+                    console.log("ERR when upload image: ", err)
+                })
+        } else {
+            alert("You dont have permission to handle this action!")
+        }
+    }
+    const handleDeleteVehicle = async (id) => {
+        if (roleName === 'ADMIN') {
+            await newRequet.delete(`/vehicles/delete/${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
                 }
-            }
-        })
+            })
+                .then(data => {
+                    console.log(data.data)
+                    getVehicles()
+                }).catch(err => {
+                    console.log("ERR when delete vehicle: ", err)
+                })
+        } else {
+            alert("You dont have permission to handle this action!")
+        }
     }
 
     const handleDisplayImage = imgUrl => {
+        console.log(imgUrl)
 
         Swal.fire({
             imageUrl: imgUrl,
@@ -224,278 +114,240 @@ const VehicleCars = () => {
         });
     }
 
+    const handleUpdateVehicle = async (event, item) => {
+        event.preventDefault()
+
+        if (roleName === 'ADMIN') {
+            const form = event.target.elements
+
+            const updatedVehicle = {
+                brand: form.brand.value,
+                description: form.description.value,
+                imageFile: form.image.files[0],
+                name: form.name.value,
+                price: form.price.value,
+                specifications: form.specifications.value,
+            };
+
+            let updateValue = {}
+
+            if (item.brand !== updatedVehicle.brand.trim()) {
+                updateValue.brand = updatedVehicle.brand
+            }
+            if (item.description !== updatedVehicle.description.trim()) {
+                updateValue.description = updatedVehicle.description
+            }
+            if (item.name !== updatedVehicle.name.trim()) {
+                updateValue.name = updatedVehicle.name
+            }
+            if (item.price !== parseInt(updatedVehicle.price.trim())) {
+                updateValue.price = updatedVehicle.price
+            }
+            if (item.specifications !== updatedVehicle.specifications.trim()) {
+                updateValue.specifications = updatedVehicle.specifications
+            }
+
+            if (updatedVehicle.imageFile) {
+                const formData = new FormData()
+                formData.append("image", updatedVehicle.imageFile)
+
+                await axios.post(
+                    'http://localhost:8080/Showroom/cloudinary/upload',
+                    formData)
+                    .then(data => {
+                        console.log(data.data.url)
+                        newRequet.patch('/vehicles/update/', {
+                            vehicleId: item.id.toString(), ...updateValue, image: data.data.url
+                        }, {
+                            headers: {
+                                "Authorization": `Bearer ${accessToken}`
+                            }
+                        }).then(data => {
+                            console.log(data.data)
+                            getVehicles()
+                            event.target.reset();
+                        })
+                            .catch(err => {
+                                console.log("ERR when update vehicle: ", err)
+                            })
+                    })
+                    .catch(err => {
+                        console.log("ERR when update image: ", err)
+                    })
+
+            } else {
+                if (Object.keys(updateValue).length > 0) {
+                    newRequet.patch('/vehicles/update/', {
+                        vehicleId: item.id.toString(), ...updateValue
+                    }, {
+                        headers: {
+                            "Authorization": `Bearer ${accessToken}`
+                        }
+                    }).then(data => {
+                        console.log(data.data)
+                        getVehicles()
+                        event.target.reset()
+                    })
+                        .catch(err => {
+                            console.log("ERR when update vehicle: ", err)
+                        })
+                }
+            }
+
+        } else {
+            alert("You dont have permission to handle this action!")
+        }
+
+    }
+
     return (
         <div>
             <h1>Cars Management</h1>
-                <div className="d-grid gap-2 p-3">
-                    {
-                        cars && brands && models && !isLoading
+            <div className="d-grid gap-2 p-3">
+                {
+                    vehicles && !isLoading
                         ?
-                            <>
-                                <Accordion>
-                                    {
-                                        Object.values(cars).map((item, index) => {
-
-                                            let currBrandName = item.brandId.length != 0 ? Object.values(brands)[item.brandId] : null;
-                                            let currModelsByBrandId =  item.brandId.length != 0 ? Object.values(models).find(i => i.brandId == item.brandId).models : null;
-                                            let currModelName = currModelsByBrandId ? currModelsByBrandId[item.modelId] : null;
-
-                                            return (
-                                                <Accordion.Item key={index} eventKey={index}>
-                                                    <Accordion.Header className="m-0 p-0">{currBrandName} / {currModelName}</Accordion.Header>
-                                                    <Accordion.Body>
+                        <>
+                            <Accordion>
+                                {
+                                    Object.values(vehicles).map((item, index) => {
+                                        return (
+                                            <Accordion.Item key={index} eventkey={index}>
+                                                <Accordion.Header className="m-0 p-0">{item.name} / {item.brand}</Accordion.Header>
+                                                <Accordion.Body>
+                                                    <Form onSubmit={(event) => { handleUpdateVehicle(event, item) }}>
                                                         <div className="mb-3 input-groups-1">
                                                             <h3>Vehicle Properties</h3>
                                                             <InputGroup className="my-1">
                                                                 <InputGroup.Text>Brand</InputGroup.Text>
-                                                                <Form.Select
-                                                                    name="brandId"
-                                                                    defaultValue={item.brandId}
-                                                                    onChange={event => handleInputChange(event, index)}
-                                                                >
-                                                                    <option value="">Select a Brand...</option>
-                                                                    {
-                                                                        Object.entries(brands).map(([key, value]) =>
-                                                                            <option value={key} key={key}>{value}</option>
-                                                                        )
-                                                                    }
-                                                                </Form.Select>
+                                                                <Form.Control
+                                                                    type="text" name="brand" placeholder="Brand"
+                                                                    defaultValue={item.brand}
+                                                                />
                                                             </InputGroup>
                                                             <InputGroup className="my-1">
-                                                                <InputGroup.Text>Model</InputGroup.Text>
-                                                                <Form.Select
-                                                                    name="modelId"
-                                                                    defaultValue={item.modelId}
-                                                                    onChange={event => handleInputChange(event, index)}
-                                                                >
-                                                                    <option value="">Select a Model...</option>
-                                                                    {
-                                                                        currModelsByBrandId && Object.entries(currModelsByBrandId).map(([key, value]) =>
-                                                                            <option value={key} key={key}>{value}</option>
-                                                                        )
-                                                                    }
-                                                                </Form.Select>
+                                                                <InputGroup.Text>description</InputGroup.Text>
+                                                                <Form.Control
+                                                                    type="text" name="description" placeholder="Description"
+                                                                    defaultValue={item.description}
+                                                                />
                                                             </InputGroup>
+                                                            <Form.Control
+                                                                name="imageUrl"
+                                                                hidden={true}
+                                                                defaultValue={item.image ? item.image : null}
+                                                            />
                                                             <InputGroup className="my-1">
                                                                 <InputGroup.Text>Image</InputGroup.Text>
                                                                 <Form.Control
                                                                     type="file" name="image"
-                                                                    defaultValue={item.image ? item.image.value : null}
-                                                                    onChange={event => handleInputChange(event, index)}
+                                                                    defaultValue={item.image !== null ? item.image.value : null}
                                                                 />
                                                                 <Button variant="warning" type="button"
-                                                                        onClick={() => handleDisplayImage(item.image)}>
+                                                                    onClick={() => handleDisplayImage(item.image)}>
                                                                     See Exist IMG
                                                                 </Button>
                                                             </InputGroup>
                                                             <InputGroup className="my-1">
-                                                                <InputGroup.Text>Power</InputGroup.Text>
+                                                                <InputGroup.Text>Name</InputGroup.Text>
                                                                 <Form.Control
-                                                                    type="text" name="power" placeholder="Power"
-                                                                    defaultValue={item.power}
-                                                                    onChange={event => handleInputChange(event, index)}
+                                                                    type="text" name="name" placeholder="Name"
+                                                                    defaultValue={item.name}
                                                                 />
                                                             </InputGroup>
                                                             <InputGroup className="my-1">
-                                                                <InputGroup.Text>Engine</InputGroup.Text>
+                                                                <InputGroup.Text>Price</InputGroup.Text>
                                                                 <Form.Control
-                                                                    type="text" name="engineSize" placeholder="Engine Size"
-                                                                    defaultValue={item.engineSize}
-                                                                    onChange={event => handleInputChange(event, index)}
+                                                                    type="text" name="price" placeholder="Price"
+                                                                    defaultValue={item.price}
                                                                 />
                                                             </InputGroup>
                                                             <InputGroup className="my-1">
-                                                                <InputGroup.Text>Gearbox</InputGroup.Text>
-                                                                <Form.Select
-                                                                    name="gearbox"
-                                                                    defaultValue={item.gearbox}
-                                                                    onChange={event => handleInputChange(event, index)}
-                                                                >
-                                                                    <option value="">Select a Gearbox...</option>
-                                                                    <option value="Manual">Manual</option>
-                                                                    <option value="Automatic">Automatic</option>
-                                                                </Form.Select>
+                                                                <InputGroup.Text>Specifications</InputGroup.Text>
+                                                                <Form.Control
+                                                                    type="text" name="specifications" placeholder="Specifications"
+                                                                    defaultValue={item.specifications}
+                                                                />
                                                             </InputGroup>
                                                             <InputGroup className="my-1">
-                                                                <InputGroup.Text>Body</InputGroup.Text>
-                                                                <Form.Select
-                                                                    name="bodyType"
-                                                                    defaultValue={item.bodyType}
-                                                                    onChange={event => handleInputChange(event, index)}
-                                                                >
-                                                                    <option value="">Select a Body Type...</option>
-                                                                    <option value="Sedan">Sedan</option>
-                                                                    <option value="Hatchback">Hatchback</option>
-                                                                    <option value="SUV">SUV</option>
-                                                                    <option value="Coupe">Coupe</option>
-                                                                    <option value="Station Wagon">Station Wagon</option>
-                                                                    <option value="Minivan/Van">Minivan/Van</option>
-                                                                    <option value="Truck">Truck</option>
-                                                                    <option value="Convertible">Convertible</option>
-                                                                </Form.Select>
-                                                            </InputGroup>
-                                                            <InputGroup className="my-1">
-                                                                <InputGroup.Text>Fuel</InputGroup.Text>
-                                                                <Form.Select
-                                                                    name="fuelType"
-                                                                    defaultValue={item.fuelType}
-                                                                    onChange={event => handleInputChange(event, index)}
-                                                                >
-                                                                    <option value="">Select a Fuel Type...</option>
-                                                                    <option value="Gas">Gas</option>
-                                                                    <option value="Diesel">Diesel</option>
-                                                                    <option value="Hybrid">Hybrid</option>
-                                                                </Form.Select>
+                                                                <InputGroup.Text>Showroom: {item.showroom.name}</InputGroup.Text>
                                                             </InputGroup>
                                                         </div>
                                                         <div className="mt-3 input-groups-2">
-                                                            <h3>Vehicle Info</h3>
-                                                            <InputGroup className="my-1">
-                                                                <InputGroup.Text>Car Count</InputGroup.Text>
-                                                                <Form.Control
-                                                                    type="number" name="carCount" placeholder="Available Car Count..."
-                                                                    defaultValue={item.carCount}
-                                                                    onChange={event => handleInputChange(event, index)}
-                                                                />
-                                                            </InputGroup>
-                                                            <InputGroup className="my-1">
-                                                                <InputGroup.Text>Available Locations</InputGroup.Text>
-                                                                <Select
-                                                                    isMulti
-                                                                    name="availableLocations"
-                                                                    defaultValue={item.availableLocations && item.availableLocations.map(i => ({label: locations[i], value: i}))}
-                                                                    options={Object.entries(locations).map(([key, value]) => ({label: value, value: key}))}
-                                                                    className="react-select w-75"
-                                                                    classNamePrefix="select"
-                                                                    onChange={event => handleInputChange(event, index)}
-                                                                />
-                                                            </InputGroup>
+                                                            <Button variant="info" type="submit" className="w-100">
+                                                                Update Car
+                                                            </Button>
                                                         </div>
                                                         <div className="mt-3 input-groups-2">
-                                                            <Button variant="danger" type="button" className="w-100" onClick={() => handleRemoveButton(index)}>
+                                                            <Button variant="danger" type="button" className="w-100" onClick={() => handleDeleteVehicle(item.id)}>
                                                                 Remove Car
                                                             </Button>
                                                         </div>
-                                                    </Accordion.Body>
-                                                </Accordion.Item>
-                                            )
-                                        })
-                                    }
-                                </Accordion>
+                                                    </Form>
+                                                </Accordion.Body>
+                                            </Accordion.Item>
+                                        )
+                                    })
+                                }
+                            </Accordion>
 
-                                <Accordion>
-                                    <Accordion.Item>
-                                        <Accordion.Header className="m-0 p-0">Add a New Car</Accordion.Header>
-                                        <Accordion.Body>
-                                            <Form onSubmit={handleAddNewSubmit}>
-                                                <div className="mb-3 input-groups-1">
-                                                    <h3>Vehicle Properties</h3>
-                                                    <InputGroup className="my-1">
-                                                        <InputGroup.Text>Brand</InputGroup.Text>
-                                                        <Form.Select
-                                                            name="brandId"
-                                                            onChange={handleBrandChange}
-                                                            required={true}
-                                                        >
-                                                            <option value="">Select a Brand...</option>
-                                                            {
-                                                                brands && Object.entries(brands).map(([key, value])=>
-                                                                    <option value={key} key={key}>{value}</option>
-                                                                )
-                                                            }
-                                                        </Form.Select>
-                                                    </InputGroup>
-                                                    <InputGroup className="my-1">
-                                                        <InputGroup.Text>Model</InputGroup.Text>
-                                                        <Form.Select name="modelId" required={true}>
-                                                            <option value="">Select a Model...</option>
-                                                            {
-                                                                modelsByBrandId && Object.entries(modelsByBrandId).map(([key, value])=>
-                                                                    <option value={key} key={key}>{value}</option>
-                                                                )
-                                                            }
-                                                        </Form.Select>
-                                                    </InputGroup>
-                                                    <InputGroup className="my-1">
-                                                        <InputGroup.Text>Image</InputGroup.Text>
-                                                        <Form.Control type="file" name="image" required={true}/>
-                                                    </InputGroup>
-                                                    <InputGroup className="my-1">
-                                                        <InputGroup.Text>Power</InputGroup.Text>
-                                                        <Form.Control type="text" name="power" placeholder="Power" required={true}/>
-                                                    </InputGroup>
-                                                    <InputGroup className="my-1">
-                                                        <InputGroup.Text>Engine Size</InputGroup.Text>
-                                                        <Form.Control type="text" name="engineSize" placeholder="Engine Size" required={true}/>
-                                                    </InputGroup>
-                                                    <InputGroup className="my-1">
-                                                        <InputGroup.Text>Gearbox</InputGroup.Text>
-                                                        <Form.Select name="gearbox" required={true}>
-                                                            <option value="">Select a Gearbox...</option>
-                                                            <option value="manual">Manual</option>
-                                                            <option value="automatic">Automatic</option>
-                                                        </Form.Select>
-                                                    </InputGroup>
-                                                    <InputGroup className="my-1">
-                                                        <InputGroup.Text>Body</InputGroup.Text>
-                                                        <Form.Select name="bodyType" required={true}>
-                                                            <option value="">Select a Body Type...</option>
-                                                            <option value="Sedan">Sedan</option>
-                                                            <option value="Hatchback">Hatchback</option>
-                                                            <option value="SUV">SUV</option>
-                                                            <option value="Coupe">Coupe</option>
-                                                            <option value="Station Wagon">Station Wagon</option>
-                                                            <option value="Minivan/Van">Minivan/Van</option>
-                                                            <option value="Truck">Truck</option>
-                                                            <option value="Convertible">Convertible</option>
-                                                        </Form.Select>
-                                                    </InputGroup>
-                                                    <InputGroup className="my-1">
-                                                        <InputGroup.Text>Fuel</InputGroup.Text>
-                                                        <Form.Select name="fuelType" required={true}>
-                                                            <option value="">Select a Fuel Type...</option>
-                                                            <option value="Gas">Gas</option>
-                                                            <option value="Diesel">Diesel</option>
-                                                            <option value="Hybrid">Hybrid</option>
-                                                        </Form.Select>
-                                                    </InputGroup>
-                                                </div>
-                                                <div className="mt-3 input-groups-2">
-                                                    <h3>Vehicle Info</h3>
-                                                    <InputGroup className="my-1">
-                                                        <InputGroup.Text>Car Count</InputGroup.Text>
-                                                        <Form.Control type="number" name="carCount" placeholder="Available Car Count..." required={true}/>
-                                                    </InputGroup>
-                                                    <InputGroup className="my-1">
-                                                        <InputGroup.Text>Available Locations</InputGroup.Text>
-                                                        <Select
-                                                            isMulti
-                                                            name="availableLocations"
-                                                            options={Object.entries(locations).map(([key, value]) => ({label: value, value: key}))}
-                                                            className="react-select w-75"
-                                                            classNamePrefix="select"
-                                                            required={true}
-                                                        />
-                                                    </InputGroup>
-                                                </div>
-                                                <div className="mt-3 input-groups-3">
-                                                    <Button variant="primary" type="submit" className="w-100">
-                                                        Add New
-                                                    </Button>
-                                                </div>
-                                            </Form>
-                                        </Accordion.Body>
-                                    </Accordion.Item>
-                                </Accordion>
+                            <Accordion>
+                                <Accordion.Item>
+                                    <Accordion.Header className="m-0 p-0">Add a New Car</Accordion.Header>
+                                    <Accordion.Body>
+                                        <Form onSubmit={handleAddNewVehicle}>
+                                            <div className="mb-3 input-groups-1">
+                                                <h3>Vehicle Properties</h3>
+                                                <InputGroup className="my-1">
+                                                    <InputGroup.Text>Brand</InputGroup.Text>
+                                                    <Form.Control type="text" name="brand" placeholder="Brand" required={true} />
+                                                </InputGroup>
+                                                <InputGroup className="my-1">
+                                                    <InputGroup.Text>Image</InputGroup.Text>
+                                                    <Form.Control type="file" name="image" required={true} />
+                                                </InputGroup>
+                                                <InputGroup className="my-1">
+                                                    <InputGroup.Text>description</InputGroup.Text>
+                                                    <Form.Control type="text" name="description" placeholder="description" required={true} />
+                                                </InputGroup>
+                                                <InputGroup className="my-1">
+                                                    <InputGroup.Text>Name</InputGroup.Text>
+                                                    <Form.Control type="text" name="name" placeholder="Name" required={true} />
+                                                </InputGroup>
+                                                <InputGroup className="my-1">
+                                                    <InputGroup.Text>Price</InputGroup.Text>
+                                                    <Form.Control type="number" name="price" placeholder="Price" required={true} />
+                                                </InputGroup>
+                                                <InputGroup className="my-1">
+                                                    <InputGroup.Text>Specifications</InputGroup.Text>
+                                                    <Form.Control type="text" name="specifications" placeholder="Specifications" required={true} />
+                                                </InputGroup>
 
-                                <Button variant="success" type="button" onClick={handleSaveChangesButton}>
-                                    Save All Changes
-                                </Button>
-                            </>
+                                                <InputGroup className="my-1">
+                                                    <InputGroup.Text>Showroom</InputGroup.Text>
+                                                    <Form.Select name="showroomId" required={true}>
+                                                        {
+                                                            showrooms.map(showroom => {
+                                                                return <option key={showroom.id} value={showroom.id}>{showroom.name}</option>
+                                                            })
+                                                        }
+                                                    </Form.Select>
+                                                </InputGroup>
+                                            </div>
+                                            <div className="mt-3 input-groups-3">
+                                                <Button variant="primary" type="submit" className="w-100">
+                                                    Add New
+                                                </Button>
+                                            </div>
+                                        </Form>
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
+                        </>
                         :
-                            loadingContent
-                    }
-                </div>
+                        loadingContent
+                }
+            </div>
         </div>
     );
 };

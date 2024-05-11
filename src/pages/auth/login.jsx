@@ -1,39 +1,45 @@
-import React, {useState} from 'react';
-
-import useAuthentication from "../../hooks/useAuthentication";
+import React, { useState } from 'react';
 
 import { NavLink, useNavigate } from "react-router-dom"
 
-import {Container, Row, Col, Form, Button, Alert, Spinner} from "react-bootstrap";
-import {loadingContent} from "../../components/general/general-components";
+import { Container, Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
+import { loadingContent } from "../../components/general/general-components";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLogin } from '../../redux/features/accountSlice';
+import { fetchUserData } from '../../redux/features/UserSlice';
 
 const Login = () => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch()
 
-    const {isLoading, message, signInCall} = useAuthentication();
-
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
+    const user = useSelector(state => state.UserSlice)
 
-        await signInCall({email, password})
+    let isLoading
+
+    const handleLogin = async (e) => {
+        e.preventDefault()
+        dispatch(fetchLogin({ username, password }))
+            .then(data => {
+                dispatch(fetchUserData(username))
+                localStorage.setItem('accessToken', data.payload.accessToken)
+                navigate('/')
+            })
+
+            .catch(err => {
+                console.log('err: ', err)
+            })
     }
 
     return (
         <div id="login">
             <Container className="pt-4 pb-5">
-                <Row>
+                <Row className="mb-5">
                     <Col>
-                        <h1 className="fs-1 text-center text-uppercase">Login</h1>
-                        {
-                            message !== null &&
-                            (message.isError
-                            ? <Alert key="danger" variant="danger">{message.content}</Alert>
-                            : <Alert key="success" variant="success">{message.content}</Alert>)
-                        }
+                        <h1 className="fs-1 text-center text-uppercase">Log In</h1>
                     </Col>
                 </Row>
                 <Row>
@@ -41,20 +47,29 @@ const Login = () => {
                         <p className="m-0">Demo Login Informations (Click for Autofill)</p>
                         <p className="m-0">
                             <a href="#" onClick={() => {
-                                setEmail("admin@batuhanozturk.com")
+                                setUsername("admin")
                                 setPassword("123456")
-                                }
+                            }
                             }>
-                                For Admin: admin@batuhanozturk.com 123456
+                                For Admin: admin 123456
                             </a>
                         </p>
                         <p className="m-0">
                             <a href="#" onClick={() => {
-                                setEmail("user@batuhanozturk.com")
+                                setUsername("staff")
                                 setPassword("123456")
-                                }
+                            }
                             }>
-                                For User: user@batuhanozturk.com 123456
+                                For Staff: staff 123456
+                            </a>
+                        </p>
+                        <p className="m-0">
+                            <a href="#" onClick={() => {
+                                setUsername("customer3")
+                                setPassword("123456")
+                            }
+                            }>
+                                For User: customer3 123456
                             </a>
                         </p>
                     </Col>
@@ -63,43 +78,43 @@ const Login = () => {
                     <Col>
                         <Row className="justify-content-center">
                             <Col xs={12} md={8} className={isLoading ? "text-center" : null}>
-                                {
+                                {/* {
                                     isLoading
-                                    ?
+                                        ?
                                         loadingContent
-                                    :
-                                        <Form onSubmit={handleLogin}>
-                                            <Form.Group className="mb-3" controlId="formBasicEmail">
-                                                <Form.Label>Email address</Form.Label>
-                                                <Form.Control
-                                                    type="email"
-                                                    placeholder="Enter email"
-                                                    value={email}
-                                                    onChange={(e) => setEmail(e.target.value)}
-                                                    required={true}
-                                                />
-                                            </Form.Group>
-                                            <Form.Group className="mb-3" controlId="formBasicPassword">
-                                                <Form.Label>Password</Form.Label>
-                                                <Form.Control
-                                                    type="password"
-                                                    placeholder="Password"
-                                                    value={password}
-                                                    onChange={(e)=>setPassword(e.target.value)}
-                                                    required={true}
-                                                />
-                                            </Form.Group>
-                                            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                                                <Form.Check type="checkbox" label="Check me out" />
-                                            </Form.Group>
-                                            <Button
-                                                variant="primary rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold"
-                                                type="submit"
-                                            >
-                                                Login
-                                            </Button>
-                                        </Form>
-                                }
+                                        : */}
+                                <Form onSubmit={handleLogin}>
+                                    <Form.Group className="mb-3" controlId="formBasicusername">
+                                        <Form.Label>Username address</Form.Label>
+                                        <Form.Control
+                                            type="username"
+                                            placeholder="Enter username"
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
+                                            required={true}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            placeholder="Password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required={true}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                                        <Form.Check type="checkbox" label="Check me out" />
+                                    </Form.Group>
+                                    <Button
+                                        variant="success rent-now-button primary-bg-color border-0 rounded-1 px-4 fw-bold"
+                                        type="submit"
+                                    >
+                                        Login
+                                    </Button>
+                                </Form>
+                                {/* } */}
                                 <p>
                                     No account yet? {' '}
                                     <NavLink to="/sign-up">
