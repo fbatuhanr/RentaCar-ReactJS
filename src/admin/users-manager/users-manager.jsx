@@ -73,7 +73,7 @@ const UsersManager = () => {
 
                                         let isAnAdmin = isAdmin(value.role);
                                         let isCurrentUser = value.email == user.email;
-                                        let isDefaultAdmin = value.userUID == "6pVIzdCErHYsMKueqR1FNlPvmE73"
+                                        let isDefaultAdmin = value.userUID == "3M9LJ5nz2PTj5I4OtHffMoa2oAD3"
                                         return (
                                             <div key={key} className="my-2">
                                                 <InputGroup>
