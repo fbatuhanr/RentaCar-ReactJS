@@ -73,7 +73,11 @@ const UsersManager = () => {
 
                                         let isAnAdmin = isAdmin(value.role);
                                         let isCurrentUser = value.email == user.email;
+
+                                        /* admin@batuhanozturk.com */
                                         let isDefaultAdmin = value.userUID == "3M9LJ5nz2PTj5I4OtHffMoa2oAD3"
+                                        /* user@batuhanozturk.com */
+                                        let isDefaultUser = value.userUID == "3fDiITFpHLf4Vgio1VBN0jUZGy52"
                                         return (
                                             <div key={key} className="my-2">
                                                 <InputGroup>
@@ -93,7 +97,7 @@ const UsersManager = () => {
                                                     <Form.Select
                                                         name="userRole"
                                                         defaultValue={value.role}
-                                                        disabled={(isAnAdmin && isCurrentUser) || isDefaultAdmin}
+                                                        disabled={(isAnAdmin && isCurrentUser) || isDefaultAdmin || isDefaultUser}
                                                         ref={event => refs.current[key] = event}
                                                     >
                                                         <option value="">Select a role...</option>
@@ -108,7 +112,7 @@ const UsersManager = () => {
 
                                                     <Button variant="success" type="button"
                                                             onClick={() => handleUpdateButton(key)}
-                                                            disabled={(isAnAdmin && isCurrentUser) || isDefaultAdmin}>
+                                                            disabled={(isAnAdmin && isCurrentUser) || isDefaultAdmin || isDefaultUser}>
                                                         Update
                                                     </Button>
 
