@@ -73,6 +73,7 @@ const UsersManager = () => {
 
                                         let isAnAdmin = isAdmin(value.role);
                                         let isCurrentUser = value.email == user.email;
+                                        let isDefaultAdmin = value.userUID == "6pVIzdCErHYsMKueqR1FNlPvmE73"
                                         return (
                                             <div key={key} className="my-2">
                                                 <InputGroup>
@@ -92,7 +93,7 @@ const UsersManager = () => {
                                                     <Form.Select
                                                         name="userRole"
                                                         defaultValue={value.role}
-                                                        disabled={isAnAdmin && isCurrentUser}
+                                                        disabled={(isAnAdmin && isCurrentUser) || isDefaultAdmin}
                                                         ref={event => refs.current[key] = event}
                                                     >
                                                         <option value="">Select a role...</option>
@@ -107,7 +108,7 @@ const UsersManager = () => {
 
                                                     <Button variant="success" type="button"
                                                             onClick={() => handleUpdateButton(key)}
-                                                            disabled={isAnAdmin && isCurrentUser}>
+                                                            disabled={(isAnAdmin && isCurrentUser) || isDefaultAdmin}>
                                                         Update
                                                     </Button>
 
