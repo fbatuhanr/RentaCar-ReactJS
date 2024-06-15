@@ -56,7 +56,7 @@ const Footer = () => {
                       <br/>
                       <span>
                     <GrMail className="header-line-2-icon"/>&nbsp;
-                        <a href="mailto:info@rentacar" target="_blank" className="text-white">info@rentacar</a>
+                        <a href="mailto:fbatuhanr@gmail.com" target="_blank" className="text-white">fbatuhanr@gmail.com</a>
                   </span>
                     </p>
                     <div className="social-icon">

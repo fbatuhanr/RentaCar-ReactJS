@@ -102,7 +102,7 @@ const Header = () => {
                                 <Col xs={12} md={4}>
                           <span className="fs-6">
                             <GrMail className="header-line-2-icon"/>&nbsp;
-                              <a href="mailto:info@rentacar" target="_blank" className="text-white">info@rentacar</a>
+                              <a href="mailto:fbatuhanr@gmail.com" target="_blank" className="text-white">fbatuhanr@gmail.com</a>
                           </span>
                                 </Col>
                             </Row>
