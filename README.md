@@ -38,11 +38,11 @@ Check out the live demo of the project: [Rent a Car Live Demo](https://rentacar-
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/rent-a-car.git
+    git clone https://github.com/fbatuhanr/RentaCar-ReactJS.git
     ```
 2. Navigate to the project directory:
     ```bash
-    cd rent-a-car
+    cd RentaCar-ReactJS
     ```
 3. Install dependencies:
     ```bash
