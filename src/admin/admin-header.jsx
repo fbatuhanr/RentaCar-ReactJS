@@ -60,7 +60,7 @@ const AdminHeader = () => {
                         <Col xs={12} md={6} className="text-center text-sm-start">
                             <h2 className="mt-1 mb-2">
                                 <Link as={Link} to="/admin">Rent a Car | Management</Link>
-                                <Button variant="info" className="ml-1 my-2 py-1 text-white" type="button" onClick={handleReloadDemoContent}>Reload Demo Content!</Button>
+                                <Button variant="info" className="ms-1 my-2 py-1 text-white" type="button" onClick={handleReloadDemoContent}>Reload Demo Content!</Button>
                             </h2>
                         </Col>
                         <Col xs={12} md={6}>
