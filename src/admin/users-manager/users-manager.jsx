@@ -75,7 +75,7 @@ const UsersManager = () => {
                                         let isCurrentUser = value.email == user.email;
 
                                         /* admin@batuhanozturk.com */
-                                        let isDefaultAdmin = value.userUID == "9CPQm1iUgBOtVfGOAkRQtsP0suy1"
+                                        let isDefaultAdmin = value.userUID == "ElzB6MaOz5V7Ad9lJmzbDbhQmlY2"
                                         /* user@batuhanozturk.com */
                                         let isDefaultUser = value.userUID == "3fDiITFpHLf4Vgio1VBN0jUZGy52"
                                         return (
